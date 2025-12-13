@@ -178,13 +178,10 @@
         
         <div id="role-module" class="module">
             <h2>🏷️ 身分組操作</h2>
-            <p style="color: #b9bbbe; font-size: 0.9em;">注意：此功能需額外 API 函數處理賦予/移除身分組邏輯。</p>
             <label for="role-member-id">目標用戶 ID (UID)：</label>
             <input type="text" id="role-member-id" placeholder="輸入要操作的用戶 ID">
-            <label for="role-select">選擇身分組：</label>
-            <select id="role-select">
-                <option value="" disabled selected>請先讀取身分組列表...</option>
-            </select>
+            <label for="role-select">輸入身分組 ID：</label>
+            <input type="text" id="role-select" placeholder="例如: 123456789012345678 (身分組 ID)">
             
             <button id="add-role-button">賦予身分組</button>
             <button id="remove-role-button" style="background-color: #99aab5;">移除身分組</button>
@@ -202,7 +199,7 @@
 
         <div id="webhook-module" class="module">
             <h2>🔗 Webhook 測試發送</h2>
-            <p style="color: #b9bbbe; font-size: 0.9em;">注意：此功能假定 Webhook URL 已存在且可訪問。</p>
+            <p style="color: #b9bbbe; font-size: 0.9em;">建議使用 Serverless 函數中轉 POST 請求，避免 CORS 錯誤。</p>
             <label for="webhook-url">Webhook URL：</label>
             <input type="text" id="webhook-url" placeholder="輸入完整的 Webhook URL">
             <label for="webhook-content">發送內容：</label>
@@ -229,22 +226,18 @@
             KICK: '/api/kick-member',
             BAN: '/api/ban-member', 
             SEND_MESSAGE: '/api/send-message',
+            MANAGE_ROLE: '/api/manage-role', // 新增身分組管理 API
         };
 
         // ----------------------------------------------------
         // 核心功能：Cookie 刪除 (用於登出)
         // ----------------------------------------------------
         const deleteCookie = (name) => {
-            // 將 Cookie 的過期時間設置為過去，強制瀏覽器刪除它
             document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/';
         };
 
-        // 登出處理
         const handleLogout = () => {
-            // 刪除用於驗證身份的 Session Cookie
             deleteCookie('auth_token'); 
-            
-            // 導向回登入頁面
             window.location.href = '/staff.html';
         };
 
@@ -272,6 +265,7 @@
             const result = await response.json();
             
             if (!response.ok) {
+                // 讓錯誤信息更具體
                 throw new Error(result.error || `操作失敗 (${response.status})`);
             }
             return result;
@@ -291,7 +285,6 @@
 
                 if (!response.ok) throw new Error(data.error || '無法讀取數據');
                 
-                // 更新介面上的數據
                 document.getElementById('total-members').textContent = data.totalMembers || '0';
                 document.getElementById('online-members').textContent = data.onlineMembers || '0';
                 document.getElementById('total-roles').textContent = data.totalRoles || '0';
@@ -327,6 +320,32 @@
 
             } catch (error) {
                 showMessage(`${action === 'kick' ? '踢出' : '封鎖'}失敗: ${error.message}`, 'error');
+            }
+        };
+
+        // ----------------------------------------------------
+        // 模組 3: 身分組操作邏輯 (NEW)
+        // ----------------------------------------------------
+        const handleRoleAction = async (action) => {
+            const userId = document.getElementById('role-member-id').value.trim();
+            const roleId = document.getElementById('role-select').value.trim();
+            
+            if (!userId || !roleId) {
+                return showMessage('請輸入目標用戶 ID 和身分組 ID。', 'error');
+            }
+
+            try {
+                const result = await apiPost(API_ENDPOINTS.MANAGE_ROLE, { 
+                    userId, 
+                    roleId, 
+                    action // 'add' 或 'remove'
+                });
+                
+                showMessage(result.message, 'success');
+
+            } catch (error) {
+                const actionText = (action === 'add') ? '賦予' : '移除';
+                showMessage(`${actionText}身分組失敗: ${error.message}`, 'error');
             }
         };
 
@@ -383,7 +402,6 @@
         // 初始化與事件監聽
         // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
-            // 頁面載入時，自動獲取統計數據
             refreshStats();
 
             // 登出按鈕
@@ -395,6 +413,10 @@
             // 成員管理按鈕
             document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));
             document.getElementById('ban-button').addEventListener('click', () => handleMemberAction('ban'));
+
+            // 身分組操作按鈕 (NEW)
+            document.getElementById('add-role-button').addEventListener('click', () => handleRoleAction('add'));
+            document.getElementById('remove-role-button').addEventListener('click', () => handleRoleAction('remove'));
 
             // 訊息發送按鈕
             document.getElementById('send-message-button').addEventListener('click', handleSendMessage);

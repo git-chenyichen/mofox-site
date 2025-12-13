@@ -7,19 +7,6 @@
     <link rel="icon" type="image/png" href="images/mofox-logo.png">
     
     <style>
-        
-        body {
-            color: #ffffff; 
-            font-family: 'Avenir', 'Georgia', serif; 
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            position: relative; /* 為了定位登入按鈕 */
-        
         body {
             color: #ffffff; 
             font-family: 'Avenir', 'Georgia', serif; 
@@ -61,42 +48,7 @@
             justify-content: center;
             order: -1; 
         }
-
-        /* ==== 登入按鈕容器樣式 ==== */
-        .login-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100; /* 確保按鈕在最上層 */
-        }
-
-        .discord-login-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 15px;
-            background-color: #7289DA; /* Discord 藍色 */
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .discord-login-btn:hover {
-            background-color: #677BC4;
-            transform: scale(1.05);
-        }
-
-        .discord-login-btn img {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
-            /* 確保 images/discord-logo.png 存在 */
-            
-            
+                  
         .nav-link {
             text-decoration: none;
             color: #ffcc66;
@@ -265,12 +217,7 @@
         <span>歡迎，迷途的旅人。</span>
     </div>
     
-    <div class="login-container">
-        <a href="/api/auth" class="discord-login-btn">
-            <img src="images/discord_login_button.png" alt="Discord Icon">
-            後台登入
-        </a>
-    </div>
+
 
     <header>
         <h1>墨狐酒館 - MoFox</h1>
@@ -308,6 +255,7 @@
 </body>
 
 </html>
+
 
 
 

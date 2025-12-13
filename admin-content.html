@@ -28,7 +28,6 @@
 
     /* 標題與容器 */
     header {
-        /* 使用半透明背景來分隔頂部欄和背景圖片 */
         background-color: rgba(35, 39, 42, 0.9); 
         padding: 20px 0;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -52,10 +51,9 @@
     
     /* 模組卡片 (實現玻璃擬態效果) */
     .module {
-        /* 核心：半透明背景 + 模糊效果 (Glassmorphism) */
         background: rgba(46, 49, 54, 0.4); 
-        backdrop-filter: blur(10px); /* 模糊背景 */
-        -webkit-backdrop-filter: blur(10px); /* 兼容性 */
+        backdrop-filter: blur(10px); 
+        -webkit-backdrop-filter: blur(10px); 
         
         border-radius: 15px; 
         border: 1px solid rgba(255, 255, 255, 0.1); 
@@ -78,14 +76,13 @@
         font-weight: bold;
         color: #b9bbbe;
     }
-    /* 修正 input 和 select 的樣式，讓它們看起來一致 */
     input[type="text"], textarea, select {
         width: 100%;
         padding: 12px;
         margin-top: 5px;
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 8px;
-        background-color: rgba(64, 68, 75, 0.7); /* 半透明輸入框/下拉選單 */
+        background-color: rgba(64, 68, 75, 0.7); 
         color: #ffffff;
         box-sizing: border-box;
         transition: all 0.3s;
@@ -103,7 +100,6 @@
 
     /* 果凍式按鈕 (Jelly Buttons) 樣式 */
     button {
-        /* 基礎樣式 */
         color: white;
         padding: 10px 20px;
         border: none;
@@ -111,7 +107,7 @@
         cursor: pointer;
         margin-top: 15px;
         margin-right: 10px;
-        transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 果凍動畫曲線 */
+        transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         font-weight: bold;
     }
@@ -131,33 +127,33 @@
         background: linear-gradient(135deg, #f04747, #cc4040);
     }
     
-    /* 按鈕懸停效果 (放大和陰影，製造果凍感) */
+    /* 按鈕懸停效果 */
     button:hover {
-        transform: scale(1.05); /* 輕微放大 */
+        transform: scale(1.05); 
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         filter: brightness(1.1);
     }
     
-    /* 按鈕點擊效果 (輕微收縮) */
+    /* 按鈕點擊效果 */
     button:active {
         transform: scale(0.98);
     }
 
-    /* 統計數據特別樣式 - 調整為兩欄佈局 */
+    /* 統計數據特別樣式 - 兩欄佈局 */
     .stats-grid {
         display: flex;
         justify-content: space-around;
         text-align: center;
-        gap: 40px; /* 增加間距讓兩張卡片更美觀 */
+        gap: 40px; 
     }
     .stat-card {
-        background: rgba(64, 68, 75, 0.5); /* 統計卡片也半透明 */
+        background: rgba(64, 68, 75, 0.5); 
         backdrop-filter: blur(5px);
-        padding: 20px 15px; /* 增加上下內距 */
+        padding: 20px 15px; 
         border-radius: 10px;
         flex-grow: 1;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        min-width: 300px; /* 設置最小寬度 */
+        min-width: 300px; 
     }
     .stat-card p {
         font-size: 1.1em;
@@ -218,7 +214,7 @@
                     <strong id="total-roles">讀取中...</strong>
                 </div>
             </div>
-            <button id="refresh-stats">重新整理數據</button>
+            <button id="refresh-stats">重新整理數據與列表</button>
         </div>
 
         <div id="member-module" class="module">
@@ -282,35 +278,18 @@
     </footer>
 
     <script>
-        // Serverless API 端點定義 (假設這些端點將由您的後端提供)
+        // Serverless API 端點定義
         const API_ENDPOINTS = {
-            GET_STATS: '/api/get-stats',
-            GET_ROLES: '/api/get-roles',       // 🌟 新增：獲取所有身分組列表
-            GET_CHANNELS: '/api/get-channels', // 🌟 新增：獲取所有頻道列表
+            // 統合的 GET 請求
+            GET_INITIAL_DATA: '/api/get-initial-data', 
+            
+            // POST 請求
             KICK: '/api/kick-member',
             BAN: '/api/ban-member', 
             SEND_MESSAGE: '/api/send-message',
             MANAGE_ROLE: '/api/manage-role', 
         };
-        
-        // ----------------------------------------------------
-        // 輔助功能：通用 API 請求
-        // ----------------------------------------------------
-        const apiPost = async (endpoint, data) => {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
 
-            const result = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(result.error || `操作失敗 (${response.status})`);
-            }
-            return result;
-        };
-        
         // ----------------------------------------------------
         // 核心功能：Cookie 刪除 (用於登出)
         // ----------------------------------------------------
@@ -336,80 +315,76 @@
             }, 5000);
         };
 
-        // ----------------------------------------------------
-        // 🌟 新增：填充下拉選單的通用函數
-        // ----------------------------------------------------
-        /**
-         * 填充 <select> 元素的選項。
-         * @param {string} selectId - <select> 元素的 ID (e.g., 'role-select').
-         * @param {string} endpoint - 獲取數據的 API 端點 (e.g., API_ENDPOINTS.GET_ROLES).
-         * @param {string} arrayKey - 響應 JSON 中包含選項陣列的鍵 (e.g., 'roles').
-         * @param {string} textKey - 用作選項顯示文本的鍵 (e.g., 'name').
-         * @param {string} valueKey - 用作選項實際值的鍵 (e.g., 'id').
-         */
-        const loadOptions = async (selectId, endpoint, arrayKey, textKey, valueKey) => {
-            const selectElement = document.getElementById(selectId);
-            selectElement.innerHTML = '<option value="" disabled selected>載入中...</option>'; // 顯示載入狀態
-            
-            try {
-                const response = await fetch(endpoint);
-                const data = await response.json();
-                
-                if (!response.ok || !data[arrayKey] || !Array.isArray(data[arrayKey])) {
-                    throw new Error(data.error || 'API 響應格式錯誤');
-                }
-                
-                const items = data[arrayKey];
-                
-                // 清空並設置默認選項
-                selectElement.innerHTML = `<option value="" disabled selected>--- 選擇 ${selectId.includes('role') ? '身分組' : '頻道'} ---</option>`;
-                
-                items.forEach(item => {
-                    const option = document.createElement('option');
-                    // 🌟 這裡將顯示名稱和 ID 都展示出來，方便管理員確認
-                    option.textContent = `#${item[textKey]} (ID: ${item[valueKey]})`; 
-                    option.value = item[valueKey]; // 實際值為 ID
-                    selectElement.appendChild(option);
-                });
-                
-                showMessage(`${selectId.includes('role') ? '身分組' : '頻道'}列表載入成功。`, 'success');
+        // 執行 API POST 請求的通用函數
+        const apiPost = async (endpoint, data) => {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
-            } catch (error) {
-                console.error(`載入 ${selectId} 失敗:`, error);
-                selectElement.innerHTML = `<option value="" disabled selected>❌ 載入失敗: ${error.message}</option>`;
-                showMessage(`載入 ${selectId} 列表失敗: ${error.message}`, 'error');
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || `操作失敗 (${response.status})`);
             }
+            return result;
         };
 
-
         // ----------------------------------------------------
-        // 模組 1: 統計數據邏輯
+        // 模組 1: 統計數據及列表載入邏輯 (使用統合 API)
         // ----------------------------------------------------
         const refreshStats = async () => {
             document.getElementById('total-members').textContent = '讀取中...';
             document.getElementById('total-roles').textContent = '讀取中...';
+            
+            // 重設下拉選單狀態
+            document.getElementById('role-select').innerHTML = '<option value="" disabled selected>載入中...</option>';
+            document.getElementById('channel-select').innerHTML = '<option value="" disabled selected>載入中...</option>';
 
             try {
-                const response = await fetch(API_ENDPOINTS.GET_STATS);
+                const response = await fetch(API_ENDPOINTS.GET_INITIAL_DATA);
                 const data = await response.json();
 
                 if (!response.ok) throw new Error(data.error || '無法讀取數據');
                 
+                // 1. 更新統計數據
                 document.getElementById('total-members').textContent = data.totalMembers || '0';
                 document.getElementById('total-roles').textContent = data.totalRoles || '0';
 
-                showMessage("統計數據已成功更新。", 'success');
+                // 2. 填充身分組下拉選單
+                const roleSelect = document.getElementById('role-select');
+                roleSelect.innerHTML = `<option value="" disabled selected>--- 選擇身分組 ---</option>`;
+                data.roles.forEach(item => {
+                    const option = document.createElement('option');
+                    option.textContent = `🏷️ ${item.name} (ID: ${item.id})`; 
+                    option.value = item.id;
+                    roleSelect.appendChild(option);
+                });
+
+                // 3. 填充頻道下拉選單
+                const channelSelect = document.getElementById('channel-select');
+                channelSelect.innerHTML = `<option value="" disabled selected>--- 選擇頻道 ---</option>`;
+                data.channels.forEach(item => {
+                    const option = document.createElement('option');
+                    option.textContent = `${item.name} (ID: ${item.id})`; 
+                    option.value = item.id;
+                    channelSelect.appendChild(option);
+                });
+
+                showMessage("所有初始數據已成功更新。", 'success');
 
             } catch (error) {
-                console.error("無法讀取統計數據:", error);
+                console.error("無法讀取初始數據:", error);
                 document.getElementById('total-members').textContent = '❌錯誤';
                 document.getElementById('total-roles').textContent = '❌錯誤';
-                showMessage(`讀取統計數據失敗: ${error.message}`, 'error');
+                showMessage(`讀取初始數據失敗: ${error.message}`, 'error');
             }
         };
 
+
         // ----------------------------------------------------
-        // 模組 2: 成員操作邏輯 (踢人/封鎖) - 保持不變，因為用戶 ID 仍需手動輸入
+        // 模組 2: 成員操作邏輯 (踢人/封鎖)
         // ----------------------------------------------------
         const handleMemberAction = async (action) => {
             const userId = document.getElementById('member-id').value.trim();
@@ -432,15 +407,14 @@
         };
 
         // ----------------------------------------------------
-        // 模組 3: 身分組操作邏輯 
+        // 模組 3: 身分組操作邏輯 
         // ----------------------------------------------------
         const handleRoleAction = async (action) => {
             const userId = document.getElementById('role-member-id').value.trim();
-            // 🌟 從下拉選單獲取選定的身分組 ID
             const roleId = document.getElementById('role-select').value.trim(); 
             
             if (!userId || !roleId) {
-                return showMessage('請輸入目標用戶 ID **並選擇身分組**。', 'error');
+                return showMessage('請輸入目標用戶 ID 並選擇身分組。', 'error');
             }
 
             try {
@@ -463,7 +437,6 @@
         // 模組 4: 訊息發送邏輯
         // ----------------------------------------------------
         const handleSendMessage = async () => {
-            // 🌟 從下拉選單獲取選定的頻道 ID
             const channelId = document.getElementById('channel-select').value.trim(); 
             const content = document.getElementById('message-content').value.trim();
 
@@ -480,7 +453,7 @@
         };
 
         // ----------------------------------------------------
-        // 模組 5: Webhook 測試邏輯 (保持不變)
+        // 模組 5: Webhook 測試邏輯
         // ----------------------------------------------------
         const handleWebhookTest = async () => {
             const webhookUrl = document.getElementById('webhook-url').value.trim();
@@ -512,21 +485,14 @@
         // 初始化與事件監聽
         // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
-            // 載入初始數據
-            refreshStats(); 
-            loadOptions('role-select', API_ENDPOINTS.GET_ROLES, 'roles', 'name', 'id');
-            loadOptions('channel-select', API_ENDPOINTS.GET_CHANNELS, 'channels', 'name', 'id');
+            // 初始載入數據
+            refreshStats();
 
             // 登出按鈕
             document.getElementById('logout-button').addEventListener('click', handleLogout);
 
-            // 統計數據按鈕
-            document.getElementById('refresh-stats').addEventListener('click', () => {
-                refreshStats();
-                // 重新整理數據時也刷新列表
-                loadOptions('role-select', API_ENDPOINTS.GET_ROLES, 'roles', 'name', 'id'); 
-                loadOptions('channel-select', API_ENDPOINTS.GET_CHANNELS, 'channels', 'name', 'id');
-            });
+            // 統計數據按鈕 (現在刷新所有列表)
+            document.getElementById('refresh-stats').addEventListener('click', refreshStats);
 
             // 成員管理按鈕
             document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));

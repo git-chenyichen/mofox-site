@@ -5,49 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>墨狐酒館後台管理 | 已登入</title>
     <style>
-        /* 基礎樣式與主題 */
+        /* 玻璃擬態 (Glassmorphism) 樣式 */
+        
+        /* 設置整個頁面背景，模擬一個圖片背景 */
         body {
             font-family: Arial, sans-serif;
-            background-color: #2c2f33; /* Discord 暗色主題 */
-            color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
+            /* 模擬背景圖片效果 */
+            background: linear-gradient(135deg, #7289DA 0%, #2c2f33 100%); 
+            background-size: cover;
+            min-height: 100vh;
+            color: #ffffff;
         }
+
+        /* 標題與容器 */
         header {
             width: 100%;
-            background-color: #23272a;
+            background-color: rgba(35, 39, 42, 0.9); /* 略微透明的頂部欄 */
             padding: 20px 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             text-align: center;
             position: relative; 
+            z-index: 10;
         }
         h1 {
-            color: #7289DA; /* Discord 藍色 */
+            color: #ffffff;
             margin: 0;
             font-size: 2.5em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
         }
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 30px auto;
+            z-index: 1; /* 確保內容在背景圖層上方 */
         }
         
-        /* 模組樣式 */
+        /* 模組卡片 (實現玻璃擬態效果) */
         .module {
-            background-color: #36393f;
-            border-radius: 10px;
-            padding: 20px;
+            /* 核心：半透明背景 + 模糊效果 */
+            background: rgba(46, 49, 54, 0.4); 
+            backdrop-filter: blur(10px); /* 模糊背景 */
+            -webkit-backdrop-filter: blur(10px); /* 兼容性 */
+            
+            border-radius: 15px; /* 圓角更明顯 */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* 邊框線 */
+            padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* 陰影更深 */
         }
         .module h2 {
             color: #ffcc66; 
-            border-bottom: 2px solid #4f545c;
-            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+            padding-bottom: 15px;
             margin-top: 0;
+            text-shadow: 0 0 5px rgba(255, 204, 102, 0.5);
         }
         
         /* 表單元素 */
@@ -59,31 +75,66 @@
         }
         input[type="text"], textarea, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
-            border: 1px solid #4f545c;
-            border-radius: 5px;
-            background-color: #40444b;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background-color: rgba(64, 68, 75, 0.7); /* 半透明輸入框 */
             color: #ffffff;
             box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        input[type="text"]:focus, textarea:focus {
+            background-color: rgba(64, 68, 75, 0.9);
+            border-color: #7289DA;
+            box-shadow: 0 0 5px #7289DA;
+            outline: none;
         }
         textarea {
             resize: vertical;
             min-height: 100px;
         }
+
+        /* 果凍式按鈕 (Jelly Buttons) 樣式 */
         button {
-            background-color: #7289DA;
+            /* 基礎樣式 */
             color: white;
             padding: 10px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             margin-top: 15px;
             margin-right: 10px;
-            transition: background-color 0.3s;
+            transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* 果凍動畫曲線 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
         }
+        
+        /* 默認 (Discord 藍) */
+        button:not(#logout-button):not(#kick-button):not(#ban-button) {
+            background: linear-gradient(135deg, #7289DA, #677bc4);
+        }
+        
+        /* 踢人 (橙色) */
+        #kick-button {
+            background: linear-gradient(135deg, #faa61a, #cc8c15);
+        }
+        
+        /* 封鎖/登出 (紅色) */
+        #ban-button, #logout-button {
+            background: linear-gradient(135deg, #f04747, #cc4040);
+        }
+        
+        /* 按鈕懸停效果 (放大和陰影，製造果凍感) */
         button:hover {
-            background-color: #677bc4;
+            transform: scale(1.05); /* 輕微放大 */
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+        
+        /* 按鈕點擊效果 (輕微收縮) */
+        button:active {
+            transform: scale(0.98);
         }
 
         /* 統計數據特別樣式 */
@@ -94,10 +145,12 @@
             gap: 20px;
         }
         .stat-card {
-            background-color: #40444b;
+            background: rgba(64, 68, 75, 0.5); /* 統計卡片也半透明 */
+            backdrop-filter: blur(5px);
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 10px;
             flex-grow: 1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
         .stat-card p {
             font-size: 1.1em;
@@ -108,16 +161,19 @@
             display: block;
             font-size: 2.5em;
             color: #ffcc66;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
         /* 錯誤/成功訊息 */
         #message-area {
             margin-top: 20px;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             color: white;
             display: none;
             text-align: left;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         .success {
             background-color: #43b581; 
@@ -126,26 +182,41 @@
             background-color: #f04747; 
         }
         
-        /* 登出按鈕樣式 */
+        /* 登出按鈕定位 */
         #logout-button {
-            background-color: #f04747; 
             position: absolute;
             top: 20px;
             right: 20px;
-        }
-        #logout-button:hover {
-            background-color: #cc4040;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>墨狐酒館 || 後台管理系統</h1>
+        <h1>墨狐酒館 🦊 後台管理系統</h1>
         <button id="logout-button">登出</button>
     </header>
 
     <div class="container">
         
+        <div id="stats-module" class="module">
+            <h2>📈 群組統計數據</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p>總成員數</p>
+                    <strong id="total-members">讀取中...</strong>
+                </div>
+                <div class="stat-card">
+                    <p>在線人數</p>
+                    <strong id="online-members">讀取中...</strong>
+                </div>
+                <div class="stat-card">
+                    <p>身分組數量</p>
+                    <strong id="total-roles">讀取中...</strong>
+                </div>
+            </div>
+            <button id="refresh-stats">重新整理數據</button>
+        </div>
+
         <div id="member-module" class="module">
             <h2>👤 成員操作 (踢人/封鎖)</h2>
             <label for="member-id">目標用戶 ID (UID)：</label>
@@ -153,8 +224,8 @@
             <label for="reason">原因 (可選)：</label>
             <input type="text" id="reason" placeholder="例如: 違反規則">
             
-            <button id="kick-button" style="background-color: #faa61a;">踢出群組 (Kick)</button>
-            <button id="ban-button" style="background-color: #f04747;">封鎖用戶 (Ban)</button>
+            <button id="kick-button">踢出群組 (Kick)</button>
+            <button id="ban-button">封鎖用戶 (Ban)</button>
         </div>
         
         <div id="role-module" class="module">
@@ -165,7 +236,7 @@
             <input type="text" id="role-select" placeholder="例如: 123456789012345678 (身分組 ID)">
             
             <button id="add-role-button">賦予身分組</button>
-            <button id="remove-role-button" style="background-color: #99aab5;">移除身分組</button>
+            <button id="remove-role-button">移除身分組</button>
         </div>
 
         <div id="message-module" class="module">
@@ -179,7 +250,7 @@
         </div>
 
         <div id="webhook-module" class="module">
-            <h2>🔗 Webhook 發送</h2>
+            <h2>🔗 Webhook 測試發送</h2>
             <label for="webhook-url">Webhook URL：</label>
             <input type="text" id="webhook-url" placeholder="輸入完整的 Webhook URL">
             <label for="webhook-content">發送內容：</label>
@@ -196,7 +267,7 @@
 
     <footer>
         <p style="color: #b9bbbe;">請確保所有操作均遵守 Discord 服務條款。</p>
-        <p><a href="https://mofox.onioncosplay.xyz/staff.html" style="color: #7289DA; text-decoration: none;">返回團隊頁面</a></p>
+        <p><a href="/staff.html" style="color: #ffffff; text-decoration: none; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">返回團隊頁面</a></p>
     </footer>
 
     <script>
@@ -206,7 +277,7 @@
             KICK: '/api/kick-member',
             BAN: '/api/ban-member', 
             SEND_MESSAGE: '/api/send-message',
-            MANAGE_ROLE: '/api/manage-role', // 新增身分組管理 API
+            MANAGE_ROLE: '/api/manage-role', 
         };
 
         // ----------------------------------------------------
@@ -245,7 +316,6 @@
             const result = await response.json();
             
             if (!response.ok) {
-                // 讓錯誤信息更具體
                 throw new Error(result.error || `操作失敗 (${response.status})`);
             }
             return result;
@@ -304,7 +374,7 @@
         };
 
         // ----------------------------------------------------
-        // 模組 3: 身分組操作邏輯 (NEW)
+        // 模組 3: 身分組操作邏輯 
         // ----------------------------------------------------
         const handleRoleAction = async (action) => {
             const userId = document.getElementById('role-member-id').value.trim();
@@ -394,7 +464,7 @@
             document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));
             document.getElementById('ban-button').addEventListener('click', () => handleMemberAction('ban'));
 
-            // 身分組操作按鈕 (NEW)
+            // 身分組操作按鈕 
             document.getElementById('add-role-button').addEventListener('click', () => handleRoleAction('add'));
             document.getElementById('remove-role-button').addEventListener('click', () => handleRoleAction('remove'));
 
@@ -407,6 +477,3 @@
     </script>
 </body>
 </html>
-
-
-

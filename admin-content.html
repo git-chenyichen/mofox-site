@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館後台管理 | 已登入</title>
+    <title>後台管理系統 - 墨狐酒館</title>
 <style>
     /* 玻璃擬態 (Glassmorphism) 樣式 */
-    
-    /* 設置整個頁面背景，使用實際的圖片 */
     body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -15,18 +13,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        
-        /* 確保您的圖片路徑正確 */
-        background-image: url('images/mofox-background.jpg'); 
-        background-size: cover; /* 確保圖片覆蓋整個視口 */
-        background-attachment: fixed; /* 圖片固定不動 */
-        background-position: center;
-        
+        background-color: #2f3136; /* 模仿 Discord 背景 */
         min-height: 100vh;
         color: #ffffff;
     }
 
-    /* 標題與容器 */
     header {
         background-color: rgba(35, 39, 42, 0.9); 
         padding: 20px 0;
@@ -36,45 +27,41 @@
         z-index: 10;
         width: 100%;
     }
-    h1 {
-        color: #ffffff;
-        margin: 0;
-        font-size: 2.5em;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    h1 { 
+        color: #ffffff; 
+        margin: 0; 
+        font-size: 2.5em; 
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); 
     }
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 30px auto;
+    .container { 
+        width: 90%; 
+        max-width: 1200px; 
+        margin: 30px auto; 
         z-index: 1; 
     }
     
-    /* 模組卡片 (實現玻璃擬態效果) */
     .module {
         background: rgba(46, 49, 54, 0.4); 
         backdrop-filter: blur(10px); 
         -webkit-backdrop-filter: blur(10px); 
-        
         border-radius: 15px; 
         border: 1px solid rgba(255, 255, 255, 0.1); 
         padding: 25px;
         margin-bottom: 25px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
     }
-    .module h2 {
-        color: #ffcc66; 
-        border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-        padding-bottom: 15px;
-        margin-top: 0;
-        text-shadow: 0 0 5px rgba(255, 204, 102, 0.5);
+    .module h2 { 
+        color: #7289DA; 
+        border-bottom: 2px solid rgba(255, 255, 255, 0.15); 
+        padding-bottom: 15px; 
+        margin-top: 0; 
     }
     
-    /* 表單元素 */
-    label {
-        display: block;
-        margin-top: 10px;
-        font-weight: bold;
-        color: #b9bbbe;
+    label { 
+        display: block; 
+        margin-top: 10px; 
+        font-weight: bold; 
+        color: #b9bbbe; 
     }
     input[type="text"], textarea, select {
         width: 100%;
@@ -85,20 +72,9 @@
         background-color: rgba(64, 68, 75, 0.7); 
         color: #ffffff;
         box-sizing: border-box;
-        transition: all 0.3s;
-    }
-    input[type="text"]:focus, textarea:focus, select:focus {
-        background-color: rgba(64, 68, 75, 0.9);
-        border-color: #7289DA;
-        box-shadow: 0 0 5px #7289DA;
-        outline: none;
-    }
-    textarea {
-        resize: vertical;
-        min-height: 100px;
     }
 
-    /* 果凍式按鈕 (Jelly Buttons) 樣式 */
+    /* 按鈕樣式 */
     button {
         color: white;
         padding: 10px 20px;
@@ -107,102 +83,84 @@
         cursor: pointer;
         margin-top: 15px;
         margin-right: 10px;
-        transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s; 
         font-weight: bold;
     }
     
-    /* 默認 (Discord 藍) */
-    button:not(#logout-button):not(#kick-button):not(#ban-button) {
-        background: linear-gradient(135deg, #7289DA, #677bc4);
+    button:not(#logout-button):not(#kick-button):not(#ban-button) { 
+        background: linear-gradient(135deg, #7289DA, #677bc4); /* 藍色 */
     }
     
-    /* 踢人 (橙色) */
-    #kick-button {
-        background: linear-gradient(135deg, #faa61a, #cc8c15);
+    #kick-button { 
+        background: linear-gradient(135deg, #faa61a, #cc8c15); /* 橙色 */
     }
     
-    /* 封鎖/登出 (紅色) */
-    #ban-button, #logout-button {
-        background: linear-gradient(135deg, #f04747, #cc4040);
+    #ban-button, #logout-button { 
+        background: linear-gradient(135deg, #f04747, #cc4040); /* 紅色 */
     }
     
-    /* 按鈕懸停效果 */
-    button:hover {
-        transform: scale(1.05); 
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        filter: brightness(1.1);
+    button:hover { 
+        transform: scale(1.03); 
     }
     
-    /* 按鈕點擊效果 */
-    button:active {
-        transform: scale(0.98);
-    }
-
-    /* 統計數據特別樣式 - 兩欄佈局 */
-    .stats-grid {
-        display: flex;
-        justify-content: space-around;
-        text-align: center;
+    /* 統計數據 */
+    .stats-grid { 
+        display: flex; 
+        justify-content: space-around; 
+        text-align: center; 
         gap: 40px; 
     }
-    .stat-card {
+    .stat-card { 
         background: rgba(64, 68, 75, 0.5); 
-        backdrop-filter: blur(5px);
         padding: 20px 15px; 
-        border-radius: 10px;
-        flex-grow: 1;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        min-width: 300px; 
+        border-radius: 10px; 
+        flex-grow: 1; 
     }
-    .stat-card p {
-        font-size: 1.1em;
-        color: #b9bbbe;
-        margin-bottom: 5px;
-    }
-    .stat-card strong {
-        display: block;
-        font-size: 2.5em;
-        color: #ffcc66;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    .stat-card strong { 
+        display: block; 
+        font-size: 2.5em; 
+        color: #43b581; /* 綠色 */
     }
 
-    /* 錯誤/成功訊息 */
-    #message-area {
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 8px;
-        color: white;
-        display: none;
-        text-align: left;
-        font-weight: bold;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    /* 訊息區域 */
+    #message-area { 
+        margin-top: 20px; 
+        padding: 15px; 
+        border-radius: 8px; 
+        color: white; 
+        display: none; 
+        font-weight: bold; 
     }
-    .success {
+    .success { 
         background-color: #43b581; 
     }
-    .error {
+    .error { 
         background-color: #f04747; 
     }
     
-    /* 登出按鈕定位 */
-    #logout-button {
-        position: absolute;
-        top: 20px;
-        right: 20px;
+    #logout-button { 
+        position: absolute; 
+        top: 20px; 
+        right: 20px; 
     }
 </style>
 </head>
 <body>
     <header>
-        <h1>墨狐酒館 🦊 後台管理系統</h1>
+        <h1>後台管理系統</h1>
         <button id="logout-button">登出</button>
     </header>
 
     <div class="container">
         
+        <div id="user-id-module" class="module">
+            <h2>🎯 目標用戶 ID (共用)</h2>
+            <label for="target-user-id">目標用戶 ID (UID)：</label>
+            <input type="text" id="target-user-id" placeholder="請輸入要操作的 Discord 用戶 ID (例如: 123456789012345678)">
+        </div>
+
         <div id="stats-module" class="module">
-            <h2>📈 群組統計數據</h2>
+            <h2>📈 伺服器統計與列表</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <p>總成員數</p>
@@ -219,8 +177,6 @@
 
         <div id="member-module" class="module">
             <h2>👤 成員操作 (踢人/封鎖)</h2>
-            <label for="member-id">目標用戶 ID (UID)：</label>
-            <input type="text" id="member-id" placeholder="例如: 123456789012345678">
             <label for="reason">原因 (可選)：</label>
             <input type="text" id="reason" placeholder="例如: 違反規則">
             
@@ -230,8 +186,6 @@
         
         <div id="role-module" class="module">
             <h2>🏷️ 身分組操作</h2>
-            <label for="role-member-id">目標用戶 ID (UID)：</label>
-            <input type="text" id="role-member-id" placeholder="輸入要操作的用戶 ID">
             
             <label for="role-select">選擇身分組：</label>
             <select id="role-select">
@@ -256,16 +210,6 @@
             <button id="send-message-button">發送訊息</button>
         </div>
 
-        <div id="webhook-module" class="module">
-            <h2>🔗 Webhook 測試發送</h2>
-            <label for="webhook-url">Webhook URL：</label>
-            <input type="text" id="webhook-url" placeholder="輸入完整的 Webhook URL">
-            <label for="webhook-content">發送內容：</label>
-            <textarea id="webhook-content" placeholder="輸入要通過 Webhook 發送的訊息..."></textarea>
-
-            <button id="test-webhook-button">測試發送 Webhook</button>
-        </div>
-
         <div id="message-area">
             操作結果將顯示在這裡。
         </div>
@@ -273,17 +217,13 @@
     </div>
 
     <footer>
-        <p style="color: #b9bbbe;">請確保所有操作均遵守 Discord 服務條款。</p>
-        <p><a href="https://mofox.onioncosplay.xyz/staff.html" style="color: #ffffff; text-decoration: none; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">返回團隊頁面</a></p>
+        <p style="color: #b9bbbe;">所有操作均由 Bot 通過 Discord API 執行。</p>
     </footer>
 
     <script>
         // Serverless API 端點定義
         const API_ENDPOINTS = {
-            // 統合的 GET 請求
             GET_INITIAL_DATA: '/api/get-initial-data', 
-            
-            // POST 請求
             KICK: '/api/kick-member',
             BAN: '/api/ban-member', 
             SEND_MESSAGE: '/api/send-message',
@@ -291,31 +231,19 @@
         };
 
         // ----------------------------------------------------
-        // 核心功能：Cookie 刪除 (用於登出)
+        // 核心功能與輔助
         // ----------------------------------------------------
-        const deleteCookie = (name) => {
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/';
-        };
+        
+        const getTargetUserId = () => document.getElementById('target-user-id').value.trim();
 
-        const handleLogout = () => {
-            deleteCookie('auth_token'); 
-            window.location.href = '/staff.html';
-        };
-
-        // ----------------------------------------------------
-        // 輔助功能：訊息顯示
-        // ----------------------------------------------------
         const showMessage = (message, type = 'success') => {
             const msgArea = document.getElementById('message-area');
             msgArea.textContent = message;
             msgArea.className = type; 
             msgArea.style.display = 'block';
-            setTimeout(() => {
-                msgArea.style.display = 'none';
-            }, 5000);
+            setTimeout(() => { msgArea.style.display = 'none'; }, 5000);
         };
 
-        // 執行 API POST 請求的通用函數
         const apiPost = async (endpoint, data) => {
             const response = await fetch(endpoint, {
                 method: 'POST',
@@ -326,19 +254,18 @@
             const result = await response.json();
             
             if (!response.ok) {
+                // 從後端錯誤物件中提取錯誤信息
                 throw new Error(result.error || `操作失敗 (${response.status})`);
             }
             return result;
         };
 
         // ----------------------------------------------------
-        // 模組 1: 統計數據及列表載入邏輯 (使用統合 API)
+        // 模組 1: 統計數據及列表載入邏輯
         // ----------------------------------------------------
         const refreshStats = async () => {
             document.getElementById('total-members').textContent = '讀取中...';
             document.getElementById('total-roles').textContent = '讀取中...';
-            
-            // 重設下拉選單狀態
             document.getElementById('role-select').innerHTML = '<option value="" disabled selected>載入中...</option>';
             document.getElementById('channel-select').innerHTML = '<option value="" disabled selected>載入中...</option>';
 
@@ -348,11 +275,10 @@
 
                 if (!response.ok) throw new Error(data.error || '無法讀取數據');
                 
-                // 1. 更新統計數據
                 document.getElementById('total-members').textContent = data.totalMembers || '0';
                 document.getElementById('total-roles').textContent = data.totalRoles || '0';
 
-                // 2. 填充身分組下拉選單
+                // 填充身分組下拉選單
                 const roleSelect = document.getElementById('role-select');
                 roleSelect.innerHTML = `<option value="" disabled selected>--- 選擇身分組 ---</option>`;
                 data.roles.forEach(item => {
@@ -362,7 +288,7 @@
                     roleSelect.appendChild(option);
                 });
 
-                // 3. 填充頻道下拉選單
+                // 填充頻道下拉選單
                 const channelSelect = document.getElementById('channel-select');
                 channelSelect.innerHTML = `<option value="" disabled selected>--- 選擇頻道 ---</option>`;
                 data.channels.forEach(item => {
@@ -378,61 +304,49 @@
                 console.error("無法讀取初始數據:", error);
                 document.getElementById('total-members').textContent = '❌錯誤';
                 document.getElementById('total-roles').textContent = '❌錯誤';
-                showMessage(`讀取初始數據失敗: ${error.message}`, 'error');
+                showMessage(`讀取初始數據失敗: ${error.message} (請檢查 Bot Token/ID 及權限)`, 'error');
             }
         };
 
 
         // ----------------------------------------------------
-        // 模組 2: 成員操作邏輯 (踢人/封鎖)
+        // 模組 2: 成員操作邏輯 (讀取單一 ID 輸入框)
         // ----------------------------------------------------
         const handleMemberAction = async (action) => {
-            const userId = document.getElementById('member-id').value.trim();
+            const userId = getTargetUserId(); 
             const reason = document.getElementById('reason').value.trim();
             
-            if (!userId) {
-                return showMessage('請輸入目標用戶 ID。', 'error');
-            }
+            if (!userId) return showMessage('請先在頂部輸入目標用戶 ID。', 'error');
 
             try {
                 const endpoint = action === 'kick' ? API_ENDPOINTS.KICK : API_ENDPOINTS.BAN;
-                
                 const result = await apiPost(endpoint, { userId, reason });
-                
                 showMessage(result.message, 'success');
-
             } catch (error) {
                 showMessage(`${action === 'kick' ? '踢出' : '封鎖'}失敗: ${error.message}`, 'error');
             }
         };
-
+        
         // ----------------------------------------------------
-        // 模組 3: 身分組操作邏輯 
+        // 模組 3: 身分組操作邏輯 (讀取單一 ID 輸入框)
         // ----------------------------------------------------
         const handleRoleAction = async (action) => {
-            const userId = document.getElementById('role-member-id').value.trim();
+            const userId = getTargetUserId();
             const roleId = document.getElementById('role-select').value.trim(); 
             
-            if (!userId || !roleId) {
-                return showMessage('請輸入目標用戶 ID 並選擇身分組。', 'error');
-            }
+            if (!userId) return showMessage('請先在頂部輸入目標用戶 ID。', 'error');
+            if (!roleId || roleId === '--- 選擇身分組 ---') return showMessage('請選擇身分組。', 'error');
 
             try {
-                const result = await apiPost(API_ENDPOINTS.MANAGE_ROLE, { 
-                    userId, 
-                    roleId, 
-                    action // 'add' 或 'remove'
-                });
-                
-                showMessage(result.message, 'success');
-
+                const result = await apiPost(API_ENDPOINTS.MANAGE_ROLE, { userId, roleId, action });
+                const actionText = (action === 'add') ? '賦予' : '移除';
+                showMessage(`${actionText}身分組成功。`, 'success');
             } catch (error) {
                 const actionText = (action === 'add') ? '賦予' : '移除';
                 showMessage(`${actionText}身分組失敗: ${error.message}`, 'error');
             }
         };
-
-
+        
         // ----------------------------------------------------
         // 模組 4: 訊息發送邏輯
         // ----------------------------------------------------
@@ -440,9 +354,8 @@
             const channelId = document.getElementById('channel-select').value.trim(); 
             const content = document.getElementById('message-content').value.trim();
 
-            if (!channelId || !content) {
-                return showMessage('請選擇頻道 ID 和輸入訊息內容。', 'error');
-            }
+            if (!channelId || channelId === '--- 選擇頻道 ---') return showMessage('請選擇頻道 ID。', 'error');
+            if (!content) return showMessage('請輸入訊息內容。', 'error');
 
             try {
                 const result = await apiPost(API_ENDPOINTS.SEND_MESSAGE, { channelId, content });
@@ -452,61 +365,26 @@
             }
         };
 
-        // ----------------------------------------------------
-        // 模組 5: Webhook 測試邏輯
-        // ----------------------------------------------------
-        const handleWebhookTest = async () => {
-            const webhookUrl = document.getElementById('webhook-url').value.trim();
-            const content = document.getElementById('webhook-content').value.trim();
-
-            if (!webhookUrl || !content) {
-                return showMessage('請輸入 Webhook URL 和發送內容。', 'error');
-            }
-            
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: content })
-                });
-
-                if (response.ok) {
-                    showMessage('Webhook 測試訊息發送成功！', 'success');
-                } else {
-                    showMessage(`Webhook 測試失敗: Discord 返回狀態碼 ${response.status}`, 'error');
-                }
-            } catch (error) {
-                showMessage(`Webhook 測試失敗: 網絡錯誤或 URL 無效。建議使用 Serverless 函數中轉。`, 'error');
-            }
-        };
-
 
         // ----------------------------------------------------
         // 初始化與事件監聽
         // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始載入數據
             refreshStats();
 
-            // 登出按鈕
-            document.getElementById('logout-button').addEventListener('click', handleLogout);
-
-            // 統計數據按鈕 (現在刷新所有列表)
+            document.getElementById('logout-button').addEventListener('click', () => showMessage('登出功能僅為範例，實際需配合您的認證系統。', 'success'));
             document.getElementById('refresh-stats').addEventListener('click', refreshStats);
 
-            // 成員管理按鈕
+            // 成員操作按鈕
             document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));
             document.getElementById('ban-button').addEventListener('click', () => handleMemberAction('ban'));
 
-            // 身分組操作按鈕 
+            // 身分組操作按鈕
             document.getElementById('add-role-button').addEventListener('click', () => handleRoleAction('add'));
             document.getElementById('remove-role-button').addEventListener('click', () => handleRoleAction('remove'));
-
+            
             // 訊息發送按鈕
             document.getElementById('send-message-button').addEventListener('click', handleSendMessage);
-
-            // Webhook 測試按鈕
-            document.getElementById('test-webhook-button').addEventListener('click', handleWebhookTest);
         });
     </script>
 </body>

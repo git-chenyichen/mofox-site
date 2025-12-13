@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
             background-color: #1a1a1a;
-            /* 背景圖片路徑 */
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/mofox-background.jpg');
             background-size: cover;
             background-attachment: fixed;
@@ -89,15 +88,14 @@
             color: #ffcc66;
             font-weight: bold;
             background-color: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ffcc6660;
-            height: 0; /* 隱藏提示區塊 */
+            height: 0; 
             padding: 0;
             margin-bottom: 0;
             overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid #ffcc6660;
         }
-        /* 管理員解鎖後才顯示提示區塊 */
+        
         .controls.unlocked {
             height: auto;
             padding: 15px;
@@ -114,7 +112,6 @@
             font-weight: bold;
         }
 
-        /* 密碼驗證 Modal 樣式保持不變 */
         #password-modal {
             position: fixed;
             top: 0;
@@ -178,7 +175,7 @@
             position: relative;
             transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
         }
-        /* 如果列表為空，顯示提示訊息 */
+        
         #announcements-list:empty::after {
             content: '目前沒有任何公告。';
             display: block;
@@ -206,11 +203,10 @@
             color: #fff;
             background-color: rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s;
-            /* 訪客狀態下，不可編輯 */
             pointer-events: none; 
             cursor: default;
         }
-        /* 管理員解鎖後，可編輯狀態 */
+        
         .editable-content[contenteditable="true"]:focus {
             background-color: rgba(0, 0, 0, 0.4);
             border: 1px solid #ffcc66;
@@ -247,7 +243,7 @@
             text-align: center;
             opacity: 0.7;
             transition: opacity 0.2s, background 0.2s;
-            display: none; /* 預設隱藏，僅管理員模式下顯示 */
+            display: none; 
         }
 
         .info-panel.unlocked .delete-btn {
@@ -258,8 +254,6 @@
             background: #ff0000;
             opacity: 1;
         }
-        
-        /* 移除 action-button 相關樣式，因為按鈕已移除 */
     </style>
 </head>
 <body>
@@ -282,7 +276,7 @@
     </div>
     
     <header>
-        <h1>墨狐酒館 - 公告系統</h1>
+        <h1>墨狐酒館 - 最新公告</h1>
         <div class="subtitle">「深夜的燭火，照亮最新的消息。」</div>
     </header>
 
@@ -293,16 +287,17 @@
         <div id="announcements-list">
         </div>
 
-        </main>
+    </main>
 
     <script>
-        const ADMIN_PASSWORD = 'mofoxadmin';
+        const ADMIN_PASSWORD = 'mofox@admin';
         const STORAGE_KEY = 'mofoxAnnouncements';
         let isAdmin = false;
         let pendingAction = null; 
-        let pendingDeleteId = null;
+        let pendingTargetId = null; 
+
         let announcementsData = [];
-        let nextId = 1; // ID 從 1 開始計算
+        let nextId = 1; 
 
         const listContainer = document.getElementById('announcements-list');
         const passwordModal = document.getElementById('password-modal'); 
@@ -312,14 +307,11 @@
         const modalPrompt = document.getElementById('modal-prompt');
         
 
-        // --- JSON 數據處理函數 ---
-
         function loadAnnouncements() {
             try {
                 const jsonString = localStorage.getItem(STORAGE_KEY);
                 if (jsonString) {
                     announcementsData = JSON.parse(jsonString);
-                    // 找出目前最大的 ID，確保新增時 ID 不重複
                     const maxId = announcementsData.reduce((max, item) => Math.max(max, item.id), 0);
                     nextId = maxId + 1;
                 } else {
@@ -341,24 +333,22 @@
             }
         }
 
-        // --- 渲染與操作函數 ---
-
         function renderAnnouncements() {
             listContainer.innerHTML = '';
-            // 由於公告列表通常是最新在前，這裡反轉數組
             announcementsData.slice().reverse().forEach(item => {
                 const newPanel = document.createElement('div');
                 newPanel.className = 'info-panel';
-                // 如果是管理員模式，則增加 unlocked class
+                
+                const isContentEditable = isAdmin ? 'true' : 'false';
                 if (isAdmin) {
                     newPanel.classList.add('unlocked');
                 }
+
                 newPanel.dataset.id = item.id;
                 
-                // 渲染內容
                 newPanel.innerHTML = `
                     <button class="delete-btn" onclick="checkAdmin('delete', '${item.id}')">×</button>
-                    <div class="editable-content" contenteditable="${isAdmin ? 'true' : 'false'}" onblur="saveContent(${item.id}, this)">
+                    <div class="editable-content" contenteditable="${isContentEditable}" onblur="saveContent(${item.id}, this)">
                         <h2>${item.title}</h2>
                         <p>${item.content}</p>
                     </div>
@@ -371,37 +361,38 @@
         function saveContent(id, element) {
             if (!isAdmin) return; 
 
-            // 提取 H2 和 P 標籤內容
             const titleElement = element.querySelector('h2');
             const contentElement = element.querySelector('p');
 
             const index = announcementsData.findIndex(item => item.id == id);
             if (index !== -1) {
                 announcementsData[index].title = titleElement ? titleElement.textContent.trim() : '（無標題）';
-                // 處理多個 <p> 標籤或其他結構，但這裡簡化為第一個 <p> 的內容
                 announcementsData[index].content = contentElement ? contentElement.innerHTML.trim() : '（無內容）'; 
                 saveAnnouncements();
             }
         }
 
-
-        // --- 管理員操作與驗證函數 ---
-
         function showPasswordModal(action, targetId = null) {
             if (isAdmin) {
-                // 如果已經是管理員，直接執行操作
                 if (action === 'add') {
                     addNewAnnouncement();
                 } else if (action === 'delete') {
                     deleteAnnouncementInternal(targetId);
+                } else if (action === 'edit' && targetId) {
+                    editAnnouncementInternal(targetId);
                 }
                 return;
             }
 
             pendingAction = action;
-            pendingDeleteId = targetId;
+            pendingTargetId = targetId;
 
-            modalPrompt.textContent = action === 'add' ? '請輸入管理密碼以新增公告。' : '請輸入管理密碼以刪除選中的公告。';
+            let promptText = '';
+            if (action === 'add') promptText = '請輸入管理密碼以新增公告。';
+            else if (action === 'delete') promptText = '請輸入管理密碼以刪除選中的公告。';
+            else if (action === 'edit') promptText = '請輸入管理密碼以開始編輯公告。';
+
+            modalPrompt.textContent = promptText;
             errorMessage.style.display = 'none';
             passwordInput.value = '';
             passwordModal.style.display = 'flex';
@@ -423,23 +414,21 @@
                 isAdmin = true;
                 passwordModal.style.display = 'none';
                 
-                // 更新提示訊息並顯示控制區塊 (僅管理員可見)
-                controlsHint.innerHTML = '管理員模式已啟用。';
+                controlsHint.innerHTML = `✨ 管理員模式已啟用。快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除 | <span class="key-hint">Ctrl + M</span> 編輯`;
                 controlsHint.classList.add('unlocked');
 
-                // 重新渲染列表，開啟所有編輯功能和刪除按鈕
                 renderAnnouncements(); 
                 
-                // 執行待處理的操作
                 if (pendingAction === 'add') {
                     addNewAnnouncement();
-                } else if (pendingAction === 'delete' && pendingDeleteId) {
-                    deleteAnnouncementInternal(pendingDeleteId);
+                } else if (pendingAction === 'delete' && pendingTargetId) {
+                    deleteAnnouncementInternal(pendingTargetId);
+                } else if (pendingAction === 'edit' && pendingTargetId) {
+                    editAnnouncementInternal(pendingTargetId);
                 }
 
-                // 重設狀態
                 pendingAction = null;
-                pendingDeleteId = null;
+                pendingTargetId = null;
 
             } else {
                 errorMessage.style.display = 'block';
@@ -447,7 +436,7 @@
                 passwordInput.focus();
             }
         }
-
+        
         function getSelectedAnnouncementId() {
             const selectedPanel = document.querySelector('.info-panel.selected');
             return selectedPanel ? selectedPanel.dataset.id : null;
@@ -470,7 +459,6 @@
             saveAnnouncements();
             renderAnnouncements();
 
-            // 嘗試選中並聚焦到新的公告 (新的公告在列表最上方)
             const newPanel = document.querySelector(`.info-panel[data-id="${newId}"]`);
             if (newPanel) {
                  selectAnnouncement(newPanel);
@@ -479,21 +467,20 @@
         }
 
         function deleteAnnouncementInternal(id) {
-            if (!isAdmin || !id) return;
+            if (!id || !confirm(`確認要刪除 ID 為 ${id} 的公告嗎？ (此操作無法復原)`)) return;
 
-            if (confirm(`確認要刪除 ID 為 ${id} 的公告嗎？ (此操作無法復原)`)) {
-                // 刪除數據庫中的項目
-                announcementsData = announcementsData.filter(item => item.id != id);
-                saveAnnouncements();
-                
-                // 重新渲染頁面
-                renderAnnouncements();
-            }
+            announcementsData = announcementsData.filter(item => item.id != id);
+            saveAnnouncements();
+            renderAnnouncements();
         }
         
-        // 點擊刪除按鈕會執行 checkAdmin，然後 checkAdmin 成功後會呼叫 deleteAnnouncementInternal
-
-        // --- 介面互動函數 ---
+        function editAnnouncementInternal(id) {
+            const panel = document.querySelector(`.info-panel[data-id="${id}"]`);
+            if (panel) {
+                selectAnnouncement(panel);
+                panel.querySelector('.editable-content').focus();
+            }
+        }
 
         function selectAnnouncement(panel) {
             if (!isAdmin) return;
@@ -502,7 +489,6 @@
             panel.classList.add('selected');
         }
 
-        // 點擊事件監聽器：
         listContainer.addEventListener('click', function(event) {
             const panel = event.target.closest('.info-panel');
             if (panel && isAdmin) {
@@ -510,26 +496,31 @@
             }
         });
 
-
         document.addEventListener('keydown', function(event) {
             const isModifierKey = event.ctrlKey || event.metaKey; 
+            const selectedId = getSelectedAnnouncementId();
 
             if (isModifierKey && event.key === 'g') {
                 event.preventDefault(); 
                 checkAdmin('add'); 
-            } else if (isModifierKey && event.key === 'v') {
-                const idToDelete = getSelectedAnnouncementId();
-                if (idToDelete) {
+            } 
+            else if (isModifierKey && event.key === 'd') {
+                if (selectedId) {
                     event.preventDefault(); 
-                    checkAdmin('delete', idToDelete); // 觸發刪除前檢查權限
+                    checkAdmin('delete', selectedId); 
+                }
+            }
+            else if (isModifierKey && event.key === 'm') {
+                if (selectedId) {
+                    event.preventDefault(); 
+                    checkAdmin('edit', selectedId); 
                 }
             }
         });
 
-        // --- 頁面初始化 ---
         document.addEventListener('DOMContentLoaded', () => {
-            loadAnnouncements(); // 載入儲存的數據
-            renderAnnouncements(); // 渲染訪客模式下的公告
+            loadAnnouncements(); 
+            renderAnnouncements(); 
             passwordInput.focus();
         });
     </script>

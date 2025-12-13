@@ -78,18 +78,19 @@
         font-weight: bold;
         color: #b9bbbe;
     }
+    /* 修正 input 和 select 的樣式，讓它們看起來一致 */
     input[type="text"], textarea, select {
         width: 100%;
         padding: 12px;
         margin-top: 5px;
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 8px;
-        background-color: rgba(64, 68, 75, 0.7); /* 半透明輸入框 */
+        background-color: rgba(64, 68, 75, 0.7); /* 半透明輸入框/下拉選單 */
         color: #ffffff;
         box-sizing: border-box;
         transition: all 0.3s;
     }
-    input[type="text"]:focus, textarea:focus {
+    input[type="text"]:focus, textarea:focus, select:focus {
         background-color: rgba(64, 68, 75, 0.9);
         border-color: #7289DA;
         box-shadow: 0 0 5px #7289DA;
@@ -235,8 +236,11 @@
             <h2>🏷️ 身分組操作</h2>
             <label for="role-member-id">目標用戶 ID (UID)：</label>
             <input type="text" id="role-member-id" placeholder="輸入要操作的用戶 ID">
-            <label for="role-select">輸入身分組 ID：</label>
-            <input type="text" id="role-select" placeholder="例如: 123456789012345678 (身分組 ID)">
+            
+            <label for="role-select">選擇身分組：</label>
+            <select id="role-select">
+                <option value="" disabled selected>載入中...</option>
+            </select>
             
             <button id="add-role-button">賦予身分組</button>
             <button id="remove-role-button">移除身分組</button>
@@ -244,8 +248,12 @@
 
         <div id="message-module" class="module">
             <h2>✉️ 訊息發送 (以 Bot 名義)</h2>
-            <label for="channel-id">頻道 ID：</label>
-            <input type="text" id="channel-id" placeholder="輸入發送目標頻道 ID">
+            
+            <label for="channel-select">選擇頻道：</label>
+            <select id="channel-select">
+                <option value="" disabled selected>載入中...</option>
+            </select>
+            
             <label for="message-content">訊息內容：</label>
             <textarea id="message-content" placeholder="輸入您要 Bot 發送的訊息..."></textarea>
             
@@ -274,15 +282,35 @@
     </footer>
 
     <script>
-        // Serverless API 端點定義
+        // Serverless API 端點定義 (假設這些端點將由您的後端提供)
         const API_ENDPOINTS = {
             GET_STATS: '/api/get-stats',
+            GET_ROLES: '/api/get-roles',       // 🌟 新增：獲取所有身分組列表
+            GET_CHANNELS: '/api/get-channels', // 🌟 新增：獲取所有頻道列表
             KICK: '/api/kick-member',
             BAN: '/api/ban-member', 
             SEND_MESSAGE: '/api/send-message',
             MANAGE_ROLE: '/api/manage-role', 
         };
+        
+        // ----------------------------------------------------
+        // 輔助功能：通用 API 請求
+        // ----------------------------------------------------
+        const apiPost = async (endpoint, data) => {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
 
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || `操作失敗 (${response.status})`);
+            }
+            return result;
+        };
+        
         // ----------------------------------------------------
         // 核心功能：Cookie 刪除 (用於登出)
         // ----------------------------------------------------
@@ -308,24 +336,54 @@
             }, 5000);
         };
 
-        // 執行 API POST 請求的通用函數
-        const apiPost = async (endpoint, data) => {
-            const response = await fetch(endpoint, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
+        // ----------------------------------------------------
+        // 🌟 新增：填充下拉選單的通用函數
+        // ----------------------------------------------------
+        /**
+         * 填充 <select> 元素的選項。
+         * @param {string} selectId - <select> 元素的 ID (e.g., 'role-select').
+         * @param {string} endpoint - 獲取數據的 API 端點 (e.g., API_ENDPOINTS.GET_ROLES).
+         * @param {string} arrayKey - 響應 JSON 中包含選項陣列的鍵 (e.g., 'roles').
+         * @param {string} textKey - 用作選項顯示文本的鍵 (e.g., 'name').
+         * @param {string} valueKey - 用作選項實際值的鍵 (e.g., 'id').
+         */
+        const loadOptions = async (selectId, endpoint, arrayKey, textKey, valueKey) => {
+            const selectElement = document.getElementById(selectId);
+            selectElement.innerHTML = '<option value="" disabled selected>載入中...</option>'; // 顯示載入狀態
             
-            if (!response.ok) {
-                throw new Error(result.error || `操作失敗 (${response.status})`);
+            try {
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (!response.ok || !data[arrayKey] || !Array.isArray(data[arrayKey])) {
+                    throw new Error(data.error || 'API 響應格式錯誤');
+                }
+                
+                const items = data[arrayKey];
+                
+                // 清空並設置默認選項
+                selectElement.innerHTML = `<option value="" disabled selected>--- 選擇 ${selectId.includes('role') ? '身分組' : '頻道'} ---</option>`;
+                
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    // 🌟 這裡將顯示名稱和 ID 都展示出來，方便管理員確認
+                    option.textContent = `#${item[textKey]} (ID: ${item[valueKey]})`; 
+                    option.value = item[valueKey]; // 實際值為 ID
+                    selectElement.appendChild(option);
+                });
+                
+                showMessage(`${selectId.includes('role') ? '身分組' : '頻道'}列表載入成功。`, 'success');
+
+            } catch (error) {
+                console.error(`載入 ${selectId} 失敗:`, error);
+                selectElement.innerHTML = `<option value="" disabled selected>❌ 載入失敗: ${error.message}</option>`;
+                showMessage(`載入 ${selectId} 列表失敗: ${error.message}`, 'error');
             }
-            return result;
         };
 
+
         // ----------------------------------------------------
-        // 模組 1: 統計數據邏輯 (已移除在線人數邏輯)
+        // 模組 1: 統計數據邏輯
         // ----------------------------------------------------
         const refreshStats = async () => {
             document.getElementById('total-members').textContent = '讀取中...';
@@ -351,7 +409,7 @@
         };
 
         // ----------------------------------------------------
-        // 模組 2: 成員操作邏輯 (踢人/封鎖)
+        // 模組 2: 成員操作邏輯 (踢人/封鎖) - 保持不變，因為用戶 ID 仍需手動輸入
         // ----------------------------------------------------
         const handleMemberAction = async (action) => {
             const userId = document.getElementById('member-id').value.trim();
@@ -378,10 +436,11 @@
         // ----------------------------------------------------
         const handleRoleAction = async (action) => {
             const userId = document.getElementById('role-member-id').value.trim();
-            const roleId = document.getElementById('role-select').value.trim();
+            // 🌟 從下拉選單獲取選定的身分組 ID
+            const roleId = document.getElementById('role-select').value.trim(); 
             
             if (!userId || !roleId) {
-                return showMessage('請輸入目標用戶 ID 和身分組 ID。', 'error');
+                return showMessage('請輸入目標用戶 ID **並選擇身分組**。', 'error');
             }
 
             try {
@@ -404,11 +463,12 @@
         // 模組 4: 訊息發送邏輯
         // ----------------------------------------------------
         const handleSendMessage = async () => {
-            const channelId = document.getElementById('channel-id').value.trim();
+            // 🌟 從下拉選單獲取選定的頻道 ID
+            const channelId = document.getElementById('channel-select').value.trim(); 
             const content = document.getElementById('message-content').value.trim();
 
             if (!channelId || !content) {
-                return showMessage('請輸入頻道 ID 和訊息內容。', 'error');
+                return showMessage('請選擇頻道 ID 和輸入訊息內容。', 'error');
             }
 
             try {
@@ -420,7 +480,7 @@
         };
 
         // ----------------------------------------------------
-        // 模組 5: Webhook 測試邏輯
+        // 模組 5: Webhook 測試邏輯 (保持不變)
         // ----------------------------------------------------
         const handleWebhookTest = async () => {
             const webhookUrl = document.getElementById('webhook-url').value.trim();
@@ -452,13 +512,21 @@
         // 初始化與事件監聽
         // ----------------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
-            refreshStats();
+            // 載入初始數據
+            refreshStats(); 
+            loadOptions('role-select', API_ENDPOINTS.GET_ROLES, 'roles', 'name', 'id');
+            loadOptions('channel-select', API_ENDPOINTS.GET_CHANNELS, 'channels', 'name', 'id');
 
             // 登出按鈕
             document.getElementById('logout-button').addEventListener('click', handleLogout);
 
             // 統計數據按鈕
-            document.getElementById('refresh-stats').addEventListener('click', refreshStats);
+            document.getElementById('refresh-stats').addEventListener('click', () => {
+                refreshStats();
+                // 重新整理數據時也刷新列表
+                loadOptions('role-select', API_ENDPOINTS.GET_ROLES, 'roles', 'name', 'id'); 
+                loadOptions('channel-select', API_ENDPOINTS.GET_CHANNELS, 'channels', 'name', 'id');
+            });
 
             // 成員管理按鈕
             document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));
@@ -477,4 +545,3 @@
     </script>
 </body>
 </html>
-

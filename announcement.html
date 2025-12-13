@@ -510,14 +510,14 @@
             }
         });
 
-        // 鍵盤事件監聽器：Ctrl+G 和 Ctrl+D 
+
         document.addEventListener('keydown', function(event) {
             const isModifierKey = event.ctrlKey || event.metaKey; 
 
             if (isModifierKey && event.key === 'g') {
                 event.preventDefault(); 
-                checkAdmin('add'); // 觸發新增前檢查權限
-            } else if (isModifierKey && event.key === 'd') {
+                checkAdmin('add'); 
+            } else if (isModifierKey && event.key === 'v') {
                 const idToDelete = getSelectedAnnouncementId();
                 if (idToDelete) {
                     event.preventDefault(); 

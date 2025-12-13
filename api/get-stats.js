@@ -1,10 +1,12 @@
-// api/get-stats.js (新版本：手動計算成員)
+// /api/get-stats.js
 
 const axios = require('axios');
 const GUILD_ID = process.env.DISCORD_GUILD_ID;
 const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 
-// 輔助函數：從請求標頭中解析 Cookie
+/**
+ * 輔助函數：從請求標頭中解析特定名稱的 Cookie 值
+ */
 function getCookie(cookieString, name) {
     if (!cookieString) return null;
     const cookies = cookieString.split(';').map(c => c.trim());
@@ -24,15 +26,15 @@ async function getGuildBaseData() {
     return response.data;
 }
 
-// 獲取並計算成員數據 (繞過 Gateway 限制)
+// 獲取並計算成員數據 (繞過 Gateway 限制，強制獲取成員列表)
 async function getMemberCounts() {
     let totalMembers = 0;
-    let onlineMembers = 0;
-    let after = '0'; // 用於分頁的用戶 ID
-    const limit = 1000; // 一次獲取 1000 個成員 (最多)
+    // 雖然在線人數無法準確獲取，但為了防止前端崩潰，我們保留變數
+    let onlineMembers = 0; 
     
-    // 由於您的群組約 300 人，單次請求即可完成
-    const url = `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=${limit}&after=${after}`;
+    // 使用 GET /guilds/{guild.id}/members 端點
+    // 由於您的群組約 300 人，單次請求 limit=1000 即可完成
+    const url = `https://discord.com/api/v10/guilds/${GUILD_ID}/members?limit=1000`;
     
     const response = await axios.get(url, {
         headers: { Authorization: `Bot ${BOT_TOKEN}` }
@@ -41,22 +43,17 @@ async function getMemberCounts() {
     const members = response.data;
     totalMembers = members.length;
 
-    // 計算在線人數 (檢查 presence 狀態，需要 PRESENCE INTENT)
-    onlineMembers = members.filter(member => 
-        // Discord API V10 (成員對象) 不直接包含 status 字段，
-        // 需依賴 Gateway 狀態，但我們可以檢查 presence 緩存
-        // 由於我們無法訪問 Gateway 緩存，此處的在線人數可能仍然不準確。
-        // 我們將暫時使用一個更保守的檢查（如果 API 有回傳 presence 信息）
-        member.presence && member.presence.status && member.presence.status !== 'offline'
-    ).length;
-
+    // 由於 Serverless 環境無法保持 Gateway 連線，
+    // onlineMembers (presence_count) 將始終不準確，因此我們保留為 0。
+    
     return { totalMembers, onlineMembers };
 }
 
 module.exports = async (req, res) => {
     
-    // 階段 1: 安全檢查
+    // 階段 1: 安全檢查 (驗證用戶是否已登入)
     const authToken = getCookie(req.headers.cookie, 'auth_token');
+
     if (!authToken) {
         console.warn('未經授權嘗試讀取統計數據。');
         return res.status(401).json({ error: '未經授權訪問，請重新登入。' });
@@ -77,18 +74,18 @@ module.exports = async (req, res) => {
 
         console.log("計算後的數據:", {
             totalMembers: totalMembers,
-            onlineMembers: onlineMembers,
             rolesCount: baseData.roles.length,
         });
 
+        // 階段 3: 返回數據
         res.status(200).json({
             totalMembers: totalMembers, 
-            onlineMembers: onlineMembers,
+            onlineMembers: onlineMembers, // 保持為 0，但確保數據類型正確
             totalRoles: baseData.roles.length,
         });
 
     } catch (error) {
-        // 錯誤診斷與處理（保持與之前一樣的詳細日誌）
+        // 階段 4: 錯誤診斷與處理
         const statusCode = error.response ? error.response.status : 'N/A';
         const errorData = error.response ? error.response.data : error.message;
 

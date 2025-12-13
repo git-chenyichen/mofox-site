@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -18,16 +18,16 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
-            position: relative; /* 為了定位登入按鈕 */
+            position: relative; 
             
-            /* 背景圖片設定：請替換為您的圖片路徑 */
+
             background-image: url('images/mofox-background.jpg'); 
             background-size: cover; 
             background-position: center center; 
             background-attachment: fixed; 
         }
         
-        /* 模糊遮罩層 */
+
         body::before {
             content: '';
             position: fixed; 
@@ -41,19 +41,19 @@
             z-index: -1; 
         }
 
-        /* ==== 登入按鈕容器樣式 ==== */
+
         .login-container {
             position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 100; /* 確保按鈕在最上層 */
+            z-index: 100; 
         }
 
         .discord-login-btn {
             display: inline-flex;
             align-items: center;
             padding: 10px 15px;
-            background-color: #7289DA; /* Discord 藍色 */
+            background-color: 
             color: white;
             border-radius: 8px;
             text-decoration: none;
@@ -73,11 +73,9 @@
             height: 20px;
             margin-right: 8px;
             vertical-align: middle;
-            /* 確保 images/discord-logo.png 存在 */
-        }
-        /* ============================ */
 
-        /* 導覽列樣式 */
+        }
+
         .nav-bar {
             width: 100%;
             background-color: rgba(0, 0, 0, 0.2); 
@@ -112,7 +110,6 @@
             border-bottom: 2px solid #ffcc66;
         }
 
-        /* 頁面標題及果凍效果 */
         .page-title {
             color: #ffe6c7;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
@@ -129,7 +126,7 @@
             cursor: default;
         }
 
-        /* 團隊成員容器 */
+
         .staff-container {
             display: flex;
             flex-wrap: wrap;
@@ -140,7 +137,7 @@
             margin-bottom: 40px;
         }
 
-        /* 單一成員卡片 */
+
         .staff-member {
             background-color: rgba(255, 255, 255, 0.15);
             border-radius: 15px;
@@ -148,7 +145,7 @@
             width: 250px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            /* 卡片的果凍/彈性懸停效果 */
+
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
@@ -165,7 +162,6 @@
             border: 4px solid #ffcc66;
             margin-bottom: 15px;
             transition: border-color 0.3s;
-            /* 圖片路徑皆為範例，請替換為您的圖片路徑 */
         }
         
         .staff-member:hover img {
@@ -178,7 +174,7 @@
             margin: 5px 0 10px;
         }
         
-        /* 名言警句 */
+
         .quote {
             color: #ffcc66; 
             font-style: italic;
@@ -187,7 +183,7 @@
             font-size: 0.95em; 
         }
         
-        /* 描述文字 */
+
         .staff-member p {
             font-size: 0.95em;
             line-height: 1.5;
@@ -195,7 +191,7 @@
             margin-bottom: 5px; 
         }
         
-        /* 頁腳 */
+
         footer {
             width: 90%;
             margin-top: 40px;
@@ -266,6 +262,7 @@
 </body>
 
 </html>
+
 
 
 

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>墨狐酒館後台管理 | 已登入</title>
- <style>
+<style>
     /* 玻璃擬態 (Glassmorphism) 樣式 */
     
     /* 設置整個頁面背景，使用實際的圖片 */
@@ -16,8 +16,8 @@
         flex-direction: column;
         align-items: center;
         
-
-        background-image: url('images/mofox-background.jpg'); /* 替換為您的圖片路徑 */
+        /* 確保您的圖片路徑正確 */
+        background-image: url('images/mofox-background.jpg'); 
         background-size: cover; /* 確保圖片覆蓋整個視口 */
         background-attachment: fixed; /* 圖片固定不動 */
         background-position: center;
@@ -142,20 +142,21 @@
         transform: scale(0.98);
     }
 
-    /* 統計數據特別樣式 */
+    /* 統計數據特別樣式 - 調整為兩欄佈局 */
     .stats-grid {
         display: flex;
         justify-content: space-around;
         text-align: center;
-        gap: 20px;
+        gap: 40px; /* 增加間距讓兩張卡片更美觀 */
     }
     .stat-card {
         background: rgba(64, 68, 75, 0.5); /* 統計卡片也半透明 */
         backdrop-filter: blur(5px);
-        padding: 15px;
+        padding: 20px 15px; /* 增加上下內距 */
         border-radius: 10px;
         flex-grow: 1;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        min-width: 300px; /* 設置最小寬度 */
     }
     .stat-card p {
         font-size: 1.1em;
@@ -210,10 +211,7 @@
                     <p>總成員數</p>
                     <strong id="total-members">讀取中...</strong>
                 </div>
-                <div class="stat-card">
-                    <p>在線人數</p>
-                    <strong id="online-members">讀取中...</strong>
-                </div>
+                
                 <div class="stat-card">
                     <p>身分組數量</p>
                     <strong id="total-roles">讀取中...</strong>
@@ -327,11 +325,10 @@
         };
 
         // ----------------------------------------------------
-        // 模組 1: 統計數據邏輯
+        // 模組 1: 統計數據邏輯 (已移除在線人數邏輯)
         // ----------------------------------------------------
         const refreshStats = async () => {
             document.getElementById('total-members').textContent = '讀取中...';
-            document.getElementById('online-members').textContent = '讀取中...';
             document.getElementById('total-roles').textContent = '讀取中...';
 
             try {
@@ -341,7 +338,6 @@
                 if (!response.ok) throw new Error(data.error || '無法讀取數據');
                 
                 document.getElementById('total-members').textContent = data.totalMembers || '0';
-                document.getElementById('online-members').textContent = data.onlineMembers || '0';
                 document.getElementById('total-roles').textContent = data.totalRoles || '0';
 
                 showMessage("統計數據已成功更新。", 'success');
@@ -349,7 +345,6 @@
             } catch (error) {
                 console.error("無法讀取統計數據:", error);
                 document.getElementById('total-members').textContent = '❌錯誤';
-                document.getElementById('online-members').textContent = '❌錯誤';
                 document.getElementById('total-roles').textContent = '❌錯誤';
                 showMessage(`讀取統計數據失敗: ${error.message}`, 'error');
             }
@@ -482,4 +477,3 @@
     </script>
 </body>
 </html>
-

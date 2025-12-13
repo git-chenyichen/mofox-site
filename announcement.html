@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨狐酒館 | 酒館公告</title>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            color: #ffffff;
+            font-family: 'Avenir', 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/000000/FFFFFF/png?text=MoFox+Background');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .nav-bar {
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+        }
+                
+        .nav-link {
+            text-decoration: none;
+            color: #ffcc66;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            margin: 0 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #ff8c42;
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            background-color: #cc6600;
+            color: #ffffff;
+            border-bottom: 2px solid #ffcc66;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            color: #ffe6c7;
+            font-family: 'Handlee', cursive;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+            margin: 0;
+        }
+        
+        .subtitle {
+            font-size: 1.1em;
+            color: #ffcc66;
+            font-style: italic;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 25px;
+            color: #ffcc66;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffcc6660;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .controls.unlocked {
+             opacity: 1;
+        }
+        .key-hint {
+            background-color: #ff8c42;
+            color: #1a1a1a;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin: 0 5px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #password-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 140, 66, 0.5);
+            border: 2px solid #ffcc66;
+        }
+        #password-input {
+            padding: 10px;
+            margin: 15px 0;
+            border: 1px solid #ffcc66;
+            border-radius: 5px;
+            width: 250px;
+            background: #2a2a2a;
+            color: #ffffff;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        #unlock-button {
+            background-color: #ff8c42;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        #unlock-button:hover {
+            background-color: #ff703f;
+        }
+        
+        #announcements-list {
+            width: 100%;
+            pointer-events: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        #announcements-list.unlocked {
+             pointer-events: auto;
+             opacity: 1;
+        }
+
+        .info-panel {
+            width: 100%;
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid #ffcc66;
+            text-align: left;
+            margin-bottom: 30px;
+            color: #ffffff;
+            position: relative;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .info-panel.selected {
+            border: 2px solid #ff8c42;
+            box-shadow: 0 0 20px rgba(255, 140, 66, 0.7);
+            transform: scale(1.01);
+        }
+
+        .editable-content {
+            min-height: 100px;
+            outline: none;
+            padding: 10px;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            line-height: 1.6;
+            font-size: 1em;
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .editable-content:focus {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 1px solid #ffcc66;
+        }
+
+        .info-panel h2 {
+            font-size: 1.6em;
+            color: #ffcc66;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+        }
+        
+        .info-panel p {
+            white-space: pre-wrap;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #cc6600;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            line-height: 30px;
+            text-align: center;
+            opacity: 0.7;
+            transition: opacity 0.2s, background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #ff0000;
+            opacity: 1;
+        }
+        
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff8c42;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .action-button:hover {
+            background-color: #ff703f;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2 style="color: #ffcc66;">🗝️ 管理員身份驗證</h2>
+            <p>請輸入墨狐酒館的管理密碼以解鎖控制台功能。</p>
+            <input type="password" id="password-input" placeholder="輸入管理密碼" onkeydown="handleEnter(event)">
+            <button id="unlock-button" onclick="verifyPassword()">🥂 進入控制台</button>
+            <p id="error-message" style="color: #ff0000; margin-top: 10px; display: none;">密碼錯誤，請重試。</p>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <a href="index.html" class="nav-link">酒館主頁</a>
+        <a href="staff.html" class="nav-link">館員團隊</a>
+        <a href="history.html" class="nav-link">歷程回顧</a>
+        <a href="announcement.html" class="nav-link active">歷程回顧</a>
+    </div>
+    
+    <header>
+        <h1>墨狐酒館 - 公告管理</h1>
+        <div class="subtitle">「深夜的燭火，照亮最新的消息。」</div>
+    </header>
+
+    <main>
+        <div class="controls" id="controls-hint">
+            控制台已鎖定，請先驗證密碼。
+        </div>
+        
+        <div id="announcements-list">
+            <div class="info-panel" data-id="1">
+                <button class="delete-btn" onclick="deleteAnnouncement(event, '1')">×</button>
+                <div class="editable-content" contenteditable="true">
+                    <h2>🥂 【範例公告】請先驗證密碼 🔒</h2>
+                    <p><strong>此區塊內容已被鎖定，只有管理員能進行編輯、新增與刪除操作。</strong></p>
+                    <p>請點擊下方的按鈕或使用快捷鍵進行解鎖。</p>
+                    <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**解鎖後，您將獲得完整的編輯權限。**</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="action-button" id="add-button" onclick="addNewAnnouncement()">
+            手動新增公告 (等同 Ctrl + G)
+        </button>
+    </main>
+
+    <script>
+        const ADMIN_PASSWORD = 'mofoxadmin@';
+        let isAdmin = false;
+
+        const listContainer = document.getElementById('announcements-list');
+        const passwordOverlay = document.getElementById('password-overlay');
+        const passwordInput = document.getElementById('password-input');
+        const errorMessage = document.getElementById('error-message');
+        const controlsHint = document.getElementById('controls-hint');
+        const addButton = document.getElementById('add-button');
+        let nextId = 2;
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                verifyPassword();
+            }
+        }
+
+        function verifyPassword() {
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                isAdmin = true;
+                passwordOverlay.style.display = 'none';
+                
+                listContainer.classList.add('unlocked');
+                controlsHint.classList.add('unlocked');
+                
+                controlsHint.innerHTML = '快捷鍵指南：<span class="key-hint">Ctrl + G</span> 或 <span class="key-hint">Cmd + G</span> 新增公告 | <span class="key-hint">Ctrl + D</span> 或 <span class="key-hint">Cmd + D</span> 刪除選中公告';
+                
+                document.querySelectorAll('.editable-content').forEach(el => {
+                    el.contentEditable = 'true';
+                });
+                
+                const firstPanel = document.querySelector('.info-panel');
+                if (firstPanel) {
+                     selectAnnouncement(firstPanel);
+                }
+
+                alert('管理權限已解鎖！歡迎，館員&館主。');
+
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        }
+
+        function selectAnnouncement(panel) {
+            if (!isAdmin) return;
+            
+            document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('selected'));
+            panel.classList.add('selected');
+        }
+
+        function getSelectedAnnouncement() {
+            return document.querySelector('.info-panel.selected');
+        }
+
+        function addNewAnnouncement() {
+            if (!isAdmin) {
+                alert('只有管理員可以新增公告。請先輸入密碼。');
+                passwordOverlay.style.display = 'flex';
+                passwordInput.focus();
+                return;
+            }
+
+            const newId = nextId++;
+            const newPanel = document.createElement('div');
+            newPanel.className = 'info-panel';
+            newPanel.dataset.id = newId;
+            
+            newPanel.innerHTML = `
+                <button class="delete-btn" onclick="deleteAnnouncement(event, '${newId}')">×</button>
+                <div class="editable-content" contenteditable="true">
+                    <h2>📝 【最新公告】待編輯標題 (ID: ${newId})</h2>
+                    <p><strong>請在此處開始輸入您的公告內容。</strong></p>
+                    <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**您的故事，就是墨狐最好的調酒。**</p>
+                </div>
+            `;
+            
+            listContainer.prepend(newPanel);
+            selectAnnouncement(newPanel);
+            
+            newPanel.querySelector('.editable-content').focus(); 
+        }
+
+        function deleteAnnouncement(event, id) {
+            if (!isAdmin) {
+                alert('只有管理員可以刪除公告。');
+                return;
+            }
+
+            if (event) event.stopPropagation();
+
+            const panel = document.querySelector(`.info-panel[data-id="${id}"]`);
+            if (panel && confirm('確認要刪除這則公告嗎？ (此操作無法復原)')) {
+                panel.remove();
+                
+                const nextPanel = document.querySelector('.info-panel');
+                if (nextPanel) {
+                    selectAnnouncement(nextPanel);
+                }
+            }
+        }
+
+        listContainer.addEventListener('click', function(event) {
+            const panel = event.target.closest('.info-panel');
+            if (panel && isAdmin) {
+                selectAnnouncement(panel);
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            if (isAdmin && !event.target.closest('.info-panel') && !event.target.closest('.action-button')) {
+                document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('selected'));
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (!isAdmin) return;
+
+            const isModifierKey = event.ctrlKey || event.metaKey; 
+
+            if (isModifierKey && event.key === 'g') {
+                event.preventDefault(); 
+                addNewAnnouncement();
+            } else if (isModifierKey && event.key === 'd') {
+                const selectedPanel = getSelectedAnnouncement();
+                if (selectedPanel) {
+                    event.preventDefault(); 
+                    const idToDelete = selectedPanel.dataset.id;
+                    deleteAnnouncement(null, idToDelete); 
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+             passwordInput.focus();
+             document.querySelectorAll('.editable-content').forEach(el => {
+                el.contentEditable = 'false';
+             });
+        });
+    </script>
+</body>
+</html>

@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             background-color: #1a1a1a;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/000000/FFFFFF/png?text=MoFox+Background');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/mofox-background.jpg');
             background-size: cover;
             background-attachment: fixed;
             min-height: 100vh;
@@ -91,12 +91,8 @@
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #ffcc6660;
-            opacity: 0.5;
-            transition: opacity 0.3s;
         }
-        .controls.unlocked {
-             opacity: 1;
-        }
+        
         .key-hint {
             background-color: #ff8c42;
             color: #1a1a1a;
@@ -107,7 +103,7 @@
             font-weight: bold;
         }
 
-        #password-overlay {
+        #password-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -115,7 +111,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.9);
             z-index: 1000;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -155,13 +151,6 @@
         
         #announcements-list {
             width: 100%;
-            pointer-events: none;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-        }
-        #announcements-list.unlocked {
-             pointer-events: auto;
-             opacity: 1;
         }
 
         .info-panel {
@@ -175,8 +164,7 @@
             margin-bottom: 30px;
             color: #ffffff;
             position: relative;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
         }
 
         .info-panel.selected {
@@ -196,11 +184,15 @@
             color: #fff;
             background-color: rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s;
+
+            pointer-events: none; 
+            cursor: default;
         }
 
-        .editable-content:focus {
+        .editable-content[contenteditable="true"]:focus {
             background-color: rgba(0, 0, 0, 0.4);
             border: 1px solid #ffcc66;
+            cursor: text;
         }
 
         .info-panel h2 {
@@ -233,6 +225,11 @@
             text-align: center;
             opacity: 0.7;
             transition: opacity 0.2s, background 0.2s;
+            display: none;
+        }
+
+        .info-panel.unlocked .delete-btn {
+            display: block;
         }
 
         .delete-btn:hover {
@@ -264,12 +261,12 @@
 </head>
 <body>
 
-    <div id="password-overlay">
+    <div id="password-modal">
         <div id="password-box">
             <h2 style="color: #ffcc66;">🗝️ 管理員身份驗證</h2>
-            <p>請輸入墨狐酒館的管理密碼以解鎖控制台功能。</p>
+            <p id="modal-prompt">請輸入管理密碼以執行操作。</p>
             <input type="password" id="password-input" placeholder="輸入管理密碼" onkeydown="handleEnter(event)">
-            <button id="unlock-button" onclick="verifyPassword()">🥂 進入控制台</button>
+            <button id="unlock-button" onclick="verifyPassword()">🥂 驗證並執行</button>
             <p id="error-message" style="color: #ff0000; margin-top: 10px; display: none;">密碼錯誤，請重試。</p>
         </div>
     </div>
@@ -277,8 +274,7 @@
     <div class="nav-bar">
         <a href="index.html" class="nav-link">酒館主頁</a>
         <a href="staff.html" class="nav-link">館員團隊</a>
-        <a href="history.html" class="nav-link">歷程回顧</a>
-        <a href="announcement.html" class="nav-link active">歷程回顧</a>
+        <a href="history.html" class="nav-link active">歷程回顧</a>
     </div>
     
     <header>
@@ -288,37 +284,68 @@
 
     <main>
         <div class="controls" id="controls-hint">
-            控制台已鎖定，請先驗證密碼。
+            訪客模式：您可閱讀下方公告。管理員請使用 <span class="key-hint">Ctrl + G</span> 或 <span class="key-hint">手動新增公告按鈕</span> 來啟動管理模式。
         </div>
         
         <div id="announcements-list">
             <div class="info-panel" data-id="1">
-                <button class="delete-btn" onclick="deleteAnnouncement(event, '1')">×</button>
-                <div class="editable-content" contenteditable="true">
-                    <h2>🥂 【範例公告】請先驗證密碼 🔒</h2>
-                    <p><strong>此區塊內容已被鎖定，只有管理員能進行編輯、新增與刪除操作。</strong></p>
-                    <p>請點擊下方的按鈕或使用快捷鍵進行解鎖。</p>
-                    <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**解鎖後，您將獲得完整的編輯權限。**</p>
+                <button class="delete-btn" onclick="checkAdmin('delete', '1')">×</button>
+                <div class="editable-content" contenteditable="false">
+                    <h2>🥂 歡迎來到公告控制台！</h2>
+                    <p><strong>這是一個僅限管理員操作的公告列表。</strong></p>
+                    <p>一般訪客可直接閱讀內容，但無法進行編輯、新增或刪除。</p>
+                    <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**管理員：執行任何管理操作（例如新增或刪除）前，系統將要求您進行密碼驗證。**</p>
                 </div>
             </div>
         </div>
 
-        <button class="action-button" id="add-button" onclick="addNewAnnouncement()">
+        <button class="action-button" id="add-button" onclick="checkAdmin('add')">
             手動新增公告 (等同 Ctrl + G)
         </button>
     </main>
 
     <script>
-        const ADMIN_PASSWORD = 'mofoxadmin@';
+        const ADMIN_PASSWORD = 'mofox123';
         let isAdmin = false;
+        let pendingAction = null; 
+        let pendingDeleteId = null;
 
         const listContainer = document.getElementById('announcements-list');
-        const passwordOverlay = document.getElementById('password-overlay');
+        const passwordModal = document.getElementById('password-modal'); 
         const passwordInput = document.getElementById('password-input');
         const errorMessage = document.getElementById('error-message');
         const controlsHint = document.getElementById('controls-hint');
-        const addButton = document.getElementById('add-button');
+        const modalPrompt = document.getElementById('modal-prompt');
         let nextId = 2;
+
+
+        // 顯示密碼驗證框
+        function showPasswordModal(action, targetId = null) {
+            if (isAdmin) {
+                // 如果已經是管理員，直接執行操作
+                if (action === 'add') {
+                    addNewAnnouncement();
+                } else if (action === 'delete') {
+                    deleteAnnouncement(null, targetId);
+                }
+                return;
+            }
+
+            // 儲存待執行的動作
+            pendingAction = action;
+            pendingDeleteId = targetId;
+
+            modalPrompt.textContent = action === 'add' ? '請輸入管理密碼以新增公告。' : '請輸入管理密碼以刪除此公告。';
+            errorMessage.style.display = 'none';
+            passwordInput.value = '';
+            passwordModal.style.display = 'flex';
+            passwordInput.focus();
+        }
+
+        // 檢查權限並觸發密碼框
+        function checkAdmin(action, targetId = null) {
+            showPasswordModal(action, targetId);
+        }
 
         function handleEnter(event) {
             if (event.key === 'Enter') {
@@ -326,26 +353,31 @@
             }
         }
 
+        // 執行密碼驗證
         function verifyPassword() {
             if (passwordInput.value === ADMIN_PASSWORD) {
                 isAdmin = true;
-                passwordOverlay.style.display = 'none';
+                passwordModal.style.display = 'none';
                 
-                listContainer.classList.add('unlocked');
-                controlsHint.classList.add('unlocked');
-                
-                controlsHint.innerHTML = '快捷鍵指南：<span class="key-hint">Ctrl + G</span> 或 <span class="key-hint">Cmd + G</span> 新增公告 | <span class="key-hint">Ctrl + D</span> 或 <span class="key-hint">Cmd + D</span> 刪除選中公告';
-                
-                document.querySelectorAll('.editable-content').forEach(el => {
-                    el.contentEditable = 'true';
+                // 更新提示訊息和控制面板狀態
+                controlsHint.innerHTML = '✨ 管理員權限已啟用！快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除';
+
+                // 開啟所有現有公告的編輯功能和刪除按鈕
+                document.querySelectorAll('.info-panel').forEach(panel => {
+                    panel.classList.add('unlocked');
+                    panel.querySelector('.editable-content').contentEditable = 'true';
                 });
                 
-                const firstPanel = document.querySelector('.info-panel');
-                if (firstPanel) {
-                     selectAnnouncement(firstPanel);
+                // 執行待處理的操作
+                if (pendingAction === 'add') {
+                    addNewAnnouncement();
+                } else if (pendingAction === 'delete' && pendingDeleteId) {
+                    deleteAnnouncement(null, pendingDeleteId);
                 }
 
-                alert('管理權限已解鎖！歡迎，館員&館主。');
+                // 重設狀態
+                pendingAction = null;
+                pendingDeleteId = null;
 
             } else {
                 errorMessage.style.display = 'block';
@@ -354,6 +386,7 @@
             }
         }
 
+        // 選擇公告，僅在管理員模式下有效
         function selectAnnouncement(panel) {
             if (!isAdmin) return;
             
@@ -367,19 +400,18 @@
 
         function addNewAnnouncement() {
             if (!isAdmin) {
-                alert('只有管理員可以新增公告。請先輸入密碼。');
-                passwordOverlay.style.display = 'flex';
-                passwordInput.focus();
+                // 如果是透過快捷鍵或按鈕觸發但未驗證，則要求驗證
+                showPasswordModal('add');
                 return;
             }
 
             const newId = nextId++;
             const newPanel = document.createElement('div');
-            newPanel.className = 'info-panel';
+            newPanel.className = 'info-panel unlocked'; // 新增的公告預設為解鎖狀態
             newPanel.dataset.id = newId;
             
             newPanel.innerHTML = `
-                <button class="delete-btn" onclick="deleteAnnouncement(event, '${newId}')">×</button>
+                <button class="delete-btn" onclick="checkAdmin('delete', '${newId}')">×</button>
                 <div class="editable-content" contenteditable="true">
                     <h2>📝 【最新公告】待編輯標題 (ID: ${newId})</h2>
                     <p><strong>請在此處開始輸入您的公告內容。</strong></p>
@@ -395,7 +427,8 @@
 
         function deleteAnnouncement(event, id) {
             if (!isAdmin) {
-                alert('只有管理員可以刪除公告。');
+                // 如果是點擊刪除按鈕但未驗證，則要求驗證
+                showPasswordModal('delete', id);
                 return;
             }
 
@@ -412,42 +445,44 @@
             }
         }
 
+        // 點擊事件監聽器：訪客模式下不允許選擇
         listContainer.addEventListener('click', function(event) {
             const panel = event.target.closest('.info-panel');
+            // 只有管理員模式下，點擊才允許選中
             if (panel && isAdmin) {
                 selectAnnouncement(panel);
             }
         });
 
-        document.addEventListener('click', function(event) {
-            if (isAdmin && !event.target.closest('.info-panel') && !event.target.closest('.action-button')) {
-                document.querySelectorAll('.info-panel').forEach(p => p.classList.remove('selected'));
-            }
-        });
-
+        // 鍵盤事件監聽器：Ctrl+G 和 Ctrl+D 
         document.addEventListener('keydown', function(event) {
-            if (!isAdmin) return;
-
             const isModifierKey = event.ctrlKey || event.metaKey; 
 
             if (isModifierKey && event.key === 'g') {
                 event.preventDefault(); 
-                addNewAnnouncement();
+                checkAdmin('add'); // 觸發新增前檢查權限
             } else if (isModifierKey && event.key === 'd') {
                 const selectedPanel = getSelectedAnnouncement();
                 if (selectedPanel) {
                     event.preventDefault(); 
                     const idToDelete = selectedPanel.dataset.id;
-                    deleteAnnouncement(null, idToDelete); 
+                    checkAdmin('delete', idToDelete); // 觸發刪除前檢查權限
                 }
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-             passwordInput.focus();
              document.querySelectorAll('.editable-content').forEach(el => {
                 el.contentEditable = 'false';
              });
+             document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.style.display = 'none';
+             });
+
+             const firstPanel = document.querySelector('.info-panel');
+             if (firstPanel) {
+                 firstPanel.classList.remove('selected'); 
+             }
         });
     </script>
 </body>

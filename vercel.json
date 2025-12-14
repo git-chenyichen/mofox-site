@@ -1,8 +1,16 @@
 {
-    "rewrites": [
-        {
-            "source": "/admin.html",
-            "destination": "/api/admin-check"
-        }
-    ]
+  "redirects": [
+    {
+      "source": "/((?!503).*)",
+      "destination": "/503.html",
+      "permanent": false,
+      "statusCode": 503
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/admin.html",
+      "destination": "/api/admin-check"
+    }
+  ]
 }

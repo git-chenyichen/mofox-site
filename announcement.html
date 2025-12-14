@@ -94,6 +94,7 @@
             overflow: hidden;
             border-radius: 8px;
             border: 1px solid #ffcc6660;
+            transition: height 0.3s, padding 0.3s, margin-bottom 0.3s;
         }
         
         .controls.unlocked {
@@ -254,6 +255,30 @@
             background: #ff0000;
             opacity: 1;
         }
+
+        /* 導入文件的樣式 */
+        #file-upload {
+            padding: 5px;
+            border: 1px solid #ffcc66;
+            border-radius: 5px;
+            background: #2a2a2a;
+            color: #ffffff;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+        #import-btn {
+            background-color: #008CBA; 
+            color: white; 
+            border: none; 
+            padding: 5px 10px; 
+            border-radius: 5px; 
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        #import-btn:hover {
+            background-color: #007bb5;
+        }
     </style>
 </head>
 <body>
@@ -282,6 +307,13 @@
 
     <main>
         <div class="controls" id="controls-hint">
+            <div id="admin-controls">
+                <div style="margin-top: 10px;">
+                    <label for="file-upload" style="font-size: 0.9em;">批量文本上傳 (.txt / .json):</label>
+                    <input type="file" id="file-upload" accept=".txt,.json"/>
+                    <button onclick="checkAdmin('upload')" id="import-btn">⬆️ 導入文本</button>
+                </div>
+            </div>
         </div>
         
         <div id="announcements-list">
@@ -357,6 +389,23 @@
                 
                 listContainer.appendChild(newPanel);
             });
+            updateControlsHint(); 
+        }
+
+        function updateControlsHint() {
+             if (isAdmin) {
+                controlsHint.innerHTML = `✨ 管理員模式已啟用。快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除 | <span class="key-hint">Ctrl + M</span> 編輯
+                <div style="margin-top: 10px;">
+                    <label for="file-upload" style="font-size: 0.9em;">批量文本上傳 (.txt / .json):</label>
+                    <input type="file" id="file-upload" accept=".txt,.json"/>
+                    <button onclick="checkAdmin('upload')" id="import-btn">⬆️ 導入文本</button>
+                </div>
+                `;
+                controlsHint.classList.add('unlocked');
+            } else {
+                controlsHint.innerHTML = '';
+                controlsHint.classList.remove('unlocked');
+            }
         }
         
         function saveContent(id, element) {
@@ -381,6 +430,8 @@
                     deleteAnnouncementInternal(targetId);
                 } else if (action === 'edit' && targetId) {
                     editAnnouncementInternal(targetId);
+                } else if (action === 'upload') {
+                    handleFileUpload();
                 }
                 return;
             }
@@ -392,6 +443,7 @@
             if (action === 'add') promptText = '請輸入管理密碼以新增公告。';
             else if (action === 'delete') promptText = '請輸入管理密碼以刪除選中的公告。';
             else if (action === 'edit') promptText = '請輸入管理密碼以開始編輯公告。';
+            else if (action === 'upload') promptText = '請輸入管理密碼以導入文件。';
 
             modalPrompt.textContent = promptText;
             errorMessage.style.display = 'none';
@@ -410,6 +462,93 @@
             }
         }
 
+        function handleFileUpload() {
+            const fileInput = document.getElementById('file-upload');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("請選擇一個文本或 JSON 文件。");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const fileContent = event.target.result;
+                
+                if (file.name.toLowerCase().endsWith('.json')) {
+                    importFromJson(fileContent);
+                } else if (file.name.toLowerCase().endsWith('.txt')) {
+                    importFromText(fileContent);
+                } else {
+                    alert("不支援的文件類型。請選擇 .txt 或 .json 文件。");
+                }
+                
+                fileInput.value = ''; 
+            };
+
+            reader.onerror = function(event) {
+                console.error("文件讀取錯誤:", event.target.error);
+                alert("無法讀取文件。");
+            };
+
+            reader.readAsText(file);
+        }
+
+        function importFromText(text) {
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+
+            if (lines.length === 0) {
+                 alert("文本文件為空或不包含有效內容。");
+                 return;
+            }
+
+            lines.forEach((line, index) => {
+                const newId = nextId++;
+                const contentText = line.trim();
+                const newAnnouncement = {
+                    id: newId,
+                    title: `📋 【文本導入】第 ${index + 1} 則`,
+                    content: `<p>${contentText}</p>`
+                };
+                announcementsData.push(newAnnouncement);
+            });
+
+            saveAnnouncements();
+            renderAnnouncements();
+            alert(`成功導入 ${lines.length} 則文本公告！`);
+        }
+
+        function importFromJson(jsonString) {
+            try {
+                const importedData = JSON.parse(jsonString);
+                if (Array.isArray(importedData)) {
+                    let importedCount = 0;
+                    importedData.forEach(item => {
+                        if (item.title && item.content) { 
+                            const newId = nextId++;
+                            announcementsData.push({
+                                id: newId,
+                                title: item.title,
+                                content: item.content
+                            });
+                            importedCount++;
+                        }
+                    });
+                    if (importedCount > 0) {
+                        saveAnnouncements();
+                        renderAnnouncements();
+                        alert(`成功導入 ${importedCount} 則 JSON 格式公告！`);
+                    } else {
+                         alert("JSON 文件格式不正確或不包含有效的公告物件 ({title: '...', content: '...'})。");
+                    }
+                } else {
+                     alert("JSON 格式不正確。請確保它是一個包含公告物件的陣列。");
+                }
+            } catch (e) {
+                alert("解析 JSON 文件失敗。請檢查格式是否正確。");
+                console.error("JSON 解析錯誤:", e);
+            }
+        }
 
         async function verifyPassword() {
             const enteredPassword = passwordInput.value;
@@ -434,18 +573,18 @@
                     isAdmin = true;
                     passwordModal.style.display = 'none';
                     
-                    controlsHint.innerHTML = `✨ 管理員模式已啟用。快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除 | <span class="key-hint">Ctrl + M</span> 編輯`;
-                    controlsHint.classList.add('unlocked');
+                    updateControlsHint();
 
                     renderAnnouncements(); 
                     
-                    // 執行待處理操作
                     if (pendingAction === 'add') {
                         addNewAnnouncement();
                     } else if (pendingAction === 'delete' && pendingTargetId) {
                         deleteAnnouncementInternal(pendingTargetId);
                     } else if (pendingAction === 'edit' && pendingTargetId) {
                         editAnnouncementInternal(pendingTargetId);
+                    } else if (pendingAction === 'upload') {
+                        handleFileUpload();
                     }
 
                     pendingAction = null;
@@ -549,6 +688,7 @@
             loadAnnouncements(); 
             renderAnnouncements(); 
             passwordInput.focus();
+            updateControlsHint(); 
         });
     </script>
 </body>

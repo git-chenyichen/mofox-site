@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 - 拒絕訪問</title>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
+        }
+
+        .background-image-container {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+            background-image: url('images/mofox-background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            transform: scale(1.05); 
+        }
+
+        .content {
+            position: relative; 
+            text-align: center;
+            color: white; 
+            padding: 40px;
+            border-radius: 10px;
+            background: rgba(128, 0, 128, 0.7); 
+            box-shadow: 0 4px 30px rgba(128, 0, 128, 0.5);
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px); 
+        }
+
+        .content h1 {
+            font-size: 6em;
+            margin-bottom: 0.1em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 1);
+            color: #e6e6fa;
+        }
+
+        .content p {
+            font-size: 1.2em;
+            margin-top: 0;
+            margin-bottom: 2em;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: #6f42c1; 
+            color: white;
+            text-decoration: none;
+            border-radius: 50px; 
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+
+        .home-button:hover {
+            background-color: #5a32b2;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-image-container">
+        </div>
+
+    <div class="content">
+        <h1>403</h1>
+        <p>🔒 拒絕訪問！</p>
+        <p>您沒有權限存取此資源。請確認您的身份和權限。</p>
+        <p>若您是管理員，請嘗試登入後台。</p>
+        <a href="/" class="home-button">返回首頁</a>
+        <a href="/api/auth" class="home-button">返回後台</a>
+    </div>
+</body>
+</html>

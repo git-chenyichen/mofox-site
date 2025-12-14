@@ -1,12 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/((?!503).*)",
-      "destination": "/503.html",
-      "permanent": false,
-      "statusCode": 503
-    }
-  ],
   "rewrites": [
     {
       "source": "/admin.html",
@@ -14,3 +6,4 @@
     }
   ]
 }
+

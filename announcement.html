@@ -222,17 +222,27 @@
             background-color: #007bb5;
         }
         #login-btn {
-            background-color: #7289DA;
+            background-color: #cc6600;
             color: white;
             border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
+            padding: 8px 15px;
+            margin-left: 10px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
             transition: background-color 0.2s;
         }
         #login-btn:hover {
-            background-color: #5b6eae;
+            background-color: #ff8c42;
+        }
+
+        #password-input {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ffcc66;
+            background: #333;
+            color: white;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -261,7 +271,7 @@
     </main>
 
     <script>
-        const VERIFY_API_ENDPOINT = '/api/auth'; 
+        const LOGIN_API_ENDPOINT = '/api/login'; 
         const ANNOUNCEMENT_API_ENDPOINT = '/api/announcements';
 
         let isAdmin = false;
@@ -292,7 +302,7 @@
             if (response.status === 401 || response.status === 403) {
                 isAdmin = false;
                 renderAnnouncements(); 
-                alert("管理員憑證無效或過期，請重新登入 Discord。");
+                alert("管理員憑證無效或過期，請重新登入。");
                 updateControlsHint();
                 throw new Error('Unauthorized Access');
             }
@@ -361,8 +371,9 @@
                 controlsHint.classList.remove('locked');
             } else {
                 controlsHint.innerHTML = `
-                <p>🔒 請透過 Discord 登入管理員以新增、修改公告。</p>
-                <button id="login-btn" onclick="checkAdmin('auth')">🤖 Discord 登入管理員</button>
+                <p style="margin: 0 0 10px 0;">🔒 請輸入密碼以啟用管理員模式：</p>
+                <input type="password" id="password-input" placeholder="管理員密碼" onkeydown="if(event.key === 'Enter') checkAdmin('auth')">
+                <button id="login-btn" onclick="checkAdmin('auth')">🔑 登入</button>
                 `;
                 controlsHint.classList.add('locked');
             }
@@ -389,14 +400,49 @@
         }
 
         
-        function checkAdmin(action, targetId = null) {
-            if (action === 'auth' || !isAdmin) {
-                pendingAction = action;
-                pendingTargetId = targetId;
-                window.location.href = VERIFY_API_ENDPOINT; 
+        async function checkAdmin(action, targetId = null) {
+            if (action === 'auth') {
+                const passwordInput = document.getElementById('password-input');
+                const password = passwordInput ? passwordInput.value : '';
+                
+                if (!password) {
+                    alert("請輸入密碼。");
+                    return;
+                }
+
+                try {
+                    const response = await fetch(LOGIN_API_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password: password }),
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        isAdmin = true;
+                        passwordInput.value = '';
+                        alert("登入成功！管理員模式已啟用。");
+                        renderAnnouncements();
+                        executePendingAction(pendingAction, pendingTargetId);
+                    } else {
+                        alert("密碼錯誤，登入失敗。");
+                        isAdmin = false;
+                        updateControlsHint();
+                    }
+                } catch (error) {
+                    console.error("登入錯誤:", error);
+                    alert("登入連線失敗。");
+                }
                 return;
             }
             
+            if (!isAdmin) {
+                pendingAction = action;
+                pendingTargetId = targetId;
+                alert("請先登入管理員以執行此操作。");
+                return;
+            }
+
             executePendingAction(action, targetId);
         }
 
@@ -531,16 +577,6 @@
                     isAdmin = false;
                 }
             }
-            
-            
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('auth') === 'success') {
-                isAdmin = true;
-                
-                history.replaceState(null, null, window.location.pathname); 
-                alert("Discord 登入成功！管理員模式已啟用。");
-            }
-            
             
             renderAnnouncements(); 
             updateControlsHint();

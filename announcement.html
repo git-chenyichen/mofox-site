@@ -290,7 +290,8 @@
     </main>
 
     <script>
-        const ADMIN_PASSWORD = 'mofox@admin';
+
+        const VERIFY_API_ENDPOINT = '/api/verify'; 
         const STORAGE_KEY = 'mofoxAnnouncements';
         let isAdmin = false;
         let pendingAction = null; 
@@ -409,31 +410,57 @@
             }
         }
 
-        function verifyPassword() {
-            if (passwordInput.value === ADMIN_PASSWORD) {
-                isAdmin = true;
-                passwordModal.style.display = 'none';
-                
-                controlsHint.innerHTML = `✨ 管理員模式已啟用。快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除 | <span class="key-hint">Ctrl + M</span> 編輯`;
-                controlsHint.classList.add('unlocked');
 
-                renderAnnouncements(); 
-                
-                if (pendingAction === 'add') {
-                    addNewAnnouncement();
-                } else if (pendingAction === 'delete' && pendingTargetId) {
-                    deleteAnnouncementInternal(pendingTargetId);
-                } else if (pendingAction === 'edit' && pendingTargetId) {
-                    editAnnouncementInternal(pendingTargetId);
-                }
+        async function verifyPassword() {
+            const enteredPassword = passwordInput.value;
+            errorMessage.style.display = 'none';
 
-                pendingAction = null;
-                pendingTargetId = null;
-
-            } else {
+            if (!enteredPassword) {
+                errorMessage.textContent = '請輸入密碼。';
                 errorMessage.style.display = 'block';
-                passwordInput.value = '';
-                passwordInput.focus();
+                return;
+            }
+
+            try {
+                const response = await fetch(VERIFY_API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: enteredPassword })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    isAdmin = true;
+                    passwordModal.style.display = 'none';
+                    
+                    controlsHint.innerHTML = `✨ 管理員模式已啟用。快捷鍵：<span class="key-hint">Ctrl + G</span> 新增 | <span class="key-hint">Ctrl + D</span> 刪除 | <span class="key-hint">Ctrl + M</span> 編輯`;
+                    controlsHint.classList.add('unlocked');
+
+                    renderAnnouncements(); 
+                    
+                    // 執行待處理操作
+                    if (pendingAction === 'add') {
+                        addNewAnnouncement();
+                    } else if (pendingAction === 'delete' && pendingTargetId) {
+                        deleteAnnouncementInternal(pendingTargetId);
+                    } else if (pendingAction === 'edit' && pendingTargetId) {
+                        editAnnouncementInternal(pendingTargetId);
+                    }
+
+                    pendingAction = null;
+                    pendingTargetId = null;
+
+                } else {
+                    errorMessage.textContent = data.message || '密碼錯誤，請重試。';
+                    errorMessage.style.display = 'block';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (error) {
+                console.error('驗證 API 請求失敗:', error);
+                errorMessage.textContent = '驗證服務失敗，請檢查網路或 Vercel Function 狀態。';
+                errorMessage.style.display = 'block';
             }
         }
         

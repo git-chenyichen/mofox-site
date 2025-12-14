@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const sessionStore = require('../session_store'); 
 
 // ⚠️ 應從環境變數 (process.env) 中讀取密碼
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'default-secure-password'; 
+  const SECRET_PASSWORD = process.env.ADMIN_SECRET;
 // 🚨 建議在生產環境中不要使用 default-secure-password，且使用 HTTPS
 
 module.exports = async (req, res) => {

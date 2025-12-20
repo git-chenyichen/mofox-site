@@ -119,33 +119,19 @@
             font-size: 1.3em;
         }
 
-        .star-rating {
-            display: inline-block;
+        .star-container {
             font-size: 1.6em;
-            position: relative;
-            font-family: 'Times New Roman', serif;
-            line-height: 1;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             margin-bottom: 12px;
-            color: rgba(255, 255, 255, 0.15);
-            width: 5.4em;
+            line-height: 1;
         }
 
-        .star-rating::before {
-            content: "★★★★★";
-        }
-
-        .star-rating-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            white-space: nowrap;
-            overflow: hidden;
+        .star-fill {
             color: #ff8c42;
         }
 
-        .star-rating-inner::before {
-            content: "★★★★★";
+        .star-empty {
+            color: rgba(255, 255, 255, 0.15);
         }
 
         .comment {
@@ -231,6 +217,19 @@
             { name: "test6", avatar: "https://cdn.discordapp.com/embed/avatars/0.png", stars: 5, text: "6" }
         ];
 
+        function getStars(count) {
+            let starsHTML = '<span class="star-fill">';
+            for (let i = 0; i < count; i++) {
+                starsHTML += '★';
+            }
+            starsHTML += '</span><span class="star-empty">';
+            for (let i = 0; i < (5 - count); i++) {
+                starsHTML += '★';
+            }
+            starsHTML += '</span>';
+            return starsHTML;
+        }
+
         function createScrollingReviews() {
             const container = document.getElementById('float-container');
             const doubleReviews = [...reviews, ...reviews];
@@ -238,16 +237,13 @@
             doubleReviews.forEach((data) => {
                 const card = document.createElement('div');
                 card.className = 'review-card';
-                const starPercentage = (data.stars / 5) * 100;
-
+                
                 card.innerHTML = `
                     <div class="user-info">
                         <img src="${data.avatar}" class="avatar">
                         <span class="nickname">${data.name}</span>
                     </div>
-                    <div class="star-rating">
-                        <div class="star-rating-inner" style="width: ${starPercentage}%"></div>
-                    </div>
+                    <div class="star-container">${getStars(data.stars)}</div>
                     <div class="comment">${data.text}</div>
                 `;
 

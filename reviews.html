@@ -71,7 +71,7 @@
 
         .scroll-wrapper {
             position: absolute;
-            top: 60%;
+            top: 55%;
             width: 100%;
             overflow: hidden;
             z-index: 1;
@@ -86,7 +86,7 @@
 
         .review-card {
             background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 204, 102, 0.2);
             padding: 35px;
             border-radius: 25px;
@@ -110,6 +110,7 @@
             border-radius: 50%;
             margin-right: 20px;
             border: 2px solid #ffcc66;
+            object-fit: cover;
         }
 
         .nickname {
@@ -118,16 +119,35 @@
             font-size: 1.3em;
         }
 
-        .stars {
-            color: #ff8c42;
-            font-size: 1.2em;
+        .star-rating {
+            display: inline-block;
+            font-size: 1.6em;
+            position: relative;
+            letter-spacing: 3px;
             margin-bottom: 12px;
-            text-align: left;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .star-rating::before {
+            content: "★★★★★";
+        }
+
+        .star-rating-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            color: #ff8c42;
+        }
+
+        .star-rating-inner::before {
+            content: "★★★★★";
         }
 
         .comment {
-            font-size: 1.15em;
-            line-height: 1.8;
+            font-size: 1.2em;
+            line-height: 1.6;
             text-align: left;
             color: #eeeeee;
             white-space: normal;
@@ -215,15 +235,16 @@
             doubleReviews.forEach((data) => {
                 const card = document.createElement('div');
                 card.className = 'review-card';
-                
-                const starHTML = '⭐'.repeat(data.stars);
+                const starPercentage = (data.stars / 5) * 100;
 
                 card.innerHTML = `
                     <div class="user-info">
                         <img src="${data.avatar}" class="avatar">
                         <span class="nickname">${data.name}</span>
                     </div>
-                    <div class="stars">${starHTML}</div>
+                    <div class="star-rating">
+                        <div class="star-rating-inner" style="width: ${starPercentage}%"></div>
+                    </div>
                     <div class="comment">${data.text}</div>
                 `;
 

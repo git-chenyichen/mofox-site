@@ -37,11 +37,36 @@
 
         .nav-bar {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.3); 
+            background-color: rgba(0, 0, 0, 0.2); 
             padding: 10px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: center;
-            z-index: 100;
+            order: -1; 
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: #ffcc66;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            margin: 0 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #ff8c42;
+            color: #ffffff;
+            transform: scale(1.05) translateY(-1px);
+        }
+
+        .nav-link.active {
+            background-color: #cc6600;
+            color: #ffffff;
+            border-bottom: 2px solid #ffcc66;
         }
         
         .nav-link {

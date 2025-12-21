@@ -57,10 +57,10 @@
             transition: background-color 0.3s, color 0.3s, transform 0.3s;
         }
 
-        .nav-link:hover {
-            background-color: #ff8c42;
+        .nav-link.active {
+            background-color: #cc6600;
             color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
+            border-bottom: 2px solid #ffcc66;
         }
 
         .display-wrapper {
@@ -69,78 +69,60 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 100%;
-            max-width: 600px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             z-index: 1;
-        }
-
-        .nav-btn {
-            background: rgba(255, 204, 102, 0.1);
-            border: 1px solid rgba(255, 204, 102, 0.3);
-            color: #ffcc66;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 50px;
-            font-size: 0.8em;
-            transition: all 0.3s;
-            user-select: none;
-            backdrop-filter: blur(5px);
-        }
-
-        .nav-btn:hover {
-            background: rgba(255, 140, 66, 0.3);
-            color: #ffffff;
-            transform: scale(1.1);
         }
 
         .review-card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 204, 102, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            width: 300px;
+            padding: 30px;
+            border-radius: 20px;
+            width: 500px; 
+            min-height: 250px; 
             display: flex;
             flex-direction: column;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s ease-in-out;
         }
 
         .fade-animation {
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.8s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
 
         .avatar {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
-            margin-right: 12px;
-            border: 1px solid #ffcc66;
+            margin-right: 15px;
+            border: 2px solid #ffcc66;
             object-fit: cover;
         }
 
         .nickname {
             color: #ffcc66;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 1.2em;
         }
 
         .star-container {
-            font-size: 1.1em;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
             line-height: 1;
         }
 
@@ -153,8 +135,8 @@
         }
 
         .comment {
-            font-size: 0.9em;
-            line-height: 1.5;
+            font-size: 1em;
+            line-height: 1.7;
             text-align: left;
             color: #eeeeee;
             white-space: pre-line; 
@@ -162,13 +144,13 @@
         }
 
         header {
-            margin-top: 30px;
+            margin-top: 40px;
             z-index: 10;
             text-align: center;
         }
 
         h1 {
-            font-size: 1.8em;
+            font-size: 2.2em;
             color: #ffe6c7;
             font-family: 'Handlee', cursive;
             margin-bottom: 5px;
@@ -176,9 +158,9 @@
 
         footer {
             position: fixed;
-            bottom: 15px;
+            bottom: 20px;
             color: #ffcc66;
-            font-size: 0.75em;
+            font-size: 0.8em;
             font-style: italic;
             z-index: 10;
         }
@@ -194,11 +176,7 @@
     </div>
 
     <div class="display-wrapper">
-        <div class="nav-btn" onclick="nextReview()">下一張</div>
-        
         <div id="card-content" class="review-card"></div>
-        
-        <div class="nav-btn" onclick="prevReview()">上一張</div>
     </div>
 
     <header>
@@ -236,7 +214,6 @@
         ];
 
         let currentIndex = 0;
-        let timer;
 
         function getStars(count) {
             let starsHTML = '<span class="star-fill">';
@@ -264,25 +241,11 @@
                 <div class="comment">${data.text}</div>
             `;
             
-            resetTimer();
-        }
-
-        function nextReview() {
             currentIndex = (currentIndex + 1) % reviews.length;
-            updateDisplay();
         }
 
-        function prevReview() {
-            currentIndex = (currentIndex - 1 + reviews.length) % reviews.length;
-            updateDisplay();
-        }
-
-        function resetTimer() {
-            clearInterval(timer);
-            timer = setInterval(nextReview, 5000);
-        }
-
-        window.onload = updateDisplay;
+        updateDisplay();
+        setInterval(updateDisplay, 5000);
     </script>
 </body>
 </html>

@@ -63,22 +63,36 @@
             transform: scale(1.05) translateY(-1px);
         }
 
-        .nav-link.active {
-            background-color: #cc6600;
-            color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
-        }
-
         .display-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 100%;
+            max-width: 600px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             z-index: 1;
+        }
+
+        .nav-btn {
+            background: rgba(255, 204, 102, 0.1);
+            border: 1px solid rgba(255, 204, 102, 0.3);
+            color: #ffcc66;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-size: 0.8em;
+            transition: all 0.3s;
+            user-select: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 140, 66, 0.3);
+            color: #ffffff;
+            transform: scale(1.1);
         }
 
         .review-card {
@@ -88,16 +102,18 @@
             padding: 20px;
             border-radius: 15px;
             width: 300px;
-            display: none;
+            display: flex;
             flex-direction: column;
             box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            animation: fadeInOut 5s infinite;
         }
 
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(10px); }
-            10%, 90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-10px); }
+        .fade-animation {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .user-info {
@@ -149,7 +165,6 @@
             margin-top: 30px;
             z-index: 10;
             text-align: center;
-            position: relative;
         }
 
         h1 {
@@ -157,17 +172,6 @@
             color: #ffe6c7;
             font-family: 'Handlee', cursive;
             margin-bottom: 5px;
-        }
-
-        .center-box {
-            z-index: 10;
-            margin-top: 10px;
-            padding: 15px;
-            border-top: 1px solid rgba(255, 204, 102, 0.2);
-            border-bottom: 1px solid rgba(255, 204, 102, 0.2);
-            max-width: 350px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         footer {
@@ -189,13 +193,16 @@
         <a href="reviews.html" class="nav-link active">旅客評價</a>
     </div>
 
-    <div class="display-wrapper" id="review-container"></div>
+    <div class="display-wrapper">
+        <div class="nav-btn" onclick="nextReview()">下一張</div>
+        
+        <div id="card-content" class="review-card"></div>
+        
+        <div class="nav-btn" onclick="prevReview()">上一張</div>
+    </div>
 
     <header>
         <h1>旅人的私語</h1>
-        <div class="center-box">
-            <p style="color: #ffcc66; letter-spacing: 2px; font-size: 0.9em;">「在這裡，每一個靈魂的低喃都值得被聽見。」</p>
-        </div>
     </header>
 
     <footer>
@@ -228,6 +235,9 @@
             { name: "test6", avatar: "https://cdn.discordapp.com/embed/avatars/0.png", stars: 5, text: "6" }
         ];
 
+        let currentIndex = 0;
+        let timer;
+
         function getStars(count) {
             let starsHTML = '<span class="star-fill">';
             for (let i = 0; i < count; i++) starsHTML += '★';
@@ -237,27 +247,42 @@
             return starsHTML;
         }
 
-        let currentIndex = 0;
-        const container = document.getElementById('review-container');
-
-        function showReview() {
+        function updateDisplay() {
             const data = reviews[currentIndex];
+            const container = document.getElementById('card-content');
+            
+            container.classList.remove('fade-animation');
+            void container.offsetWidth; 
+            container.classList.add('fade-animation');
+
             container.innerHTML = `
-                <div class="review-card" style="display: flex;">
-                    <div class="user-info">
-                        <img src="${data.avatar}" class="avatar">
-                        <span class="nickname">${data.name}</span>
-                    </div>
-                    <div class="star-container">${getStars(data.stars)}</div>
-                    <div class="comment">${data.text}</div>
+                <div class="user-info">
+                    <img src="${data.avatar}" class="avatar">
+                    <span class="nickname">${data.name}</span>
                 </div>
+                <div class="star-container">${getStars(data.stars)}</div>
+                <div class="comment">${data.text}</div>
             `;
             
-            currentIndex = (currentIndex + 1) % reviews.length;
+            resetTimer();
         }
 
-        showReview();
-        setInterval(showReview, 5000);
+        function nextReview() {
+            currentIndex = (currentIndex + 1) % reviews.length;
+            updateDisplay();
+        }
+
+        function prevReview() {
+            currentIndex = (currentIndex - 1 + reviews.length) % reviews.length;
+            updateDisplay();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = setInterval(nextReview, 5000);
+        }
+
+        window.onload = updateDisplay;
     </script>
 </body>
 </html>

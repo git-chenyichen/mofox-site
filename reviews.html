@@ -3,35 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館 | 2026 跨年盛典</title>
+    <title>旅客私語 | 墨狐酒館</title>
     <link rel="icon" type="image/png" href="images/mofox-logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
     
     <style>
         body {
             color: #ffffff; 
-            font-family: 'Avenir', 'Noto Serif TC', serif; 
+            font-family: 'Avenir', 'Georgia', serif; 
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            text-align: center;
+            background-color: #1a1a1a;
             background-image: url('images/mofox-background.jpg'); 
             background-size: cover; 
             background-position: center center; 
             background-attachment: fixed; 
+            overflow: hidden;
         }
         
         body::before {
             content: '';
             position: fixed; 
             top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px); 
-            z-index: -1; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); 
+            z-index: -2; 
         }
 
         .nav-bar {
@@ -42,126 +43,126 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: center;
+            order: -1; 
         }
-                  
+        
         .nav-link {
             text-decoration: none;
             color: #ffcc66;
             font-weight: bold;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            margin: 0 15px;
+            font-size: 0.9em;
+            padding: 6px 12px;
+            margin: 0 10px;
             border-radius: 5px;
-            transition: all 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
         }
 
-        .nav-link:hover {
-            background-color: #ff8c42;
+        .nav-link.active {
+            background-color: #cc6600;
             color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
+            border-bottom: 2px solid #ffcc66;
         }
 
-        .countdown-section {
-            margin: 60px 0 30px;
-            width: 90%;
-            max-width: 800px;
+        .display-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .review-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 204, 102, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            width: 500px; 
+            min-height: 250px; 
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .fade-animation {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #ffcc66;
+            object-fit: cover;
+        }
+
+        .nickname {
+            color: #ffcc66;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .star-container {
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+
+        .star-fill {
+            color: #ff8c42;
+        }
+
+        .star-empty {
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .comment {
+            font-size: 1em;
+            line-height: 1.7;
+            text-align: left;
+            color: #eeeeee;
+            white-space: pre-line; 
+            word-wrap: break-word;
+        }
+
+        header {
+            margin-top: 40px;
+            z-index: 10;
+            text-align: center;
         }
 
         h1 {
-            font-size: 3em;
+            font-size: 2.2em;
             color: #ffe6c7;
             font-family: 'Handlee', cursive;
-            text-shadow: 0 0 15px rgba(255, 140, 66, 0.6);
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #ffcc66;
-            font-style: italic;
-            margin-bottom: 40px;
-        }
-
-        .timer-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .time-box {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            min-width: 100px;
-            border: 1px solid rgba(255, 204, 102, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .time-num {
-            display: block;
-            font-size: 3.5em;
-            font-weight: bold;
-            color: #ffffff;
-            font-family: 'Handlee', cursive;
-            text-shadow: 0 0 10px #ff8c42;
-        }
-
-        .time-label {
-            font-size: 0.8em;
-            color: #ffcc66;
-            letter-spacing: 2px;
-        }
-
-        #new-year-msg {
-            display: none;
-            font-size: 3.5em;
-            color: #ffcc66;
-            font-family: 'Handlee', cursive;
-            animation: glow 2s infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px gold; transform: scale(1); }
-            50% { text-shadow: 0 0 30px #ff8c42; transform: scale(1.05); }
-        }
-
-        .action-area {
-            margin-top: 20px;
-        }
-
-        .join-button {
-            display: inline-block;
-            padding: 15px 40px;
-            background-color: #ff8c42;
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.3em;
-            transition: all 0.3s;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-        }
-
-        .join-button:hover {
-            background-color: #ff703f;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            margin-bottom: 5px;
         }
 
         footer {
-            margin-top: auto;
-            padding: 30px;
-            width: 90%;
-            border-top: 1px solid rgba(255,255,255,0.2);
+            position: fixed;
+            bottom: 20px;
             color: #ffcc66;
+            font-size: 0.8em;
             font-style: italic;
-        }
-
-        @media (max-width: 600px) {
-            .timer-grid { gap: 10px; }
-            .time-box { min-width: 70px; padding: 10px; }
-            .time-num { font-size: 2em; }
+            z-index: 10;
         }
     </style>
 </head>
@@ -171,77 +172,90 @@
         <a href="index.html" class="nav-link">酒館主頁</a>
         <a href="staff.html" class="nav-link">館員團隊</a>
         <a href="history.html" class="nav-link">歷程回顧</a>
-        <a href="reviews.html" class="nav-link">旅客評價</a>
-        <a href="2026.html" class="nav-link active">跨年盛典</a>
+        <a href="reviews.html" class="nav-link active">旅客評價</a>
+        <a href="2026.html" class="nav-link">跨年盛典</a>
     </div>
 
-    <main class="countdown-section">
-        <header>
-            <h1>MoFox Countdown 2026</h1>
-            <div class="subtitle">「一杯曖昧，敬過去的遺憾；一場煙火，迎未來的微光」</div>
-        </header>
+    <div class="display-wrapper">
+        <div id="card-content" class="review-card"></div>
+    </div>
 
-        <div id="countdown-display">
-            <div class="timer-grid">
-                <div class="time-box">
-                    <span class="time-num" id="days">00</span>
-                    <span class="time-label">DAYS</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-num" id="hours">00</span>
-                    <span class="time-label">HOURS</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-num" id="minutes">00</span>
-                    <span class="time-label">MINS</span>
-                </div>
-                <div class="time-box">
-                    <span class="time-num" id="seconds">00</span>
-                    <span class="time-label">SECS</span>
-                </div>
-            </div>
-        </div>
+    <header>
+        <h1>旅客的私語</h1>
+    </header>
 
-        <div id="new-year-msg">
-            Happy New Year 2026<br>
-            <span style="font-size: 0.4em;">歡迎來到墨狐的新時代</span>
-        </div>
-
-        <div class="action-area">
-            <a href="https://discord.gg/mofox" target="_blank" class="join-button">
-                進入酒館一起跨年 
-            </a>
-        </div>
-    </main>
+    <footer>
+        墨狐酒館 | Since 2025.06.09
+    </footer>
 
     <script>
-        function updateTimer() {
-            const target = new Date("January 1, 2026 00:00:00").getTime();
-            
-            const timer = setInterval(function() {
-                const now = new Date().getTime();
-                const diff = target - now;
+        const reviews = [
+            {
+                name: "館主- 墨狐",
+                avatar: "https://cdn.discordapp.com/avatars/1367782120403238923/d309d8768a8c6a71aba1421375bb9b32.png?size=1024",
+                stars: 5,
+                text: "這是一間隱藏在塵世喧囂中的小酒館。\n\n有時人聲鼎沸、有時靜謐溫馨；\n有時歌聲悠揚、有時也會跑出奇特的聲音(？)。\n\n這裡的人們溫暖包容、多元接納，\n除了人類之外，亦存在著各種族 (w)。\n\n從小心翼翼地探頭，到像在家一般自在。\n\n歡迎光臨 —— 墨狐酒館"
+            },
+            { 
+                name: "館員- 2023", 
+                avatar: "https://cdn.discordapp.com/avatars/1191200148357910538/9066b691c0b376209b51833a4de5b1ac.png?size=1024", 
+                stars: 5, 
+                text: "這裡的氛圍真的好讚，\n放鬆聊天的首選。" 
+            },
+            { 
+                name: "Ting", 
+                avatar: "https://cdn.discordapp.com/avatars/906520363012325387/e287f972fdcf19867bfcd6fd1818577c.png?size=1024", 
+                stars: 5, 
+                text: "這是一個很溫暖每個人類都很友好的地方！\n也是一個治療心靈的好地方。" 
+            },
+            { 
+                name: "小楓", 
+                avatar: "https://cdn.discordapp.com/avatars/426762305653702666/51b4d03b7361cd5cb4d964fe1a50cbb1.png?size=1024", 
+                stars: 5, 
+                text: "在墨狐酒館你可以體驗到很多很多，裡面的酒客也都很和善、好相處吶。\n來到這邊就會捨不得離開拉（笑" 
+            },
+            {   name: "時汐",
+                avatar: "https://cdn.discordapp.com/avatars/705338042788872236/6305c47e1de3ddbdd1e15348d7ea18e6.png?size=1024", 
+                stars: 4, 
+                text: "視他人的凝目如盞盞鬼火，大膽去走你的夜路。" 
+            },
+            { name: "test5", avatar: "https://cdn.discordapp.com/embed/avatars/5.png", stars: 5, text: "5" },
+            { name: "test6", avatar: "https://cdn.discordapp.com/embed/avatars/0.png", stars: 5, text: "6" }
+        ];
 
-                if (diff <= 0) {
-                    clearInterval(timer);
-                    document.getElementById("countdown-display").style.display = "none";
-                    document.getElementById("new-year-msg").style.display = "block";
-                    return;
-                }
+        let currentIndex = 0;
 
-                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById("days").innerText = String(d).padStart(2, '0');
-                document.getElementById("hours").innerText = String(h).padStart(2, '0');
-                document.getElementById("minutes").innerText = String(m).padStart(2, '0');
-                document.getElementById("seconds").innerText = String(s).padStart(2, '0');
-            }, 1000);
+        function getStars(count) {
+            let starsHTML = '<span class="star-fill">';
+            for (let i = 0; i < count; i++) starsHTML += '★';
+            starsHTML += '</span><span class="star-empty">';
+            for (let i = 0; i < (5 - count); i++) starsHTML += '★';
+            starsHTML += '</span>';
+            return starsHTML;
         }
 
-        updateTimer();
+        function updateDisplay() {
+            const data = reviews[currentIndex];
+            const container = document.getElementById('card-content');
+            
+            container.classList.remove('fade-animation');
+            void container.offsetWidth; 
+            container.classList.add('fade-animation');
+
+            container.innerHTML = `
+                <div class="user-info">
+                    <img src="${data.avatar}" class="avatar">
+                    <span class="nickname">${data.name}</span>
+                </div>
+                <div class="star-container">${getStars(data.stars)}</div>
+                <div class="comment">${data.text}</div>
+            `;
+            
+            currentIndex = (currentIndex + 1) % reviews.length;
+        }
+
+        updateDisplay();
+        setInterval(updateDisplay, 5000);
     </script>
 </body>
 </html>

@@ -35,6 +35,7 @@
             z-index: -2; 
         }
 
+        /* 同步 Index 的導覽列樣式 */
         .nav-bar {
             width: 100%;
             background-color: rgba(0, 0, 0, 0.2); 
@@ -45,16 +46,22 @@
             justify-content: center;
             order: -1; 
         }
-        
+                  
         .nav-link {
             text-decoration: none;
             color: #ffcc66;
             font-weight: bold;
-            font-size: 0.9em;
-            padding: 6px 12px;
-            margin: 0 10px;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            margin: 0 15px;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+        }
+
+        .nav-link:hover {
+            background-color: #ff8c42;
+            color: #ffffff;
+            transform: scale(1.05) translateY(-1px);
         }
 
         .nav-link.active {
@@ -218,9 +225,7 @@
                 avatar: "https://cdn.discordapp.com/avatars/705338042788872236/6305c47e1de3ddbdd1e15348d7ea18e6.png?size=1024", 
                 stars: 4, 
                 text: "視他人的凝目如盞盞鬼火，大膽去走你的夜路。" 
-            },
-            { name: "test5", avatar: "https://cdn.discordapp.com/embed/avatars/5.png", stars: 5, text: "5" },
-            { name: "test6", avatar: "https://cdn.discordapp.com/embed/avatars/0.png", stars: 5, text: "6" }
+            }
         ];
 
         let currentIndex = 0;

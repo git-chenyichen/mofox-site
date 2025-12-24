@@ -1,5 +1,3 @@
-// api/send-message.js
-
 const axios = require('axios');
 const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 
@@ -8,7 +6,6 @@ module.exports = async (req, res) => {
         return res.status(405).send('只接受 POST 請求');
     }
     
-    // 從請求體中獲取數據
     const { channelId, content } = req.body; 
 
     if (!channelId || !content) {
@@ -16,7 +13,6 @@ module.exports = async (req, res) => {
     }
 
     try {
-        // 呼叫 Discord API 執行發送訊息
         await axios.post(`https://discord.com/api/v10/channels/${channelId}/messages`, {
             content: content
         }, {
@@ -30,7 +26,7 @@ module.exports = async (req, res) => {
 
     } catch (error) {
         const status = error.response ? error.response.status : 500;
-        console.error('發送訊息失敗:', error.response ? error.response.data : error.message);
-        res.status(status).json({ error: '訊息發送失敗。請檢查 Bot 權限、頻道 ID 是否正確。' });
+        console.error(error.response ? error.response.data : error.message);
+        res.status(status).json({ error: '訊息發送失敗。' });
     }
 };

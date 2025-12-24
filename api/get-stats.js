@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
 
     if (!authToken) {
         console.warn('未經授權嘗試讀取統計數據。');
-        return res.status(401).json({ error: '未經授權訪問，請重新登入。' });
+        return res.status(405).send('只接受 POST 請求');
     }
 
     if (!BOT_TOKEN || !GUILD_ID) {
@@ -99,3 +99,4 @@ module.exports = async (req, res) => {
         res.status(500).json({ error: errorMessage });
     }
 };
+

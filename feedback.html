@@ -57,94 +57,92 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .nav-link:hover {
-            background-color: #ff8c42;
-            color: #ffffff;
-        }
-
-        .nav-link.active {
-            background-color: #cc6600;
-            color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
-        }
+        .nav-link:hover { background-color: #ff8c42; color: #ffffff; }
+        .nav-link.active { background-color: #cc6600; color: #ffffff; border-bottom: 2px solid #ffcc66; }
 
         header {
             width: 90%;
-            padding: 30px 0 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
-            margin-bottom: 25px;
+            padding: 20px 0 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+            margin-bottom: 20px;
         }
         
         h1 {
-            font-size: 2.8em;
+            font-size: 2.2em;
             color: #ffe6c7; 
             font-family: 'Handlee', cursive; 
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); 
+            margin-bottom: 5px;
         }
 
         main {
-            width: 90%;
-            max-width: 600px; 
+            width: 95%;
+            max-width: 500px; 
             text-align: left;
         }
 
         .form-container {
-            background-color: rgba(255, 255, 255, 0.15); 
-            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.12); 
+            padding: 20px 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-            border-left: 5px solid #ffcc66; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+            border-left: 4px solid #ffcc66; 
+        }
+
+        .row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
         }
 
         .input-group {
-            margin-bottom: 15px;
+            flex: 1;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
             color: #ffcc66;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            font-size: 0.9em;
             font-weight: bold;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             color: white;
-            font-size: 1em;
+            font-size: 0.95em;
             box-sizing: border-box;
         }
 
+        textarea { resize: none; }
+
         .submit-btn {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             background-color: #ff8c42; 
             color: white;
             border: none;
-            border-radius: 30px; 
+            border-radius: 25px; 
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1em;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
-            margin-top: 10px;
+            transition: 0.3s;
+            margin-top: 5px;
         }
 
-        .submit-btn:hover {
-            background-color: #ff703f; 
-            transform: scale(1.02);
-        }
+        .submit-btn:hover { background-color: #ff703f; transform: translateY(-2px); }
 
         footer {
             width: 90%;
-            margin-top: 40px;
+            margin-top: 30px;
             padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.9em;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.85em;
             color: #ffcc66; 
-            font-style: italic;
         }
     </style>
 </head>
@@ -161,20 +159,22 @@
 
     <header>
         <h1>旅客回饋信箱</h1>
-        <div style="color: #ffcc66; font-style: italic;">「投遞您的故事，我們傾心聆聽」</div>
     </header>
 
     <main>
         <div class="form-container">
             <form id="feedbackForm">
-                <div class="input-group">
-                    <label>酒館暱稱</label>
-                    <input type="text" id="nickname" required>
+                <div class="row">
+                    <div class="input-group">
+                        <label>酒館暱稱</label>
+                        <input type="text" id="nickname" placeholder="Nickname" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Discord ID</label>
+                        <input type="text" id="discord_id" placeholder="User ID" required>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Discord 使用者 ID</label>
-                    <input type="text" id="discord_id" placeholder="例如: 123456789..." required>
-                </div>
+
                 <div class="input-group">
                     <label>回饋類別</label>
                     <select id="category">
@@ -185,18 +185,25 @@
                         <option value="其他">其他</option>
                     </select>
                 </div>
+
                 <div class="input-group">
                     <label>標題</label>
-                    <input type="text" id="title" required>
+                    <input type="text" id="title" placeholder="主旨" required>
                 </div>
+
                 <div class="input-group">
                     <label>內容</label>
-                    <textarea id="content" rows="5" required></textarea>
+                    <textarea id="content" rows="4" placeholder="在這裡寫下您的想法..." required></textarea>
                 </div>
+
                 <button type="submit" class="submit-btn" id="submitBtn">🥂 投遞回饋</button>
             </form>
         </div>
     </main>
+
+    <footer>
+        墨狐酒館 | By 2023_TW．本網站由洋蔥女裝團隊旗下所有。
+    </footer>
 
     <script>
         document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
@@ -227,10 +234,10 @@
                     alert('傳送失敗，請聯繫管理員。');
                 }
             } catch (err) {
-                alert('發生錯誤。');
+                alert('發生網路錯誤。');
             } finally {
                 btn.disabled = false;
-                btn.innerText = '投遞回饋';
+                btn.innerText = '🥂 投遞回饋';
             }
         });
     </script>

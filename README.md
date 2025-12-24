@@ -10,7 +10,7 @@
 
 > 官方網站：https://mofox.onioncosplay.xyz
 
-> 網域提供：https://www.onioncosplay.xyz
+> 網域提供：https://2023.onioncosplay.xyz
 
 > 網站後台：https://mofox.onioncosplay.xyz/api/auth
 

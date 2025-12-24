@@ -11,7 +11,7 @@ const BASE_URL = `https://discord.com/api/v10/guilds/${DISCORD_GUILD_ID}/members
 module.exports = async (req, res) => {
     
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: '只接受 POST 請求' });
+        return res.status(405).send('只接受 POST 請求');
     }
 
     if (!DISCORD_BOT_TOKEN || !DISCORD_GUILD_ID) {

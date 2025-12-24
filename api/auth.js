@@ -1,5 +1,3 @@
-// api/auth.js (Node.js/JavaScript)
-
 const axios = require('axios');
 const crypto = require('crypto');
 

@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json(只接受 POST 請求);
+    return res.status(405).send('只接受 POST 請求');
   }
 
   const { nickname, discord_id, category, title, content } = req.body;

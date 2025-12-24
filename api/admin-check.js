@@ -1,3 +1,9 @@
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).send('只接受 POST 請求');
+  }
+
+
 // api/admin-check.js
 
 const fs = require('fs');
@@ -85,3 +91,4 @@ module.exports = async (req, res) => {
         res.status(500).send('後台系統錯誤：無法載入管理介面。請檢查 admin-content.html 檔案是否存在於專案根目錄。');
     }
 };
+

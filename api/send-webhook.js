@@ -13,14 +13,14 @@ export default async function handler(req, res) {
   const discordPayload = {
     embeds: [{
       title: `新回饋：${title}`,
-      color: 16753730, // 橙色
+      color: 16753730,
       fields: [
         { name: "暱稱", value: nickname, inline: true },
         { name: "Discord ID", value: discord_id, inline: true },
         { name: "類別", value: category, inline: true },
         { name: "內容", value: content }
       ],
-      footer: { text: "來自墨狐酒館官網" },
+      footer: { text: "墨狐酒館用戶回饋系統．By 2023_TW" },
       timestamp: new Date()
     }]
   };

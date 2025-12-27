@@ -3,269 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館 | 溫暖且神秘的深夜驛站</title>
-    <link rel="icon" type="image/png" href="images/mofox-logo.png">
+    <title>403 - 拒絕訪問</title>
     
     <style>
         body {
-            color: #ffffff; 
-            font-family: 'Avenir', 'Georgia', serif; 
             margin: 0;
             padding: 0;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            
-            background-image: url('images/mofox-background.jpg'); 
-            background-size: cover; 
-            background-position: center center; 
-            background-attachment: fixed; 
+            overflow: hidden; 
+            font-family: Arial, sans-serif;
         }
-        
-        body::before {
-            content: '';
+
+        .background-image-container {
             position: fixed; 
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px); 
             z-index: -1; 
+            background-image: url('images/mofox-background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px);
+            transform: scale(1.05); 
         }
 
-        /* 導覽列樣式 */
-        .nav-bar {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.2); 
-            padding: 10px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-            order: -1; 
-        }
-                  
-        .nav-link {
-            text-decoration: none;
-            color: #ffcc66;
-            font-weight: bold;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            margin: 0 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .nav-link:hover {
-            background-color: #ff8c42;
-            color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
-        }
-
-        .nav-link.active {
-            background-color: #cc6600;
-            color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
-        }
-
-        .top-intro {
-            width: 90%;
-            padding: 15px 0 0; 
-            color: #ffcc66; 
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: -15px; 
-        }
-        
-        .top-intro h0 { 
-            font-size: 1.6em;
-            color: #ff8c42; 
-            margin-bottom: 5px;
-            display: block; 
-        }
-        
-        header {
-            width: 90%;
-            padding: 30px 0 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
-            margin-bottom: 25px;
-        }
-        
-        h1 {
-            font-size: 2.8em;
-            color: #ffe6c7; 
-            font-family: 'Handlee', cursive; 
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); 
-            margin-bottom: 5px;
-            
-            display: inline-block; 
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        h1:hover {
-            transform: scale(1.05) translateY(-2px);
-            cursor: pointer;
-        }
-
-        .subtitle {
-            font-size: 1.1em;
-            color: #ffcc66; 
-            font-style: italic;
-        }
-        
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            width: 90%;
-            max-width: 800px; 
-            gap: 30px;
-            flex-direction: column; 
-        }
-
-        .info-panel {
-            width: 100%; 
-            padding: 25px;
-            background-color: rgba(255, 255, 255, 0.15); 
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-            border-left: 5px solid #ffcc66; 
-            text-align: left;
-            margin-bottom: 20px; 
-            color: #ffffff; 
-        }
-
-        h2 {
-            font-size: 1.6em;
-            color: #ffcc66; 
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3); 
-            padding-bottom: 8px;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-        
-        ul {
-            list-style: none;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        li {
-            padding: 6px 0;
-            position: relative;
-            color: #ffffff; 
-        }
-
-        li::before {
-            content: '🕯️'; 
-            margin-right: 10px;
-        }
-
-        .action-area {
-            width: 100%;
+        .content {
+            position: relative; 
             text-align: center;
-            padding: 20px 0;
+            color: white; 
+            padding: 40px;
+            border-radius: 10px;
+            background: rgba(128, 0, 128, 0.7); 
+            box-shadow: 0 4px 30px rgba(128, 0, 128, 0.5);
+            backdrop-filter: blur(5px); 
+            -webkit-backdrop-filter: blur(5px); 
         }
 
-        .join-button {
-            display: inline-block;
-            padding: 15px 35px; 
-            background-color: #ff8c42; 
-            color: white;
-            text-decoration: none; 
-            border-radius: 30px; 
-            font-weight: bold;
+        .content h1 {
+            font-size: 6em;
+            margin-bottom: 0.1em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 1);
+            color: #e6e6fa;
+        }
+
+        .content p {
             font-size: 1.2em;
-            letter-spacing: 1px;
-            transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
+            margin-top: 0;
+            margin-bottom: 2em;
         }
 
-        .join-button:hover {
-            background-color: #ff703f; 
-            transform: translateY(-5px) scale(1.05); 
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        .home-button {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: #6f42c1; 
+            color: white;
+            text-decoration: none;
+            border-radius: 50px; 
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin: 5px;
         }
 
-        p {
-             color: #ffffff; 
-        }
-        
-        footer {
-            width: 90%;
-            margin-top: 40px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.9em;
-            color: #ffcc66; 
-            font-style: italic;
+        .home-button:hover {
+            background-color: #5a32b2;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="nav-bar">
-        <a href="index.html" class="nav-link active">酒館主頁</a>
-        <a href="staff.html" class="nav-link">館員團隊</a>
-        <a href="history.html" class="nav-link">歷程回顧</a>
-        <a href="announcement.html" class="nav-link">最新公告</a>
-    </div>
-
-    <div class="top-intro">
-        <h0>✨ 深夜的秘密集會地 ✨</h0>
-        <span>歡迎，迷途的旅人。</span>
-    </div>
-    
-
-
-    <header>
-        <h1>墨狐酒館 - MoFox</h1>
-        <div class="subtitle">「一杯曖昧，讓靈魂在迷霧中自由共醉」 · Since 2025.06.09</div>
-    </header>
-
-    <main>
-        <section class="info-panel">
-            <h2>📜 酒館守則與區域指南</h2>
-            <p><strong>歡迎來到墨狐酒館，一個專屬於深夜，讓心靈放鬆交流的舒適空間。</strong></p>
-            <ul>
-                <li><strong>🕯️ 暖心分齡分區：</strong> 我們為不同年齡層設有專屬區域，確保所有訪客都能在自在的環境下交流。</li>
-                <li><strong>🗝️ 曖昧神秘角落：：</strong> 情感交流區，尋找共鳴的靈魂，聊聊心事或享受純粹的陪伴。</li>
-                <li><strong>🌹 深夜探索專區：：</strong> BDSM專區，在安全、信任的基礎上，探索隱私與慾望的邊界。</li>
-                <li><strong>💼 打工商店物語：：</strong> 獨特的打工商店系統，讓你在虛擬世界中體驗角色扮演的樂趣與溫暖。</li>
-            </ul>
-            <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**在這裡，放下白天的疲憊，找到屬於你的那份溫柔與自在。**</p>
-        </section>
-
-        <div class="action-area">
-            <a href="https://discord.gg/EECnvFZHpR" target="_blank" class="join-button">
-                🦊 點此加入墨狐酒館 🥂
-            </a>
-            <p style="margin-top: 15px; color: #ffcc66;">
-                // 歡迎您的造訪，請點擊按鈕，隨時準備好您的故事 //
-            </p>
+    <div class="background-image-container">
         </div>
-    </main>
 
-    
-    <footer>
-        墨狐酒館 | By 2023_TW
-    </footer>
-
+    <div class="content">
+        <h1>403</h1>
+        <p>🔒 拒絕訪問！</p>
+        <p>您沒有權限存取此資源。請確認您的身份和權限。</p>
+        <p>本網站目前已遷移至 https://web.mofox.twnd.cc</p>
+    </div>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-

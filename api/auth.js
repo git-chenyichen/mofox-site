@@ -10,7 +10,8 @@ const REDIRECT_URI = process.env.DISCORD_REDIRECT_URI;
 const AUTHORIZED_USERS = [
     '1191200148357910538', 
     '1342872004667117620', 
-    '1367782120403238923'  
+    '1367782120403238923',
+    '964849855396741130',
 ]; 
 
 module.exports = async (req, res) => {

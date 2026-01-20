@@ -217,12 +217,13 @@
             padding: 15px 0;
             border-top: none;
             box-shadow: none;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.4s ease-in-out, opacity 0.4s;
             z-index: 1000;
         }
 
         .footer-hidden {
             transform: translateY(100%);
+            opacity: 0;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
@@ -291,13 +292,13 @@
         window.addEventListener('scroll', function() {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            if (scrollTop > lastScrollTop && scrollTop > 50) {
+            if (scrollTop > lastScrollTop) {
                 footer.classList.add('footer-hidden');
             } else {
                 footer.classList.remove('footer-hidden');
             }
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-        }, false);
+            lastScrollTop = scrollTop;
+        });
     </script>
 
 </body>

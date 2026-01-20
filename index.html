@@ -17,7 +17,6 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
-            
             background-image: url('images/mofox-background.jpg'); 
             background-size: cover; 
             background-position: center center; 
@@ -202,6 +201,28 @@
             font-size: 0.9em;
             color: #ffcc66; 
             font-style: italic;
+            padding-bottom: 80px;
+        }
+
+        #dynamic-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            color: #888;
+            background: transparent;
+            padding: 15px 0;
+            border-top: none;
+            box-shadow: none;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .footer-hidden {
+            transform: translateY(100%);
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
@@ -250,18 +271,34 @@
     </main>
 
     <footer>
-    <div style="position: fixed; bottom: 0; left: 0; width: 100%; text-align: center; font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; color: #888; background: transparent; padding: 10px 0; border-top: none; box-shadow: none;">
-        <a href="https://www.onioncosplay.xyz" style="background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 600;">墨狐酒館&洋蔥女裝</a>
-        © 2026 by 2023_TW ・
-        <a href="https://www.mofox.xyz" style="color: #7c3aed; text-decoration: none;">已獲得</a>
-        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color: #7c3aed; text-decoration: none;">CC BY-NC-ND 4.0 許可</a>
-        <br>
-        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-        <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-        <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-    </div>
+        <div id="dynamic-footer">
+            <a href="https://www.onioncosplay.xyz" style="background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 600;">墨狐酒館&洋蔥女裝</a>
+            © 2026 by 2023_TW ・
+            <a href="https://www.mofox.xyz" style="color: #7c3aed; text-decoration: none;">已獲得</a>
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color: #7c3aed; text-decoration: none;">CC BY-NC-ND 4.0 許可</a>
+            <br>
+            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+            <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+        </div>
     </footer>
+
+    <script>
+        let lastScrollTop = 0;
+        const footer = document.getElementById('dynamic-footer');
+
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 50) {
+                footer.classList.add('footer-hidden');
+            } else {
+                footer.classList.remove('footer-hidden');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        }, false);
+    </script>
 
 </body>
 </html>

@@ -21,6 +21,7 @@
             background-size: cover; 
             background-position: center center; 
             background-attachment: fixed; 
+            padding-bottom: 120px;
         }
         
         body::before {
@@ -181,6 +182,8 @@
             letter-spacing: 1px;
             transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
+            position: relative;
+            z-index: 10;
         }
 
         .join-button:hover {
@@ -194,14 +197,8 @@
         }
         
         footer {
-            width: 90%;
-            margin-top: 40px;
-            padding: 15px 0;
+            width: 100%;
             border-top: none;
-            font-size: 0.9em;
-            color: #ffcc66; 
-            font-style: italic;
-            padding-bottom: 80px;
         }
 
         #dynamic-footer {
@@ -212,13 +209,18 @@
             text-align: center;
             font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 12px;
-            color: #888;
+            color: #aaa;
             background: transparent;
-            padding: 15px 0;
+            padding: 20px 0;
             border-top: none;
             box-shadow: none;
             transition: transform 0.4s ease-in-out, opacity 0.4s;
-            z-index: 1000;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #dynamic-footer a {
+            pointer-events: auto;
         }
 
         .footer-hidden {
@@ -254,9 +256,9 @@
             <p><strong>歡迎來到墨狐酒館，一個專屬於深夜，讓心靈放鬆交流的舒適空間。</strong></p>
             <ul>
                 <li><strong>🕯️ 暖心分齡分區：</strong> 我們為不同年齡層設有專屬區域，確保所有訪客都能在自在的環境下交流。</li>
-                <li><strong>🗝️ 曖昧神秘角落：：</strong> 情感交流區，尋找共鳴的靈魂，聊聊心事或享受純粹的陪伴。</li>
-                <li><strong>🌹 深夜探索專區：：</strong> BDSM專區，在安全、信任的基礎上，探索隱私與慾望的邊界。</li>
-                <li><strong>💼 打工商店物語：：</strong> 獨特的打工商店系統，讓你在虛擬世界中體驗角色扮演的樂趣與溫暖。</li>
+                <li><strong>🗝️ 曖昧神秘角落：</strong> 情感交流區，尋找共鳴的靈魂，聊聊心事或享受純粹的陪伴。</li>
+                <li><strong>🌹 深夜探索專區：</strong> BDSM專區，在安全、信任的基礎上，探索隱私與慾望的邊界。</li>
+                <li><strong>💼 打工商店物語：</strong> 獨特的打工商店系統，讓你在虛擬世界中體驗角色扮演的樂趣與溫暖。</li>
             </ul>
             <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**在這裡，放下白天的疲憊，找到屬於你的那份溫柔與自在。**</p>
         </section>
@@ -271,19 +273,17 @@
         </div>
     </main>
 
-    <footer>
-        <div id="dynamic-footer">
-            <a href="https://www.onioncosplay.xyz" style="background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 600;">墨狐酒館&洋蔥女裝</a>
-            © 2026 by 2023_TW ・
-            <a href="https://www.mofox.xyz" style="color: #7c3aed; text-decoration: none;">已獲得</a>
-            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color: #7c3aed; text-decoration: none;">CC BY-NC-ND 4.0 許可</a>
-            <br>
-            <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-            <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
-        </div>
-    </footer>
+    <div id="dynamic-footer">
+        <a href="https://www.onioncosplay.xyz" style="background: linear-gradient(90deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 600;">墨狐酒館&洋蔥女裝</a>
+        © 2026 by 2023_TW ・
+        <a href="https://www.mofox.xyz" style="color: #7c3aed; text-decoration: none;">已獲得</a>
+        <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" style="color: #7c3aed; text-decoration: none;">CC BY-NC-ND 4.0 許可</a>
+        <br>
+        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/nd.svg" alt="ND" style="width: 1em; height: 1em; margin: 0 .15em; opacity: 0.6;">
+    </div>
 
     <script>
         let lastScrollTop = 0;
@@ -291,7 +291,6 @@
 
         window.addEventListener('scroll', function() {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             if (scrollTop > lastScrollTop) {
                 footer.classList.add('footer-hidden');
             } else {

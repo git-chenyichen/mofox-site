@@ -2,21 +2,14 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>墨狐酒館 | 2026 靈狐報喜 · 賽博春節</title>
     <link rel="icon" type="image/png" href="images/mofox-logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --gold: #ffcc66;
-            --orange: #ff8c42;
-            --glass-bg: rgba(0, 0, 0, 0.5);
-            --card-bg: rgba(255, 255, 255, 0.12);
-        }
-
         body {
             color: #ffffff; 
-            font-family: 'Avenir', 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+            font-family: 'Avenir', 'Georgia', serif; 
             margin: 0;
             padding: 0;
             display: flex;
@@ -28,204 +21,219 @@
             background-size: cover; 
             background-position: center center; 
             background-attachment: fixed; 
-            overflow-x: hidden;
+            padding-bottom: 150px;
         }
         
         body::before {
             content: '';
             position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.45); 
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px); 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px); 
             z-index: -1; 
         }
 
         .nav-bar {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.7); 
-            padding: 12px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.2); 
+            padding: 10px 0;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             display: flex;
-            justify-content: flex-start;
-            gap: 8px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            padding-left: 15px;
-            padding-right: 15px;
-            box-sizing: border-box;
-            border-bottom: 1px solid rgba(255, 204, 102, 0.2);
-        }
-
-        .nav-bar::-webkit-scrollbar {
-            display: none;
+            justify-content: center;
+            order: -1; 
         }
                   
         .nav-link {
             text-decoration: none;
-            color: var(--gold);
+            color: #ffcc66;
             font-weight: bold;
-            font-size: 0.9em;
-            padding: 8px 16px;
-            white-space: nowrap;
-            border-radius: 20px;
-            transition: all 0.3s;
-            border: 1px solid transparent;
+            font-size: 1.1em;
+            padding: 8px 15px;
+            margin: 0 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: #ff8c42;
+            color: #ffffff;
+            transform: scale(1.05) translateY(-1px);
         }
 
         .nav-link.active {
-            background-color: var(--orange);
+            background-color: #cc6600;
             color: #ffffff;
-            border-color: var(--gold);
+            border-bottom: 2px solid #ffcc66;
         }
 
         .top-intro {
             width: 90%;
-            padding: 30px 0 10px; 
-            color: var(--gold); 
+            padding: 15px 0 0; 
+            color: #ffcc66; 
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: -15px; 
         }
         
         .top-intro h0 { 
-            font-size: 1.3em;
-            color: var(--orange); 
+            font-size: 1.6em;
+            color: #ff8c42; 
             margin-bottom: 5px;
             display: block; 
-            text-shadow: 0 0 10px rgba(255, 140, 66, 0.4);
         }
         
         header {
             width: 90%;
-            padding: 10px 0 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 30px 0 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
             margin-bottom: 25px;
         }
         
         h1 {
-            font-size: 2.2em;
+            font-size: 2.8em;
             color: #ffe6c7; 
             font-family: 'Handlee', cursive; 
-            margin: 0;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8); 
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); 
+            margin-bottom: 5px;
+            display: inline-block; 
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        h1:hover {
+            transform: scale(1.05) translateY(-2px);
+            cursor: pointer;
         }
 
         .subtitle {
-            font-size: 0.85em;
-            color: var(--gold); 
+            font-size: 1.1em;
+            color: #ffcc66; 
             font-style: italic;
-            margin-top: 10px;
-            line-height: 1.4;
         }
         
         main {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 92%;
+            justify-content: center;
+            align-items: flex-start;
+            width: 90%;
             max-width: 800px; 
-            padding-bottom: 140px;
+            gap: 30px;
+            flex-direction: column; 
         }
 
         .info-panel, .event-panel {
             width: 100%; 
-            padding: 22px;
-            background-color: var(--card-bg); 
-            border-radius: 18px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
+            padding: 25px;
+            background-color: rgba(255, 255, 255, 0.15); 
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
+            border-left: 5px solid #ffcc66; 
             text-align: left;
             margin-bottom: 20px; 
+            color: #ffffff; 
             box-sizing: border-box;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .event-panel { border-top: 4px solid var(--orange); }
-        .info-panel { border-top: 4px solid var(--gold); }
+        .event-panel {
+            border-left: 5px solid #ff8c42;
+            background-color: rgba(255, 140, 66, 0.1);
+        }
 
         h2 {
-            font-size: 1.25em;
-            color: var(--gold); 
+            font-size: 1.6em;
+            color: #ffcc66; 
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3); 
+            padding-bottom: 8px;
             margin-top: 0;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .event-panel h2 { color: var(--orange); }
+        .event-panel h2 {
+            color: #ff8c42;
+        }
         
-        ul { list-style: none; padding: 0; margin: 0; }
+        ul {
+            list-style: none;
+            padding: 0;
+            line-height: 1.6;
+        }
 
         li {
-            padding: 12px 0;
-            line-height: 1.6;
-            font-size: 0.95em;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 6px 0;
+            position: relative;
+            color: #ffffff; 
         }
 
-        li:last-child { border-bottom: none; }
+        .event-list li::before {
+            content: '🧧'; 
+            margin-right: 10px;
+        }
 
-        .event-list li::before { content: '🧧'; margin-right: 8px; }
-        .info-list li::before { content: '🕯️'; margin-right: 8px; }
+        .info-list li::before {
+            content: '🕯️'; 
+            margin-right: 10px;
+        }
 
         .reward {
-            color: var(--gold);
+            color: #ffcc66;
             font-weight: bold;
             display: block;
-            margin-top: 6px;
-            font-size: 0.85em;
-            background: rgba(255, 204, 102, 0.15);
-            padding: 4px 10px;
-            border-radius: 6px;
-            width: fit-content;
+            margin-top: 5px;
         }
 
         .action-area {
-            position: fixed;
-            bottom: 35px;
             width: 100%;
-            left: 0;
-            z-index: 1001;
-            display: flex;
-            justify-content: center;
-            pointer-events: none;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 50px;
         }
 
         .join-button {
-            pointer-events: auto;
             display: inline-block;
-            padding: 16px 40px; 
-            background: linear-gradient(135deg, var(--orange) 0%, #cc6600 100%);
+            padding: 15px 35px; 
+            background-color: #ff8c42; 
             color: white;
             text-decoration: none; 
-            border-radius: 50px; 
+            border-radius: 30px; 
             font-weight: bold;
-            font-size: 1.1em;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            transition: all 0.2s;
-            animation: breathe 2.5s infinite ease-in-out;
-        }
-
-        @keyframes breathe {
-            0% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
-            50% { transform: scale(1.05); box-shadow: 0 15px 35px rgba(255, 140, 66, 0.4); }
-            100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7); }
-        }
-
-        .join-button:active {
-            transform: scale(0.92);
-            filter: brightness(1.1);
-        }
-
-        #dynamic-footer {
-            padding: 20px 0 120px;
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.2em;
             letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); 
+            position: relative;
+            z-index: 10;
+        }
+
+        .join-button:hover {
+            background-color: #ff703f; 
+            transform: translateY(-5px) scale(1.05); 
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+             color: #ffffff; 
+        }
+        
+        #dynamic-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            color: #aaa;
+            background: transparent;
+            padding: 25px 0;
+            z-index: 100;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -244,48 +252,48 @@
     
     <header>
         <h1>墨狐酒館 - MoFox</h1>
-        <div class="subtitle">「一杯曖昧，讓靈魂在迷霧中自由共醉」<br>Since 2025.06.09</div>
+        <div class="subtitle">「一杯曖昧，讓靈魂在迷霧中自由共醉」 · Since 2025.06.09</div>
     </header>
 
     <main>
         <section class="event-panel">
-            <h2>🦊 2026 靈狐報喜 · 賽博春節</h2>
+            <h2>🦊 2026 靈狐報喜 · 賽博春節開運計畫</h2>
+            <p><strong>各位酒客們：墨狐酒館的燈火已在雲端點亮，農曆新年我們不打算讓你安靜度過！</strong></p>
             <ul class="event-list">
                 <li>
                     <strong>第一彈：【狐鬧新春】年夜飯大賞</strong><br>
-                    分享你的年味瞬間，留下新年寄語。
-                    <span class="reward">獎勵：100 醉金</span>
+                    在活動頻道上傳你的年夜飯或新年第一杯酒的照片，並附上新年新希望。
+                    <span class="reward">獎勵：統計至初五，發照片+留言者獲得「100醉金」。</span>
                 </li>
                 <li>
                     <strong>第二彈：【墨色閒談】活躍挑戰</strong><br>
-                    尋找當季最有梗、最熱衷交流的天選靈狐。
-                    <span class="reward">獎勵：2026 天選靈狐限定身分組</span>
+                    管理員將隨機抓取最有梗、最會聊天的三位「天選靈狐」。
+                    <span class="reward">獎勵：獲得「2026 天選靈狐」身分組 + 永久專屬顏色名稱！</span>
                 </li>
                 <li>
                     <strong>第三彈：【除夕守歲】雲端乾杯</strong><br>
-                    除夕 23:30 語音頻道，我們不醉不歸。
-                    <span class="reward">獎勵：50 醉金（全程參與）</span>
+                    除夕晚間 11：30，準時開啟 ⁠｜一號桌🪑 語音頻道。
+                    <span class="reward">獎勵：全程參與語音的朋友（抽插不算），即可領取「50醉金」。</span>
                 </li>
             </ul>
+            <p style="text-align: center; font-style: italic; color: #ff8c42;">「新的一年，不求清醒，但求盡興。」</p>
         </section>
 
         <section class="info-panel">
-            <h2>📜 酒館區域指南</h2>
+            <h2>📜 酒館守則與區域指南</h2>
+            <p><strong>歡迎來到墨狐酒館，一個專屬於深夜，讓心靈放鬆交流的舒適空間。</strong></p>
             <ul class="info-list">
-                <li><strong>暖心分齡區：</strong> 給予每個年齡層最自在的對話。</li>
-                <li><strong>🗝️ 曖昧神祕角：</strong> 傾訴心事，尋找靈魂共鳴。</li>
-                <li><strong>🌹 深夜探索區：</strong> BDSM 專區，安全與信任的邊界。</li>
-                <li><strong>💼 打工商店：</strong> 體驗酒館職人的日常趣味。</li>
+                <li><strong>暖心分齡分區：</strong> 我們為不同年齡層設有專屬區域，確保所有訪客都能在自在的環境下交流。</li>
+                <li><strong>🗝️ 曖昧神秘角落：</strong> 情感交流區，尋找共鳴的靈魂，聊聊心事或享受純粹的陪伴。</li>
+                <li><strong>🌹 深夜探索專區：</strong> BDSM專區，在安全、信任的基礎上，探索隱私與慾望的邊界。</li>
+                <li><strong>💼 打工商店物語：</strong> 獨特的打工商店系統，讓你在虛擬世界中體驗角色扮演的樂趣與溫暖。</li>
             </ul>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #ffcc66;">**在這裡，放下白天的疲憊，找到屬於你的那份溫柔與自在。**</p>
         </section>
-
-        <div id="dynamic-footer">
-            &copy; 2025-2026 MOFOX TAVERN. ALL RIGHTS RESERVED.
-        </div>
 
         <div class="action-area">
             <a href="https://discord.gg/HnQ7qQxmRG" target="_blank" class="join-button">
-                🦊 加入墨狐酒館 🥂
+                🦊 點此加入墨狐酒館 🥂
             </a>
         </div>
     </main>

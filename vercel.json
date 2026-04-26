@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/auth/google",
-      "destination": "/api/auth.js"
+      "destination": "/api/server.js"
     },
     {
       "source": "/api/auth/callback",

@@ -256,6 +256,25 @@
 <script>
     let cacheUsers = [];
 
+    async function checkSession() {
+        try {
+            const res = await fetch('/api/list?type=users');
+            if (res.status === 401) {
+                window.location.replace('/login.html');
+            }
+        } catch (e) {
+            window.location.replace('/login.html');
+        }
+    }
+
+    window.onpageshow = function(event) {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            window.location.reload();
+        } else {
+            checkSession();
+        }
+    };
+
     function filterSelect(val, selectId) {
         const select = document.getElementById(selectId);
         const options = select.getElementsByTagName("option");
@@ -302,7 +321,10 @@
         const opt = { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json' } };
         if (body) opt.body = JSON.stringify(body);
         const res = await fetch(url, opt);
-        if (res.status === 401) window.location.href = '/login.html';
+        if (res.status === 401) {
+            window.location.replace('/login.html');
+            return;
+        }
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || '操作失敗');
         return data;
@@ -352,7 +374,7 @@
     }
 
     function logout() {
-        window.location.href = '/api/logout';
+        window.location.replace('/api/logout');
     }
 
     window.onload = loadData;

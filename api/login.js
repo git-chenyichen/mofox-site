@@ -1,4 +1,6 @@
 import nodemailer from 'nodemailer';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const USERS_DATABASE = {
     OWNER: [
@@ -23,47 +25,52 @@ const transporter = nodemailer.createTransport({
 });
 
 export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Method Not Allowed' });
-    }
+    const auth = req.headers.cookie;
 
-    const { step, role, username, password, code } = req.body;
-
-    if (step === 'auth') {
-        const userList = USERS_DATABASE[role];
-        const user = userList?.find(u => u.u === username && u.p === password);
-
-        if (user) {
-            const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-            tempCodes[username] = verificationCode;
-
+    if (req.method === 'GET') {
+        if (auth && auth.includes('mofox_auth=true')) {
             try {
-                await transporter.sendMail({
-                    from: `"墨狐酒館 SSO" <${process.env.EMAIL_USER}>`,
-                    to: user.email,
-                    subject: '您的登入驗證碼',
-                    html: `
-                        <div style="font-family: sans-serif; padding: 20px; border: 1px solid #eee;">
-                            <h2>墨狐酒館 SSO 驗證</h2>
-                            <p>您好 ${username}，您的身分驗證碼為：</p>
-                            <h1 style="color: #ff8c42;">${verificationCode}</h1>
-                            <p>請在網頁輸入此代碼完成登入。</p>
-                        </div>
-                    `
-                });
-                return res.status(200).json({ success: true, nextStep: '2fa' });
-            } catch (error) {
-                return res.status(500).json({ success: false, message: '郵件發送失敗' });
+                const filePath = join(process.cwd(), 'admin-content.html');
+                const fileContent = readFileSync(filePath, 'utf8');
+                res.setHeader('Content-Type', 'text/html');
+                return res.status(200).send(fileContent);
+            } catch (err) {
+                return res.status(500).send('讀取後台檔案失敗');
             }
         }
-        return res.status(401).json({ success: false, message: '帳號或密碼錯誤' });
+        return res.redirect(302, '/login.html');
     }
 
-    if (step === 'verify') {
-        if (tempCodes[username] && tempCodes[username] === code) {
-            delete tempCodes[username];
-            return res.status(200).json({ success: true });
+    if (req.method === 'POST') {
+        const { step, role, username, password, code } = req.body;
+
+        if (step === 'auth') {
+            const user = USERS_DATABASE[role]?.find(u => u.u === username && u.p === password);
+            if (user) {
+                const vCode = Math.floor(100000 + Math.random() * 900000).toString();
+                tempCodes[username] = vCode;
+                try {
+                    await transporter.sendMail({
+                        from: `"墨狐酒館 SSO" <${process.env.EMAIL_USER}>`,
+                        to: user.email,
+                        subject: '您的登入驗證碼',
+                        text: `驗證碼：${vCode}`
+                    });
+                    return res.status(200).json({ success: true, nextStep: '2fa' });
+                } catch (e) {
+                    return res.status(500).json({ success: false, message: '郵件發送失敗' });
+                }
+            }
+            return res.status(401).json({ success: false, message: '帳號或密碼錯誤' });
         }
-        return res.status(401).json({ success: false, message: '驗證碼錯誤' });
+
+        if (step === 'verify') {
+            if (tempCodes[username] && tempCodes[username] === code) {
+                delete tempCodes[username];
+                res.setHeader('Set-Cookie', 'mofox_auth=true; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600');
+                return res.status(200).json({ success: true });
+            }
+            return res.status(401).json({ success: false, message: '驗證碼錯誤' });
+        }
     }
 }

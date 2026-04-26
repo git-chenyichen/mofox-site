@@ -5,7 +5,7 @@ const USERS_DATABASE = {
         { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com" }
     ],
     STAFF: [
-        { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@example.com" }
+        { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@kusanagi.dev" }
     ],
     ADMIN: [
         { u: "2023", p: "chenyichen1106", email: "yic0979s@gmail.com" }

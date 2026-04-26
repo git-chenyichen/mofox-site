@@ -11,7 +11,7 @@ const CONFIG = {
     CLIENT_SECRET: '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',
     REDIRECT_URI: 'https://mofox.xyz/api/auth/callback',
     ADMIN_WHITELIST: [
-        'your-email@gmail.com', 
+        'yic0979s@gmail.com', 
         'staff1@gmail.com',
         'staff2@gmail.com'
     ],

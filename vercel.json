@@ -1,9 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/admin.html",
-      "destination": "/api/admin-check"
+      "source": "/api/auth/google",
+      "destination": "/api/auth.js"
+    },
+    {
+      "source": "/api/auth/callback",
+      "destination": "/api/auth.js"
     }
   ]
 }
-

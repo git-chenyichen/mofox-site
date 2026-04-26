@@ -3,126 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoFox Bot | 服務條款與隱私權政策</title>
+    <title>服務條款 (TOS) | 墨狐酒館管理系統</title>
     <style>
         :root {
             --bg-color: #0b0e14;
             --card-bg: #161b22;
             --text-main: #e6edf3;
             --text-dim: #8b949e;
-            --accent: #58a6ff;
+            --accent-gold: #ffcc66;
             --border: #30363d;
-            --danger: #f85149;
         }
-
         body {
-            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: "Segoe UI", system-ui, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.8;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-
         .container {
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 0 30px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        h1 { font-size: 2.2rem; color: var(--accent); margin-bottom: 10px; }
-        h2 { font-size: 1.6rem; margin-top: 40px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        h3 { font-size: 1.2rem; margin-top: 25px; color: #ffffff; }
-
-        .content-box {
-            background-color: var(--card-bg);
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--card-bg);
             padding: 40px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid var(--border);
-            margin-bottom: 40px;
         }
-
-        ul { padding-left: 25px; }
-        li { margin-bottom: 12px; }
-
-        .important { color: var(--danger); font-weight: bold; }
-
-        footer {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-top: 80px;
-            padding: 40px 0;
-        }
-
-        .update-date { font-size: 0.9rem; color: var(--text-dim); }
+        h1, h2 { color: var(--accent-gold); border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; margin-top: 30px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+        .back-link { display: inline-block; margin-top: 30px; color: var(--accent-gold); text-decoration: none; font-weight: bold; }
+        footer { margin-top: 50px; text-align: center; color: var(--text-dim); font-size: 0.9rem; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>服務條款 (Terms of Service)</h1>
+        <p>歡迎使用「墨狐酒館管理系統 v4.1」（以下簡稱本系統）。當您存取或使用本系統時，即表示您已閱讀、瞭解並同意接受本條款之所有內容。</p>
 
-<div class="container">
-    <header>
-        <h1>MoFox Bot Official Documentation</h1>
-        <p class="update-date">最後修訂日期：2026年4月26日</p>
-    </header>
+        <h2>1. 帳號與安全性</h2>
+        <ul>
+            <li>本系統僅限授權之館員與管理團隊使用。</li>
+            <li>使用者需透過 Google OAuth 進行驗證。您有義務維護個人 Google 帳號的安全，任何經由您的帳號所進行的操作，均視為您的親自行為。</li>
+        </ul>
 
-    <div class="content-box">
-        <section>
-            <h2>服務條款 (Terms of Service)</h2>
-            <p>當您使用本機器人功能時，即代表您同意以下規範：</p>
+        <h2>2. 使用規範</h2>
+        <ul>
+            <li>禁止利用本系統進行任何未經授權的數據修改、洩漏成員個資或破壞 Discord 社群秩序之行為。</li>
+            <li>嚴禁嘗試繞過驗證機制、進行壓力測試或任何可能損害伺服器運行的行為。</li>
+        </ul>
 
-            <h3>1. 使用規範</h3>
-            <ul>
-                <li>禁止利用 MoFox Bot 進行任何形式的騷擾、詐騙或違反 Discord 官方社群守則之行為。</li>
-                <li>嚴禁嘗試攻擊機器人後端 API 或惡意洗指令以造成服務負擔。</li>
-                <li>若發現功能異常，請至官方支援伺服器回報。嚴禁利用程式漏洞（Bug）獲取非正常的伺服器權限或經濟數值。</li>
-            </ul>
+        <h2>3. 終止服務</h2>
+        <p>若發現使用者違反上述規範，開發團隊有權在不經事先通知的情況下，取消該使用者的管理權限並封鎖存取。</p>
 
-            <h3>2. 權限與責任</h3>
-            <ul>
-                <li>伺服器管理員需自行承擔賦予機器人權限之風險（如「管理員」權限）。</li>
-                <li>對於因 Discord 官方 API 故障或不可抗力因素導致的服務中斷，開發團隊不負賠償責任。</li>
-            </ul>
-
-            <h3>3. 贊助與虛擬物品</h3>
-            <p>若涉及贊助或伺服器內部的虛擬代幣交易，請注意：這些物品僅具備社群內部紀念或功能性質，不具備任何現實貨幣價值。一旦完成贊助，原則上不接受退款要求。</p>
-        </section>
-
-        <hr style="border: 0; border-top: 1px solid var(--border); margin: 50px 0;">
-
-        <section>
-            <h2>隱私權政策 (Privacy Policy)</h2>
-            <p>MoFox Bot 致力於保護使用者的資料安全，以下說明我們的資料處理方式：</p>
-
-            <h3>1. 資料收集範圍</h3>
-            <ul>
-                <li><strong>必要識別資訊：</strong> 包含您的 Discord User ID、伺服器 ID。這些資料用於區分不同用戶的設定。</li>
-                <li><strong>功能執行紀錄：</strong> 為了實現「E-mail審核」或「購買物品」功能，我們會暫存相關頻道的 ID 與設定內容。</li>
-            </ul>
-
-            <h3>2. 數據處理與安全</h3>
-            <ul>
-                <li>我們承諾不會將任何伺服器成員名單、對話內容或個人識別資料出售給第三方。</li>
-                <li>數據儲存於加密資料庫，僅限開發團隊（MoFox Team）因維護需求進行必要存取。</li>
-            </ul>
-
-            <h3>3. 您的權利</h3>
-            <p>若您希望完全刪除資料庫中關於您的所有紀錄（如經濟系統、設定），請聯繫開發團隊，我們將在核實身分後手動執行刪除程序。</p>
-        </section>
+        <a href="google.html" class="back-link">← 返回首頁</a>
+        
+        <footer>
+            <p>© 2026 MoFox Team. 最後更新日期：2026/04/26</p>
+        </footer>
     </div>
-
-    <footer>
-        <p>&copy; 2026 MoFox Team. All Rights Reserved.</p>
-        <p>本文件受法律保護，未經許可請勿擅自修改後轉作他用。</p>
-    </footer>
-</div>
-
 </body>
 </html>

@@ -1,10 +1,9 @@
 const USERS_DATABASE = {
     OWNER: [
-        { u: "mohuhu", p: "mohuhu328" }
+        { u: "mohuhu", p: "Mofox0609" }
     ],
     STAFF: [
-        { u: "lan", p: "l.c.y.x" },
-        { u: "kusanagi", p: "kusanagi_akane" },
+        { u: "no", p: "1232rewtrhrtgrwdvydrfiefgedwserufgdsruegrfedtrfjdherthbgfdketfgdujsetfgrkewjutgl,bjfjhdoiyhrujgld0o" }
     ],
     ADMIN: [
         { u: "2023", p: "chenyichen1106" }

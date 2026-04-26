@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>墨狐酒館管理系統 v4.0</title>
+    <title>墨狐酒館管理系統 v4.1</title>
     <style>
         :root {
             --sidebar-width: 260px;
@@ -72,24 +72,13 @@
             border-left: 4px solid transparent;
         }
 
-        .nav-link:hover {
-            color: #fff;
-            background: rgba(255, 204, 102, 0.04);
-        }
-
-        .nav-link.active {
-            color: #fff;
-            background: rgba(255, 204, 102, 0.08);
-            border-left-color: var(--accent-gold);
-            font-weight: 600;
-        }
+        .nav-link:hover { color: #fff; background: rgba(255, 204, 102, 0.04); }
+        .nav-link.active { color: #fff; background: rgba(255, 204, 102, 0.08); border-left-color: var(--accent-gold); font-weight: 600; }
 
         .mobile-header {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 65px;
             background: rgba(17, 18, 20, 0.98);
             backdrop-filter: blur(10px);
@@ -98,7 +87,6 @@
             padding: 0 20px;
             border-bottom: 1px solid var(--border-light);
             justify-content: space-between;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
         @media (max-width: 768px) {
@@ -106,16 +94,12 @@
             nav.open { transform: translateX(0); }
             .mobile-header { display: flex; }
             main { margin-left: 0 !important; padding: 90px 18px 30px 18px !important; }
-            .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
-            .btn-group { grid-template-columns: 1fr !important; gap: 12px !important; }
-            .card { padding: 25px !important; }
         }
 
         main {
             margin-left: var(--sidebar-width);
             flex-grow: 1;
             padding: 50px 60px;
-            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
         }
@@ -123,7 +107,6 @@
         .container { width: 100%; max-width: 1100px; }
         .module-section { display: none; }
         .module-section.active { display: block; animation: moduleFade 0.4s ease-out; }
-
         @keyframes moduleFade { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
@@ -133,10 +116,8 @@
             padding: 40px;
             margin-bottom: 35px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transition: border-color 0.3s ease;
         }
-        
-        .card:hover { border-color: rgba(255, 204, 102, 0.2); }
+
         h2 { color: #fff; margin-top: 0; margin-bottom: 30px; font-size: 1.8em; font-weight: 700; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
@@ -146,25 +127,14 @@
             border-radius: 15px;
             text-align: center;
             border: 1px solid var(--border-light);
-            transition: all 0.3s ease;
         }
-        .stat-item:hover { transform: translateY(-5px); border-color: rgba(255, 204, 102, 0.3); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .stat-label { color: var(--text-muted); font-size: 1em; font-weight: 500; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .stat-value { font-size: 3em; font-weight: 800; color: var(--accent-gold); text-shadow: 0 0 15px var(--gold-shadow); }
 
         .form-group { margin-bottom: 25px; }
-        label { display: block; margin-bottom: 12px; font-size: 0.95em; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; }
+        label { display: block; margin-bottom: 12px; font-size: 0.95em; color: var(--text-muted); font-weight: 600; }
 
-        .input-with-avatar { display: flex; align-items: center; gap: 18px; }
-        .avatar-preview {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            border: 2px solid var(--accent-gold);
-            object-fit: cover;
-            background: #000;
-            box-shadow: 0 0 15px var(--gold-shadow);
-        }
+        .search-container { position: relative; width: 100%; }
+        .search-input { margin-bottom: 5px; background: #2b2d31; border-color: var(--accent-gold); }
 
         select, input, textarea {
             width: 100%;
@@ -174,82 +144,32 @@
             border-radius: 10px;
             color: #fff;
             font-size: 16px;
-            transition: all 0.2s ease;
             box-sizing: border-box;
-        }
-        
-        select:focus, input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 10px var(--gold-shadow);
         }
 
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        button {
-            padding: 16px 20px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        button { padding: 16px 20px; border-radius: 10px; border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 
-        button:active { transform: scale(0.97); }
-
-        .btn-primary {
-            background: linear-gradient(145deg, var(--accent-gold), var(--hover-gold));
-            color: #000;
-            box-shadow: 0 5px 15px rgba(245, 179, 80, 0.2);
-        }
-        .btn-primary:hover { background: linear-gradient(145deg, var(--hover-gold), var(--active-gold)); box-shadow: 0 8px 20px rgba(245, 179, 80, 0.4); }
-
-        .btn-danger {
-            background: transparent;
-            color: var(--status-red);
-            border: 2px solid var(--status-red);
-        }
-        .btn-danger:hover { background: var(--status-red); color: #fff; box-shadow: 0 5px 15px rgba(218, 55, 60, 0.3); }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 950;
-        }
-        .overlay.show { display: block; }
+        .btn-primary { background: linear-gradient(145deg, var(--accent-gold), var(--hover-gold)); color: #000; }
+        .btn-danger { background: transparent; color: var(--status-red); border: 2px solid var(--status-red); }
 
         #toast {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 16px 30px;
-            border-radius: 12px;
-            display: none;
-            z-index: 2000;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            animation: toastIn 0.3s ease;
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+            padding: 16px 30px; border-radius: 12px; display: none; z-index: 2000; font-weight: 600;
         }
-        @keyframes toastIn { from { top: -20px; opacity: 0; } to { top: 30px; opacity: 1; } }
-        .toast-success { background: rgba(36, 128, 70, 0.9); color: #fff; border: 1px solid var(--status-green); }
-        .toast-error { background: rgba(218, 55, 60, 0.9); color: #fff; border: 1px solid var(--status-red); }
+        .toast-success { background: rgba(36, 128, 70, 0.9); color: #fff; }
+        .toast-error { background: rgba(218, 55, 60, 0.9); color: #fff; }
+
+        .avatar-preview { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--accent-gold); background: #000; }
     </style>
 </head>
 <body>
 
 <div class="mobile-header">
     <div onclick="toggleMenu()" style="font-size: 1.6em; cursor: pointer; color: var(--accent-gold);">☰</div>
-    <div style="color: var(--accent-gold); font-weight: 800; font-size: 1.2em; letter-spacing: 1px;">墨狐酒館</div>
+    <div style="color: var(--accent-gold); font-weight: 800;">墨狐酒館</div>
     <div style="width: 24px;"></div>
 </div>
-
-<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
 
 <nav id="sidebar">
     <div class="nav-brand">墨狐酒館</div>
@@ -270,14 +190,8 @@
             <div class="card">
                 <h2>系統數據概覽</h2>
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">成員數量</div>
-                        <div class="stat-value" id="s-members">---</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">身分組數量</div>
-                        <div class="stat-value" id="s-roles">---</div>
-                    </div>
+                    <div class="stat-item"><div>成員數量</div><div class="stat-value" id="s-members">---</div></div>
+                    <div class="stat-item"><div>身分組數量</div><div class="stat-value" id="s-roles">---</div></div>
                 </div>
                 <button class="btn-primary" style="width:100%; margin-top:30px" onclick="loadData()">同步即時數據</button>
             </div>
@@ -287,18 +201,16 @@
             <div class="card">
                 <h2>成員懲處作業</h2>
                 <div class="form-group">
-                    <label>目標成員</label>
-                    <div class="input-with-avatar">
+                    <label>搜尋成員</label>
+                    <input type="text" class="search-input" placeholder="輸入名稱搜尋..." onkeyup="filterSelect('m-search', 'm-target')" id="m-search">
+                    <div class="input-with-avatar" style="margin-top:10px">
                         <img id="m-avatar" class="avatar-preview" src="https://cdn.discordapp.com/embed/avatars/0.png">
                         <select id="m-target" class="list-u" onchange="syncAvatar(this, 'm-avatar')"></select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>執行理由</label>
-                    <input type="text" id="m-reason" placeholder="請輸入懲處理由...">
-                </div>
+                <div class="form-group"><label>理由</label><input type="text" id="m-reason" placeholder="請輸入理由..."></div>
                 <div class="btn-group">
-                    <button class="btn-primary" style="background: transparent; border: 2px solid var(--accent-gold); color: var(--accent-gold);" onclick="execMember('kick')">KICK</button>
+                    <button class="btn-primary" style="background:transparent; border:2px solid var(--accent-gold); color:var(--accent-gold)" onclick="execMember('kick')">KICK</button>
                     <button class="btn-danger" onclick="execMember('ban')">BAN</button>
                 </div>
             </div>
@@ -308,13 +220,17 @@
             <div class="card">
                 <h2>身分組權限調度</h2>
                 <div class="form-group">
-                    <label>對象成員</label>
-                    <div class="input-with-avatar">
+                    <label>搜尋成員</label>
+                    <input type="text" class="search-input" placeholder="輸入名稱搜尋..." onkeyup="filterSelect('r-search', 'r-target')" id="r-search">
+                    <div class="input-with-avatar" style="margin-top:10px">
                         <img id="r-avatar" class="avatar-preview" src="https://cdn.discordapp.com/embed/avatars/0.png">
                         <select id="r-target" class="list-u" onchange="syncAvatar(this, 'r-avatar')"></select>
                     </div>
                 </div>
-                <div class="form-group"><label>選擇身分組</label><select id="r-role" class="list-r"></select></div>
+                <div class="form-group">
+                    <label>選擇身分組</label>
+                    <select id="r-role" class="list-r"></select>
+                </div>
                 <div class="btn-group">
                     <button class="btn-primary" onclick="execRole('add')">授予權限</button>
                     <button class="btn-danger" onclick="execRole('remove')">撤銷權限</button>
@@ -324,10 +240,10 @@
 
         <section id="msg" class="module-section">
             <div class="card">
-                <h2>系統廣播發布</h2>
-                <div class="form-group"><label>目標頻道</label><select id="msg-ch" class="list-c"></select></div>
-                <div class="form-group"><label>訊息內容</label><textarea id="msg-ctx" rows="7" placeholder="請輸入廣播內容..."></textarea></div>
-                <button class="btn-primary" style="width:100%" onclick="execMsg()">發送系統廣播</button>
+                <h2>系統廣播</h2>
+                <div class="form-group"><label>頻道</label><select id="msg-ch" class="list-c"></select></div>
+                <div class="form-group"><label>內容</label><textarea id="msg-ctx" rows="7"></textarea></div>
+                <button class="btn-primary" style="width:100%" onclick="execMsg()">發送廣播</button>
             </div>
         </section>
     </div>
@@ -337,10 +253,28 @@
 
 <script>
     let cacheUsers = [];
+    let originalUserOptions = "";
+
+    function filterSelect(inputId, selectId) {
+        const val = document.getElementById(inputId).value.toLowerCase();
+        const select = document.getElementById(selectId);
+        const options = select.getElementsByTagName("option");
+        
+        let firstMatch = true;
+        for (let i = 0; i < options.length; i++) {
+            const txt = options[i].textContent || options[i].innerText;
+            const isMatch = txt.toLowerCase().indexOf(val) > -1;
+            options[i].style.display = isMatch ? "" : "none";
+            if(isMatch && firstMatch) {
+                options[i].selected = true;
+                firstMatch = false;
+            }
+        }
+        syncAvatar(select, selectId === 'm-target' ? 'm-avatar' : 'r-avatar');
+    }
 
     function toggleMenu() {
         document.getElementById('sidebar').classList.toggle('open');
-        document.getElementById('overlay').classList.toggle('show');
     }
 
     function navTo(id) {
@@ -348,7 +282,6 @@
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.currentTarget.classList.add('active');
-        if (window.innerWidth <= 768) toggleMenu();
     }
 
     function syncAvatar(selectEl, imgId) {
@@ -384,12 +317,14 @@
             cacheUsers = users;
             document.getElementById('s-members').textContent = users.length;
             document.getElementById('s-roles').textContent = roles.length;
+            
             const uHtml = users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
-            const rHtml = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-            const cHtml = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
-            document.querySelectorAll('.list-u').forEach(s => { s.innerHTML = uHtml; syncAvatar(s, s.id === 'm-target' ? 'm-avatar' : 'r-avatar'); });
-            document.querySelector('.list-r').innerHTML = rHtml;
-            document.querySelector('.list-c').innerHTML = cHtml;
+            document.querySelectorAll('.list-u').forEach(s => { 
+                s.innerHTML = uHtml; 
+                syncAvatar(s, s.id === 'm-target' ? 'm-avatar' : 'r-avatar');
+            });
+            document.querySelector('.list-r').innerHTML = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+            document.querySelector('.list-c').innerHTML = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
             notify('數據同步完成');
         } catch (e) { notify(e.message, true); }
     }

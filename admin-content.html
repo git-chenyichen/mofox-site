@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館管理系統 v2.2.2</title>
+    <title>墨狐酒館系統管理核心</title>
     <style>
         :root {
             --sidebar-width: 260px;
@@ -12,12 +12,12 @@
             --discord-red: #ED4245;
             --discord-yellow: #FEE75C;
             --discord-green: #57F287;
-            --bg-glass: rgba(32, 34, 37, 0.85);
+            --bg-glass: rgba(32, 34, 37, 0.95);
             --card-glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
             display: flex;
             background: #0f0f0f url('images/mofox-background.jpg') no-repeat center center fixed;
@@ -43,7 +43,6 @@
             padding: 40px 24px;
             font-size: 1.5em;
             font-weight: 800;
-            letter-spacing: 1px;
             color: var(--accent-gold);
             text-align: center;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -58,17 +57,12 @@
             padding: 16px 24px;
             cursor: pointer;
             color: #8e9297;
-            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.2s;
             display: flex;
             align-items: center;
-            font-size: 0.95em;
         }
 
-        .nav-link:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
+        .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.03); }
         .nav-link.active {
             color: #fff;
             background: rgba(88, 101, 242, 0.2);
@@ -79,22 +73,13 @@
             margin-left: var(--sidebar-width);
             flex-grow: 1;
             padding: 50px;
-            max-width: 1200px;
+            max-width: 1000px;
         }
 
-        .module-section {
-            display: none;
-            animation: fadeIn 0.4s ease-out;
-        }
+        .module-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .module-section.active { display: block; }
 
-        .module-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .card {
             background: var(--card-glass);
@@ -102,45 +87,15 @@
             border-radius: 12px;
             padding: 32px;
             margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
         }
 
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .stat-item { background: rgba(0, 0, 0, 0.3); padding: 24px; border-radius: 10px; text-align: center; }
+        .stat-value { font-size: 2.5em; font-weight: 700; color: var(--accent-gold); }
 
-        .stat-item {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 24px;
-            border-radius: 10px;
-            border-bottom: 3px solid var(--accent-gold);
-        }
-
-        .stat-label {
-            color: #b9bbbe;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 2.8em;
-            font-weight: 700;
-            margin-top: 8px;
-            color: var(--accent-gold);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.85em;
-            color: #dcddde;
-        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.85em; color: #b9bbbe; }
 
         select, input, textarea {
             width: 100%;
@@ -149,40 +104,22 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             color: #fff;
-            font-size: 1em;
-            transition: border-color 0.2s;
-            appearance: none;
+            box-sizing: border-box;
         }
 
-        select:focus, input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--discord-blurple);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
+        .btn-group { display: flex; gap: 12px; }
         button {
-            padding: 12px 28px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 6px;
             border: none;
             font-weight: 600;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.9em;
         }
 
-        .btn-core { background: var(--discord-blurple); color: white; }
+        .btn-primary { background: var(--discord-blurple); color: white; }
         .btn-kick { background: var(--discord-yellow); color: #000; }
         .btn-ban { background: var(--discord-red); color: white; }
-        
-        button:hover {
-            filter: brightness(1.2);
-            transform: translateY(-1px);
-        }
 
         #toast {
             position: fixed;
@@ -190,246 +127,157 @@
             right: 30px;
             padding: 16px 32px;
             border-radius: 8px;
-            font-weight: 600;
             display: none;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
         .toast-success { background: var(--discord-green); color: #000; }
         .toast-error { background: var(--discord-red); color: #fff; }
-
-        @media (max-width: 992px) {
-            nav { width: 80px; }
-            .nav-brand, .nav-link span { display: none; }
-            main { margin-left: 80px; padding: 20px; }
-        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-brand">MOFOX OPS</div>
-        <div class="nav-menu">
-            <div class="nav-link active" onclick="navigate('stats')"><span>數據總覽</span></div>
-            <div class="nav-link" onclick="navigate('members')"><span>成員核裁</span></div>
-            <div class="nav-link" onclick="navigate('roles')"><span>權限管理</span></div>
-            <div class="nav-link" onclick="navigate('broadcast')"><span>通訊發布</span></div>
-            <div class="nav-link" onclick="navigate('webhooks')"><span>自動化集成</span></div>
-        </div>
-        <div style="padding: 24px; border-top: 1px solid rgba(255,255,255,0.05);">
-            <button class="btn-ban" style="width: 100%;" onclick="handleLogout()">登出核心</button>
-        </div>
-    </nav>
+<nav>
+    <div class="nav-brand">墨狐核心</div>
+    <div class="nav-menu">
+        <div class="nav-link active" onclick="switchModule('stats')">數據儀表板</div>
+        <div class="nav-link" onclick="switchModule('members')">成員管理</div>
+        <div class="nav-link" onclick="switchModule('roles')">權限調度</div>
+        <div class="nav-link" onclick="switchModule('msg')">訊息廣播</div>
+    </div>
+    <div style="padding: 24px;">
+        <button class="btn-ban" style="width:100%" onclick="logout()">登出</button>
+    </div>
+</nav>
 
-    <main>
-        <div id="stats" class="module-section active">
-            <div class="card">
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <div class="stat-label">Total Members</div>
-                        <div class="stat-value" id="val-members">---</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Active Roles</div>
-                        <div class="stat-value" id="val-roles">---</div>
-                    </div>
-                </div>
-                <button class="btn-core" style="margin-top: 30px;" onclick="initDashboard()">同步最新數據</button>
+<main>
+    <div id="stats" class="module-section active">
+        <div class="card">
+            <h2>即時狀態</h2>
+            <div class="stats-grid">
+                <div class="stat-item"><div>總成員</div><div class="stat-value" id="s-members">---</div></div>
+                <div class="stat-item"><div>身分組</div><div class="stat-value" id="s-roles">---</div></div>
+            </div>
+            <button class="btn-primary" style="margin-top:20px" onclick="loadData()">重新整理</button>
+        </div>
+    </div>
+
+    <div id="members" class="module-section">
+        <div class="card">
+            <h2>成員懲處</h2>
+            <div class="form-group">
+                <label>選擇對象</label>
+                <select id="m-target" class="list-u"></select>
+            </div>
+            <div class="form-group">
+                <label>原因</label>
+                <input type="text" id="m-reason" placeholder="原因...">
+            </div>
+            <div class="btn-group">
+                <button class="btn-kick" onclick="execMember('kick')">KICK</button>
+                <button class="btn-ban" onclick="execMember('ban')">BAN</button>
             </div>
         </div>
+    </div>
 
-        <div id="members" class="module-section">
-            <div class="card">
-                <h2>成員懲處作業</h2>
-                <div class="form-group">
-                    <label>TARGET MEMBER</label>
-                    <select id="m-uid" class="user-list-select"></select>
-                </div>
-                <div class="form-group">
-                    <label>REASON</label>
-                    <input type="text" id="m-reason" placeholder="請輸入執行理由">
-                </div>
-                <div class="btn-group">
-                    <button class="btn-kick" onclick="execMember('kick')">執行 KICK</button>
-                    <button class="btn-ban" onclick="execMember('ban')">執行 BAN</button>
-                </div>
+    <div id="roles" class="module-section">
+        <div class="card">
+            <h2>身分組操作</h2>
+            <div class="form-group"><label>對象</label><select id="r-target" class="list-u"></select></div>
+            <div class="form-group"><label>身分組</label><select id="r-role" class="list-r"></select></div>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="execRole('add')">給予</button>
+                <button class="btn-ban" onclick="execRole('remove')">移除</button>
             </div>
         </div>
+    </div>
 
-        <div id="roles" class="module-section">
-            <div class="card">
-                <h2>身分組權限調度</h2>
-                <div class="form-group">
-                    <label>TARGET USER</label>
-                    <select id="r-uid" class="user-list-select"></select>
-                </div>
-                <div class="form-group">
-                    <label>ROLE NAME</label>
-                    <select id="r-rid" class="role-list-select"></select>
-                </div>
-                <div class="btn-group">
-                    <button class="btn-core" onclick="execRole('add')">授予權限</button>
-                    <button class="btn-ban" onclick="execRole('remove')">撤銷權限</button>
-                </div>
-            </div>
+    <div id="msg" class="module-section">
+        <div class="card">
+            <h2>訊息發布</h2>
+            <div class="form-group"><label>頻道</label><select id="msg-ch" class="list-c"></select></div>
+            <div class="form-group"><label>內容</label><textarea id="msg-ctx" rows="5"></textarea></div>
+            <button class="btn-primary" onclick="execMsg()">發送</button>
         </div>
+    </div>
+</main>
 
-        <div id="broadcast" class="module-section">
-            <div class="card">
-                <h2>系統訊息廣播</h2>
-                <div class="form-group">
-                    <label>TARGET CHANNEL</label>
-                    <select id="b-cid" class="channel-list-select"></select>
-                </div>
-                <div class="form-group">
-                    <label>PAYLOAD</label>
-                    <textarea id="b-content" rows="6" placeholder="輸入廣播內容..."></textarea>
-                </div>
-                <button class="btn-core" onclick="execBroadcast()">發送廣播</button>
-            </div>
-        </div>
+<div id="toast"></div>
 
-        <div id="webhooks" class="module-section">
-            <div class="card">
-                <h2>Webhook 集成測試</h2>
-                <div class="form-group">
-                    <label>ENDPOINT URL</label>
-                    <input type="text" id="w-url" placeholder="https://discord.com/api/webhooks/...">
-                </div>
-                <div class="form-group">
-                    <label>CONTENT</label>
-                    <textarea id="w-content" rows="4" placeholder="JSON 或純文字內容..."></textarea>
-                </div>
-                <button class="btn-core" onclick="execWebhook()">推送數據</button>
-            </div>
-        </div>
-    </main>
+<script>
+    function switchModule(id) {
+        document.querySelectorAll('.module-section').forEach(m => m.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
 
-    <div id="toast"></div>
+    function notify(m, e=false) {
+        const t = document.getElementById('toast');
+        t.textContent = m;
+        t.className = e ? 'toast-error' : 'toast-success';
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 3000);
+    }
 
-    <script>
-        const API = {
-            STATS: '/api/get-stats',
-            LIST_USERS: '/api/list-users',
-            LIST_ROLES: '/api/list-roles',
-            LIST_CHANNELS: '/api/list-channels',
-            KICK: '/api/kick-member',
-            BAN: '/api/ban-member',
-            MSG: '/api/send-message',
-            ROLE: '/api/manage-role'
-        };
+    async function req(url, body = null) {
+        const opt = { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json' } };
+        if (body) opt.body = JSON.stringify(body);
+        const res = await fetch(url, opt);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || '失敗');
+        return data;
+    }
 
-        function navigate(id) {
-            document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+    async function loadData() {
+        try {
+            const [users, roles, channels] = await Promise.all([
+                req('/api/list?type=users'),
+                req('/api/list?type=roles'),
+                req('/api/list?type=channels')
+            ]);
+            
+            document.getElementById('s-members').textContent = users.length;
+            document.getElementById('s-roles').textContent = roles.length;
 
-        function notify(msg, err = false) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.className = err ? 'toast-error' : 'toast-success';
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
+            const uHtml = users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+            const rHtml = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+            const cHtml = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
 
-        async function request(url, body = null) {
-            const opt = {
-                method: body ? 'POST' : 'GET',
-                headers: { 'Content-Type': 'application/json' }
-            };
-            if (body) opt.body = JSON.stringify(body);
-            const res = await fetch(url, opt);
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || '操作失敗');
-            return data;
-        }
+            document.querySelectorAll('.list-u').forEach(s => s.innerHTML = uHtml);
+            document.querySelectorAll('.list-r').forEach(s => s.innerHTML = rHtml);
+            document.querySelectorAll('.list-c').forEach(s => s.innerHTML = cHtml);
+            
+            notify('數據已更新');
+        } catch (e) { notify(e.message, true); }
+    }
 
-        async function populateSelects() {
-            try {
-                const [users, roles, channels] = await Promise.all([
-                    request(API.LIST_USERS),
-                    request(API.LIST_ROLES),
-                    request(API.LIST_CHANNELS)
-                ]);
+    async function execMember(action) {
+        try {
+            const res = await req('/api/member', { userId: document.getElementById('m-target').value, action, reason: document.getElementById('m-reason').value });
+            notify(res.message);
+        } catch (e) { notify(e.message, true); }
+    }
 
-                const userSelects = document.querySelectorAll('.user-list-select');
-                const roleSelects = document.querySelectorAll('.role-list-select');
-                const channelSelects = document.querySelectorAll('.channel-list-select');
+    async function execRole(action) {
+        try {
+            const res = await req('/api/role', { userId: document.getElementById('r-target').value, roleId: document.getElementById('r-role').value, action });
+            notify(res.message);
+        } catch (e) { notify(e.message, true); }
+    }
 
-                const userOps = users.map(u => `<option value="${u.id}">${u.name} (${u.id})</option>`).join('');
-                const roleOps = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
-                const channelOps = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
+    async function execMsg() {
+        try {
+            const res = await req('/api/msg', { channelId: document.getElementById('msg-ch').value, content: document.getElementById('msg-ctx').value });
+            notify(res.message);
+        } catch (e) { notify(e.message, true); }
+    }
 
-                userSelects.forEach(s => s.innerHTML = userOps);
-                roleSelects.forEach(s => s.innerHTML = roleOps);
-                channelSelects.forEach(s => s.innerHTML = channelOps);
-            } catch (e) {
-                notify('清單加載失敗: ' + e.message, true);
-            }
-        }
+    function logout() {
+        document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = 'https://mofox.xyz/staff.html';
+    }
 
-        async function initDashboard() {
-            try {
-                const data = await request(API.STATS);
-                document.getElementById('val-members').textContent = data.totalMembers || '0';
-                document.getElementById('val-roles').textContent = data.totalRoles || '0';
-                await populateSelects();
-                notify('核心數據同步完成');
-            } catch (e) { notify(e.message, true); }
-        }
-
-        async function execMember(type) {
-            const userId = document.getElementById('m-uid').value;
-            const reason = document.getElementById('m-reason').value;
-            try {
-                const url = type === 'kick' ? API.KICK : API.BAN;
-                const res = await request(url, { userId, reason });
-                notify(res.message);
-            } catch (e) { notify(e.message, true); }
-        }
-
-        async function execRole(action) {
-            const userId = document.getElementById('r-uid').value;
-            const roleId = document.getElementById('r-rid').value;
-            try {
-                const res = await request(API.ROLE, { userId, roleId, action });
-                notify(res.message);
-            } catch (e) { notify(e.message, true); }
-        }
-
-        async function execBroadcast() {
-            const channelId = document.getElementById('b-cid').value;
-            const content = document.getElementById('b-content').value;
-            if (!content) return notify('內容缺失', true);
-            try {
-                const res = await request(API.MSG, { channelId, content });
-                notify(res.message);
-            } catch (e) { notify(e.message, true); }
-        }
-
-        async function execWebhook() {
-            const url = document.getElementById('w-url').value;
-            const content = document.getElementById('w-content').value;
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content })
-                });
-                if (res.ok) notify('Webhook 交付成功');
-                else notify('交付失敗', true);
-            } catch (e) { notify('網址無效', true); }
-        }
-
-        function handleLogout() {
-            document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            window.location.href = 'https://mofox.xyz/staff.html';
-        }
-
-        window.onload = initDashboard;
-    </script>
+    window.onload = loadData;
+</script>
 </body>
 </html>

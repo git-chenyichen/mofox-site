@@ -1,913 +1,412 @@
 <!DOCTYPE html>
-
 <html lang="zh-Hant">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨狐酒館系統管理核心</title>
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --accent-gold: #ffcc66;
+            --discord-blurple: #5865F2;
+            --discord-red: #ED4245;
+            --discord-yellow: #FEE75C;
+            --discord-green: #57F287;
+            --bg-glass: rgba(32, 34, 37, 0.85);
+            --card-glass: rgba(255, 255, 255, 0.05);
+        }
 
-    <title>墨狐酒館後台管理 | 已登入</title>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            display: flex;
+            background: #0f0f0f url('images/mofox-background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            min-height: 100vh;
+        }
 
-<style>
+        nav {
+            width: var(--sidebar-width);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
 
+        .nav-brand {
+            padding: 40px 24px;
+            font-size: 1.5em;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--accent-gold);
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    
+        .nav-menu {
+            flex-grow: 1;
+            padding: 20px 0;
+        }
 
+        .nav-link {
+            padding: 16px 24px;
+            cursor: pointer;
+            color: #8e9297;
+            transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            font-size: 0.95em;
+        }
 
-    body {
+        .nav-link:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+        }
 
-        font-family: Arial, sans-serif;
+        .nav-link.active {
+            color: #fff;
+            background: rgba(88, 101, 242, 0.2);
+            border-left: 4px solid var(--discord-blurple);
+        }
 
-        margin: 0;
+        main {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 50px;
+            max-width: 1200px;
+        }
 
-        padding: 0;
+        .module-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
 
-        display: flex;
+        .module-section.active {
+            display: block;
+        }
 
-        flex-direction: column;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        align-items: center;
+        .card {
+            background: var(--card-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 30px;
+        }
 
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 24px;
+            border-radius: 10px;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .stat-label {
+            color: #b9bbbe;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-top: 8px;
+            color: var(--accent-gold);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            color: #dcddde;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--discord-blurple);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button {
+            padding: 12px 28px;
+            border-radius: 5px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9em;
+        }
+
+        .btn-core { background: var(--discord-blurple); color: white; }
+        .btn-kick { background: var(--discord-yellow); color: #000; }
+        .btn-ban { background: var(--discord-red); color: white; }
         
-
-
-        background-image: url('images/mofox-background.jpg'); 
-
-        background-size: cover; 
-
-        background-attachment: fixed; 
-
-        background-position: center;
-
-        
-
-        min-height: 100vh;
-
-        color: #ffffff;
-
-    }
-
-
-
-
-    header {
-
-
-
-        background-color: rgba(35, 39, 42, 0.9); 
-
-        padding: 20px 0;
-
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-
-        text-align: center;
-
-        position: relative; 
-
-        z-index: 10;
-
-        width: 100%;
-
-    }
-
-    h1 {
-
-        color: #ffffff;
-
-        margin: 0;
-
-        font-size: 2.5em;
-
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-
-    }
-
-    .container {
-
-        width: 90%;
-
-        max-width: 1200px;
-
-        margin: 30px auto;
-
-        z-index: 1; 
-
-    }
-
-    
-
-
-
-    .module {
-
-
-        background: rgba(46, 49, 54, 0.4); 
-
-        backdrop-filter: blur(10px); 
-
-        -webkit-backdrop-filter: blur(10px); 
-
-        
-
-        border-radius: 15px; 
-
-        border: 1px solid rgba(255, 255, 255, 0.1); 
-
-        padding: 25px;
-
-        margin-bottom: 25px;
-
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); 
-
-    }
-
-    .module h2 {
-
-        color: #ffcc66; 
-
-        border-bottom: 2px solid rgba(255, 255, 255, 0.15);
-
-        padding-bottom: 15px;
-
-        margin-top: 0;
-
-        text-shadow: 0 0 5px rgba(255, 204, 102, 0.5);
-
-    }
-
-    
-
-
-
-    label {
-
-        display: block;
-
-        margin-top: 10px;
-
-        font-weight: bold;
-
-        color: #b9bbbe;
-
-    }
-
-    input[type="text"], textarea, select {
-
-        width: 100%;
-
-        padding: 12px;
-
-        margin-top: 5px;
-
-        border: 1px solid rgba(255, 255, 255, 0.2);
-
-        border-radius: 8px;
-
-        background-color: rgba(64, 68, 75, 0.7); 
-
-        color: #ffffff;
-
-        box-sizing: border-box;
-
-        transition: all 0.3s;
-
-    }
-
-    input[type="text"]:focus, textarea:focus {
-
-        background-color: rgba(64, 68, 75, 0.9);
-
-        border-color: #7289DA;
-
-        box-shadow: 0 0 5px #7289DA;
-
-        outline: none;
-
-    }
-
-    textarea {
-
-        resize: vertical;
-
-        min-height: 100px;
-
-    }
-
-
-
-    button {
-
-
-        color: white;
-
-        padding: 10px 20px;
-
-        border: none;
-
-        border-radius: 10px;
-
-        cursor: pointer;
-
-        margin-top: 15px;
-
-        margin-right: 10px;
-
-        transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
-
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-
-        font-weight: bold;
-
-    }
-
-    
-
-
-    button:not(#logout-button):not(#kick-button):not(#ban-button) {
-
-        background: linear-gradient(135deg, #7289DA, #677bc4);
-
-    }
-
-    
-
-
-
-    #kick-button {
-
-        background: linear-gradient(135deg, #faa61a, #cc8c15);
-
-    }
-
-    
-
-
-
-    #ban-button, #logout-button {
-
-        background: linear-gradient(135deg, #f04747, #cc4040);
-
-    }
-
-    
-
-
-
-    button:hover {
-
-        transform: scale(1.05); 
-
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-
-        filter: brightness(1.1);
-
-    }
-
-    
-
-
-
-    button:active {
-
-        transform: scale(0.98);
-
-    }
-
-
-
-
-
-    .stats-grid {
-
-        display: flex;
-
-        justify-content: space-around;
-
-        text-align: center;
-
-        gap: 40px;
-
-    }
-
-    .stat-card {
-
-        background: rgba(64, 68, 75, 0.5); 
-
-        backdrop-filter: blur(5px);
-
-        padding: 20px 15px; 
-
-        border-radius: 10px;
-
-        flex-grow: 1;
-
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-
-        min-width: 300px; 
-
-    }
-
-    .stat-card p {
-
-        font-size: 1.1em;
-
-        color: #b9bbbe;
-
-        margin-bottom: 5px;
-
-    }
-
-    .stat-card strong {
-
-        display: block;
-
-        font-size: 2.5em;
-
-        color: #ffcc66;
-
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-
-    }
-
-
-
-
-
-    #message-area {
-
-        margin-top: 20px;
-
-        padding: 15px;
-
-        border-radius: 8px;
-
-        color: white;
-
-        display: none;
-
-        text-align: left;
-
-        font-weight: bold;
-
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-
-    }
-
-    .success {
-
-        background-color: #43b581; 
-
-    }
-
-    .error {
-
-        background-color: #f04747; 
-
-    }
-
-    
-
-
-    #logout-button {
-
-        position: absolute;
-
-        top: 20px;
-
-        right: 20px;
-
-    }
-
-</style>
-
+        button:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .toast-success { background: var(--discord-green); color: #000; }
+        .toast-error { background: var(--discord-red); color: #fff; }
+
+        @media (max-width: 992px) {
+            nav { width: 80px; }
+            .nav-brand, .nav-link span { display: none; }
+            main { margin-left: 80px; padding: 20px; }
+        }
+    </style>
 </head>
-
 <body>
 
-    <header>
+    <nav>
+        <div class="nav-brand">MOFOX OPS</div>
+        <div class="nav-menu">
+            <div class="nav-link active" onclick="navigate('stats')"><span>數據總覽</span></div>
+            <div class="nav-link" onclick="navigate('members')"><span>成員核裁</span></div>
+            <div class="nav-link" onclick="navigate('roles')"><span>權限管理</span></div>
+            <div class="nav-link" onclick="navigate('broadcast')"><span>通訊發布</span></div>
+            <div class="nav-link" onclick="navigate('webhooks')"><span>自動化集成</span></div>
+        </div>
+        <div style="padding: 24px; border-top: 1px solid rgba(255,255,255,0.05);">
+            <button class="btn-ban" style="width: 100%;" onclick="handleLogout()">登出核心</button>
+        </div>
+    </nav>
 
-        <h1>墨狐酒館 後台管理系統</h1>
-
-        <button id="logout-button">登出</button>
-
-    </header>
-
-
-
-    <div class="container">
-
-        
-
-        <div id="stats-module" class="module">
-
-            <h2>群組統計數據</h2>
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <p>總成員數</p>
-
-                    <strong id="total-members">讀取中...</strong>
-
+    <main>
+        <div id="stats" class="module-section active">
+            <div class="card">
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-label">Total Members</div>
+                        <div class="stat-value" id="val-members">---</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Active Roles</div>
+                        <div class="stat-value" id="val-roles">---</div>
+                    </div>
                 </div>
-
-                
-
-                <div class="stat-card">
-
-                    <p>身分組數量</p>
-
-                    <strong id="total-roles">讀取中...</strong>
-
-                </div>
-
+                <button class="btn-core" style="margin-top: 30px;" onclick="fetchMetrics()">同步最新數據</button>
             </div>
-
-            <button id="refresh-stats">重新整理數據</button>
-
         </div>
 
-
-
-        <div id="member-module" class="module">
-
-            <h2>成員操作 (踢人/封鎖)</h2>
-
-            <label for="member-id">目標用戶 ID (UID)：</label>
-
-            <input type="text" id="member-id" placeholder="例如: 123456789012345678">
-
-            <label for="reason">原因 (可選)：</label>
-
-            <input type="text" id="reason" placeholder="例如: 違反規則">
-
-            
-
-            <button id="kick-button">踢出群組 (Kick)</button>
-
-            <button id="ban-button">封鎖用戶 (Ban)</button>
-
+        <div id="members" class="module-section">
+            <div class="card">
+                <h2>成員懲處作業</h2>
+                <div class="form-group">
+                    <label>USER ID</label>
+                    <input type="text" id="m-uid" placeholder="請輸入 18 位 UID">
+                </div>
+                <div class="form-group">
+                    <label>REASON</label>
+                    <input type="text" id="m-reason" placeholder="請輸入執行理由">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-kick" onclick="execMember('kick')">執行 KICK</button>
+                    <button class="btn-ban" onclick="execMember('ban')">執行 BAN</button>
+                </div>
+            </div>
         </div>
 
-        
-
-        <div id="role-module" class="module">
-
-            <h2>身分組操作</h2>
-
-            <label for="role-member-id">目標用戶 ID (UID)：</label>
-
-            <input type="text" id="role-member-id" placeholder="輸入要操作的用戶 ID">
-
-            <label for="role-select">輸入身分組 ID：</label>
-
-            <input type="text" id="role-select" placeholder="例如: 123456789012345678 (身分組 ID)">
-
-            
-
-            <button id="add-role-button">賦予身分組</button>
-
-            <button id="remove-role-button">移除身分組</button>
-
+        <div id="roles" class="module-section">
+            <div class="card">
+                <h2>身分組權限調度</h2>
+                <div class="form-group">
+                    <label>TARGET USER ID</label>
+                    <input type="text" id="r-uid" placeholder="用戶 UID">
+                </div>
+                <div class="form-group">
+                    <label>ROLE ID</label>
+                    <input type="text" id="r-rid" placeholder="身分組 ID">
+                </div>
+                <div class="btn-group">
+                    <button class="btn-core" onclick="execRole('add')">授予權限</button>
+                    <button class="btn-ban" onclick="execRole('remove')">撤銷權限</button>
+                </div>
+            </div>
         </div>
 
-
-
-        <div id="message-module" class="module">
-
-            <h2>訊息發送 (以 Bot 名義)</h2>
-
-            <label for="channel-id">頻道 ID：</label>
-
-            <input type="text" id="channel-id" placeholder="輸入發送目標頻道 ID">
-
-            <label for="message-content">訊息內容：</label>
-
-            <textarea id="message-content" placeholder="輸入您要 Bot 發送的訊息..."></textarea>
-
-            
-
-            <button id="send-message-button">發送訊息</button>
-
+        <div id="broadcast" class="module-section">
+            <div class="card">
+                <h2>系統訊息廣播</h2>
+                <div class="form-group">
+                    <label>CHANNEL ID</label>
+                    <input type="text" id="b-cid" placeholder="目標頻道 ID">
+                </div>
+                <div class="form-group">
+                    <label>PAYLOAD</label>
+                    <textarea id="b-content" rows="6" placeholder="輸入廣播內容..."></textarea>
+                </div>
+                <button class="btn-core" onclick="execBroadcast()">發送廣播</button>
+            </div>
         </div>
 
-
-
-        <div id="webhook-module" class="module">
-
-            <h2>Webhook 發送</h2>
-
-            <label for="webhook-url">Webhook URL：</label>
-
-            <input type="text" id="webhook-url" placeholder="輸入完整的 Webhook URL">
-
-            <label for="webhook-content">發送內容：</label>
-
-            <textarea id="webhook-content" placeholder="輸入要通過 Webhook 發送的訊息..."></textarea>
-
-
-
-            <button id="test-webhook-button">Webhook</button>
-
+        <div id="webhooks" class="module-section">
+            <div class="card">
+                <h2>Webhook 集成測試</h2>
+                <div class="form-group">
+                    <label>ENDPOINT URL</label>
+                    <input type="text" id="w-url" placeholder="https://discord.com/api/webhooks/...">
+                </div>
+                <div class="form-group">
+                    <label>CONTENT</label>
+                    <textarea id="w-content" rows="4" placeholder="JSON 或純文字內容..."></textarea>
+                </div>
+                <button class="btn-core" onclick="execWebhook()">推送數據</button>
+            </div>
         </div>
+    </main>
 
-
-
-        <div id="message-area">
-
-            操作結果將顯示在這裡。
-
-        </div>
-
-
-
-    </div>
-
-
-
-    <footer>
-
-        <p style="color: #b9bbbe;">請確保所有操作均遵守 Discord 服務條款。</p>
-
-        <p><a href="https://mofox.xyz/staff.html" style="color: #ffffff; text-decoration: none; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);">返回團隊頁面</a></p>
-
-    </footer>
-
-
+    <div id="toast"></div>
 
     <script>
-
-
-
-        const API_ENDPOINTS = {
-
-            GET_STATS: '/api/get-stats',
-
+        const API = {
+            STATS: '/api/get-stats',
             KICK: '/api/kick-member',
-
-            BAN: '/api/ban-member', 
-
-            SEND_MESSAGE: '/api/send-message',
-
-            MANAGE_ROLE: '/api/manage-role', 
-
+            BAN: '/api/ban-member',
+            MSG: '/api/send-message',
+            ROLE: '/api/manage-role'
         };
 
-
-
-
-
-        const deleteCookie = (name) => {
-
-            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=https://mofox.onioncosplay.xyz';
-
-        };
-
-
-
-        const handleLogout = () => {
-
-            deleteCookie('auth_token'); 
-
-            window.location.href = 'https://mofox.xyz/staff.html';
-
-        };
-
-
-
-
-
-        const showMessage = (message, type = 'success') => {
-
-            const msgArea = document.getElementById('message-area');
-
-            msgArea.textContent = message;
-
-            msgArea.className = type; 
-
-            msgArea.style.display = 'block';
-
-            setTimeout(() => {
-
-                msgArea.style.display = 'none';
-
-            }, 5000);
-
-        };
-
-
-
-
-        const apiPost = async (endpoint, data) => {
-
-            const response = await fetch(endpoint, {
-
-                method: 'POST',
-
-                headers: { 'Content-Type': 'application/json' },
-
-                body: JSON.stringify(data)
-
-            });
-
-
-
-            const result = await response.json();
-
+        function navigate(id) {
+            document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-            if (!response.ok) {
+        function notify(msg, err = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = err ? 'toast-error' : 'toast-success';
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
 
-                throw new Error(result.error || `操作失敗 (${response.status})`);
-
-            }
-
-            return result;
-
-        };
-
-
-
-
-
-        const refreshStats = async () => {
-
-            document.getElementById('total-members').textContent = '讀取中...';
-
-            document.getElementById('total-roles').textContent = '讀取中...';
-
-
-
-            try {
-
-                const response = await fetch(API_ENDPOINTS.GET_STATS);
-
-                const data = await response.json();
-
-
-
-                if (!response.ok) throw new Error(data.error || '無法讀取數據');
-
-                
-
-                document.getElementById('total-members').textContent = data.totalMembers || '0';
-
-                document.getElementById('total-roles').textContent = data.totalRoles || '0';
-
-
-
-                showMessage("統計數據已成功更新。", 'success');
-
-
-
-            } catch (error) {
-
-                console.error("無法讀取統計數據:", error);
-
-                document.getElementById('total-members').textContent = '❌錯誤';
-
-                document.getElementById('total-roles').textContent = '❌錯誤';
-
-                showMessage(`讀取統計數據失敗: ${error.message}`, 'error');
-
-            }
-
-        };
-
-
-
-
-
-        const handleMemberAction = async (action) => {
-
-            const userId = document.getElementById('member-id').value.trim();
-
-            const reason = document.getElementById('reason').value.trim();
-
+        async function request(url, body = null) {
+            const opt = {
+                method: body ? 'POST' : 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            };
+            if (body) opt.body = JSON.stringify(body);
             
+            const res = await fetch(url, opt);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Request Failed');
+            return data;
+        }
 
-            if (!userId) {
-
-                return showMessage('請輸入目標用戶 ID。', 'error');
-
-            }
-
-
-
+        async function fetchMetrics() {
             try {
-
-                const endpoint = action === 'kick' ? API_ENDPOINTS.KICK : API_ENDPOINTS.BAN;
-
-                
-
-                const result = await apiPost(endpoint, { userId, reason });
-
-                
-
-                showMessage(result.message, 'success');
-
-
-
-            } catch (error) {
-
-                showMessage(`${action === 'kick' ? '踢出' : '封鎖'}失敗: ${error.message}`, 'error');
-
+                const data = await request(API.STATS);
+                document.getElementById('val-members').textContent = data.totalMembers || '0';
+                document.getElementById('val-roles').textContent = data.totalRoles || '0';
+                notify('核心數據同步完成');
+            } catch (e) {
+                notify(e.message, true);
             }
+        }
 
-        };
-
-
-
-
-
-        const handleRoleAction = async (action) => {
-
-            const userId = document.getElementById('role-member-id').value.trim();
-
-            const roleId = document.getElementById('role-select').value.trim();
-
-            
-
-            if (!userId || !roleId) {
-
-                return showMessage('請輸入目標用戶 ID 和身分組 ID。', 'error');
-
-            }
-
-
-
+        async function execMember(type) {
+            const userId = document.getElementById('m-uid').value;
+            const reason = document.getElementById('m-reason').value;
+            if (!userId) return notify('請輸入用戶 ID', true);
             try {
+                const url = type === 'kick' ? API.KICK : API.BAN;
+                const res = await request(url, { userId, reason });
+                notify(res.message);
+            } catch (e) { notify(e.message, true); }
+        }
 
-                const result = await apiPost(API_ENDPOINTS.MANAGE_ROLE, { 
-
-                    userId, 
-
-                    roleId, 
-
-                    action 
-                });
-
-                
-
-                showMessage(result.message, 'success');
-
-
-
-            } catch (error) {
-
-                const actionText = (action === 'add') ? '賦予' : '移除';
-
-                showMessage(`${actionText}身分組失敗: ${error.message}`, 'error');
-
-            }
-
-        };
-
-
-
-
-
-
-        const handleSendMessage = async () => {
-
-            const channelId = document.getElementById('channel-id').value.trim();
-
-            const content = document.getElementById('message-content').value.trim();
-
-
-
-            if (!channelId || !content) {
-
-                return showMessage('請輸入頻道 ID 和訊息內容。', 'error');
-
-            }
-
-
-
+        async function execRole(action) {
+            const userId = document.getElementById('r-uid').value;
+            const roleId = document.getElementById('r-rid').value;
+            if (!userId || !roleId) return notify('資訊填寫不完整', true);
             try {
+                const res = await request(API.ROLE, { userId, roleId, action });
+                notify(res.message);
+            } catch (e) { notify(e.message, true); }
+        }
 
-                const result = await apiPost(API_ENDPOINTS.SEND_MESSAGE, { channelId, content });
-
-                showMessage(result.message, 'success');
-
-            } catch (error) {
-
-                showMessage(`發送訊息失敗: ${error.message}`, 'error');
-
-            }
-
-        };
-
-
-
-
-
-        const handleWebhookTest = async () => {
-
-            const webhookUrl = document.getElementById('webhook-url').value.trim();
-
-            const content = document.getElementById('webhook-content').value.trim();
-
-
-
-            if (!webhookUrl || !content) {
-
-                return showMessage('請輸入 Webhook URL 和發送內容。', 'error');
-
-            }
-
-            
-
+        async function execBroadcast() {
+            const channelId = document.getElementById('b-cid').value;
+            const content = document.getElementById('b-content').value;
+            if (!channelId || !content) return notify('頻道或內容缺失', true);
             try {
+                const res = await request(API.MSG, { channelId, content });
+                notify(res.message);
+            } catch (e) { notify(e.message, true); }
+        }
 
-                const response = await fetch(webhookUrl, {
-
+        async function execWebhook() {
+            const url = document.getElementById('w-url').value;
+            const content = document.getElementById('w-content').value;
+            try {
+                const res = await fetch(url, {
                     method: 'POST',
-
                     headers: { 'Content-Type': 'application/json' },
-
-                    body: JSON.stringify({ content: content })
-
+                    body: JSON.stringify({ content })
                 });
+                if (res.ok) notify('Webhook 交付成功');
+                else notify('交付失敗: ' + res.status, true);
+            } catch (e) { notify('無效的 Webhook URL', true); }
+        }
 
+        function handleLogout() {
+            document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = 'https://mofox.xyz/staff.html';
+        }
 
-
-                if (response.ok) {
-
-                    showMessage('Webhook 測試訊息發送成功！', 'success');
-
-                } else {
-
-                    showMessage(`Webhook 測試失敗: Discord 返回狀態碼 ${response.status}`, 'error');
-
-                }
-
-            } catch (error) {
-
-                showMessage(`Webhook 測試失敗: 網絡錯誤或 URL 無效。建議使用 Serverless 函數中轉。`, 'error');
-
-            }
-
-        };
-
-
-
-
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            refreshStats();
-
-
-
-
-            document.getElementById('logout-button').addEventListener('click', handleLogout);
-
-
-
-
-            document.getElementById('refresh-stats').addEventListener('click', refreshStats);
-
-
-
-
-
-            document.getElementById('kick-button').addEventListener('click', () => handleMemberAction('kick'));
-
-            document.getElementById('ban-button').addEventListener('click', () => handleMemberAction('ban'));
-
-
-
-
-
-            document.getElementById('add-role-button').addEventListener('click', () => handleRoleAction('add'));
-
-            document.getElementById('remove-role-button').addEventListener('click', () => handleRoleAction('remove'));
-
-
-
-
-            document.getElementById('send-message-button').addEventListener('click', handleSendMessage);
-
-
-
-
-
-            document.getElementById('test-webhook-button').addEventListener('click', handleWebhookTest);
-
-        });
-
+        window.onload = fetchMetrics;
     </script>
-
 </body>
-
 </html>
-
-
-
-
-

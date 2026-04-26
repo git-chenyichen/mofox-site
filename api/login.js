@@ -3,9 +3,8 @@ const USERS_DATABASE = {
         { u: "mohuhu", p: "mohuhu328" }
     ],
     STAFF: [
-        { u: "staff_lan", p: "lan123" },
-        { u: "staff_2023", p: "code2023" },
-        { u: "staff_akane", p: "cat555" }
+        { u: "lan", p: "l.c.y.x" },
+        { u: "kusanagi", p: "kusanagi_akane" },
     ],
     ADMIN: [
         { u: "2023", p: "chenyichen1106" }

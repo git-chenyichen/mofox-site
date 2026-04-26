@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館系統管理核心</title>
+    <title>墨狐酒館管理系統 v2.2.2</title>
     <style>
         :root {
             --sidebar-width: 260px;
@@ -142,18 +142,19 @@
             color: #dcddde;
         }
 
-        input, textarea {
+        select, input, textarea {
             width: 100%;
             padding: 14px;
-            background: rgba(0, 0, 0, 0.3);
+            background: #2f3136;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             color: #fff;
             font-size: 1em;
             transition: border-color 0.2s;
+            appearance: none;
         }
 
-        input:focus, textarea:focus {
+        select:focus, input:focus, textarea:focus {
             outline: none;
             border-color: var(--discord-blurple);
         }
@@ -234,7 +235,7 @@
                         <div class="stat-value" id="val-roles">---</div>
                     </div>
                 </div>
-                <button class="btn-core" style="margin-top: 30px;" onclick="fetchMetrics()">同步最新數據</button>
+                <button class="btn-core" style="margin-top: 30px;" onclick="initDashboard()">同步最新數據</button>
             </div>
         </div>
 
@@ -242,8 +243,8 @@
             <div class="card">
                 <h2>成員懲處作業</h2>
                 <div class="form-group">
-                    <label>USER ID</label>
-                    <input type="text" id="m-uid" placeholder="請輸入 18 位 UID">
+                    <label>TARGET MEMBER</label>
+                    <select id="m-uid" class="user-list-select"></select>
                 </div>
                 <div class="form-group">
                     <label>REASON</label>
@@ -260,12 +261,12 @@
             <div class="card">
                 <h2>身分組權限調度</h2>
                 <div class="form-group">
-                    <label>TARGET USER ID</label>
-                    <input type="text" id="r-uid" placeholder="用戶 UID">
+                    <label>TARGET USER</label>
+                    <select id="r-uid" class="user-list-select"></select>
                 </div>
                 <div class="form-group">
-                    <label>ROLE ID</label>
-                    <input type="text" id="r-rid" placeholder="身分組 ID">
+                    <label>ROLE NAME</label>
+                    <select id="r-rid" class="role-list-select"></select>
                 </div>
                 <div class="btn-group">
                     <button class="btn-core" onclick="execRole('add')">授予權限</button>
@@ -278,8 +279,8 @@
             <div class="card">
                 <h2>系統訊息廣播</h2>
                 <div class="form-group">
-                    <label>CHANNEL ID</label>
-                    <input type="text" id="b-cid" placeholder="目標頻道 ID">
+                    <label>TARGET CHANNEL</label>
+                    <select id="b-cid" class="channel-list-select"></select>
                 </div>
                 <div class="form-group">
                     <label>PAYLOAD</label>
@@ -310,6 +311,9 @@
     <script>
         const API = {
             STATS: '/api/get-stats',
+            LIST_USERS: '/api/list-users',
+            LIST_ROLES: '/api/list-roles',
+            LIST_CHANNELS: '/api/list-channels',
             KICK: '/api/kick-member',
             BAN: '/api/ban-member',
             MSG: '/api/send-message',
@@ -319,7 +323,6 @@
         function navigate(id) {
             document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            
             document.getElementById(id).classList.add('active');
             event.currentTarget.classList.add('active');
         }
@@ -338,28 +341,49 @@
                 headers: { 'Content-Type': 'application/json' }
             };
             if (body) opt.body = JSON.stringify(body);
-            
             const res = await fetch(url, opt);
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Request Failed');
+            if (!res.ok) throw new Error(data.error || '操作失敗');
             return data;
         }
 
-        async function fetchMetrics() {
+        async function populateSelects() {
+            try {
+                const [users, roles, channels] = await Promise.all([
+                    request(API.LIST_USERS),
+                    request(API.LIST_ROLES),
+                    request(API.LIST_CHANNELS)
+                ]);
+
+                const userSelects = document.querySelectorAll('.user-list-select');
+                const roleSelects = document.querySelectorAll('.role-list-select');
+                const channelSelects = document.querySelectorAll('.channel-list-select');
+
+                const userOps = users.map(u => `<option value="${u.id}">${u.name} (${u.id})</option>`).join('');
+                const roleOps = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+                const channelOps = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
+
+                userSelects.forEach(s => s.innerHTML = userOps);
+                roleSelects.forEach(s => s.innerHTML = roleOps);
+                channelSelects.forEach(s => s.innerHTML = channelOps);
+            } catch (e) {
+                notify('清單加載失敗: ' + e.message, true);
+            }
+        }
+
+        async function initDashboard() {
             try {
                 const data = await request(API.STATS);
                 document.getElementById('val-members').textContent = data.totalMembers || '0';
                 document.getElementById('val-roles').textContent = data.totalRoles || '0';
+                await populateSelects();
                 notify('核心數據同步完成');
-            } catch (e) {
-                notify(e.message, true);
-            }
+            } catch (e) { notify(e.message, true); }
         }
 
         async function execMember(type) {
             const userId = document.getElementById('m-uid').value;
             const reason = document.getElementById('m-reason').value;
-            if (!userId) return notify('請輸入用戶 ID', true);
             try {
                 const url = type === 'kick' ? API.KICK : API.BAN;
                 const res = await request(url, { userId, reason });
@@ -370,7 +394,6 @@
         async function execRole(action) {
             const userId = document.getElementById('r-uid').value;
             const roleId = document.getElementById('r-rid').value;
-            if (!userId || !roleId) return notify('資訊填寫不完整', true);
             try {
                 const res = await request(API.ROLE, { userId, roleId, action });
                 notify(res.message);
@@ -380,7 +403,7 @@
         async function execBroadcast() {
             const channelId = document.getElementById('b-cid').value;
             const content = document.getElementById('b-content').value;
-            if (!channelId || !content) return notify('頻道或內容缺失', true);
+            if (!content) return notify('內容缺失', true);
             try {
                 const res = await request(API.MSG, { channelId, content });
                 notify(res.message);
@@ -397,8 +420,8 @@
                     body: JSON.stringify({ content })
                 });
                 if (res.ok) notify('Webhook 交付成功');
-                else notify('交付失敗: ' + res.status, true);
-            } catch (e) { notify('無效的 Webhook URL', true); }
+                else notify('交付失敗', true);
+            } catch (e) { notify('網址無效', true); }
         }
 
         function handleLogout() {
@@ -406,7 +429,7 @@
             window.location.href = 'https://mofox.xyz/staff.html';
         }
 
-        window.onload = fetchMetrics;
+        window.onload = initDashboard;
     </script>
 </body>
 </html>

@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>墨狐酒館管理系統 v3.2</title>
+    <title>墨狐酒館管理系統 v3.3</title>
     <style>
         :root {
             --sidebar-width: 260px;
             --accent-gold: #ffcc66;
-            --discord-blurple: #5865F2;
-            --discord-red: #ED4245;
-            --discord-yellow: #FEE75C;
-            --discord-green: #57F287;
-            --bg-glass: rgba(32, 34, 37, 0.98);
-            --card-glass: rgba(255, 255, 255, 0.05);
+            --discord-blurple: #4752C4;
+            --discord-red: #A12D2F;
+            --discord-yellow: #C29100;
+            --discord-green: #248046;
+            --bg-glass: rgba(20, 20, 22, 0.98);
+            --card-glass: rgba(255, 255, 255, 0.03);
         }
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
-            background: #0f0f0f url('images/mofox-background.jpg') no-repeat center center fixed;
+            background: #0a0a0a url('images/mofox-background.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             min-height: 100vh;
@@ -36,7 +36,7 @@
             left: 0;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 1000;
             transition: transform 0.3s ease;
         }
@@ -81,7 +81,7 @@
 
         .nav-link.active {
             color: #fff;
-            background: rgba(88, 101, 242, 0.2);
+            background: rgba(71, 82, 196, 0.15);
             border-left: 4px solid var(--discord-blurple);
         }
 
@@ -97,10 +97,11 @@
 
         .card {
             background: var(--card-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
             padding: 24px;
             margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .stats-grid {
@@ -109,11 +110,11 @@
             gap: 15px;
         }
 
-        .stat-item { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-item { background: rgba(0, 0, 0, 0.4); padding: 20px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,255,255,0.03); }
         .stat-value { font-size: 2em; font-weight: 700; color: var(--accent-gold); }
 
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 10px; font-size: 0.9em; color: #b9bbbe; }
+        label { display: block; margin-bottom: 10px; font-size: 0.9em; color: #b9bbbe; font-weight: 600; }
 
         .input-with-avatar { display: flex; align-items: center; gap: 12px; }
         .avatar-preview {
@@ -122,12 +123,13 @@
             border-radius: 50%;
             border: 2px solid var(--accent-gold);
             object-fit: cover;
+            background: #000;
         }
 
         select, input, textarea {
             width: 100%;
             padding: 14px;
-            background: #2f3136;
+            background: #1e1f22;
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             color: #fff;
@@ -142,11 +144,15 @@
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-primary { background: var(--discord-blurple); color: white; }
-        .btn-kick { background: var(--discord-yellow); color: #000; }
-        .btn-ban { background: var(--discord-red); color: white; }
+        button:active { transform: scale(0.98); filter: brightness(0.8); }
+
+        .btn-primary { background: var(--discord-blurple); color: #ffffff; }
+        .btn-kick { background: var(--discord-yellow); color: #ffffff; }
+        .btn-ban { background: var(--discord-red); color: #ffffff; }
 
         .overlay {
             display: none;
@@ -155,23 +161,24 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             z-index: 950;
         }
         .overlay.show { display: block; }
 
         #toast {
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 8px;
             display: none;
             z-index: 2000;
-            white-space: nowrap;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .toast-success { background: var(--discord-green); color: #000; }
+        .toast-success { background: var(--discord-green); color: #fff; }
         .toast-error { background: var(--discord-red); color: #fff; }
     </style>
 </head>
@@ -254,7 +261,7 @@
             <h2>廣播訊息</h2>
             <div class="form-group"><label>頻道</label><select id="msg-ch" class="list-c"></select></div>
             <div class="form-group"><label>內容</label><textarea id="msg-ctx" rows="5"></textarea></div>
-            <button class="btn-primary" style="width:100%" onclick="execMsg()">發送</button>
+            <button class="btn-primary" style="width:100%" onclick="execMsg()">發送廣播</button>
         </div>
     </section>
 </main>
@@ -263,12 +270,10 @@
 
 <script>
     let cacheUsers = [];
-
     function toggleMenu() {
         document.getElementById('sidebar').classList.toggle('open');
         document.getElementById('overlay').classList.toggle('show');
     }
-
     function navTo(id) {
         document.querySelectorAll('.module-section').forEach(m => m.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
@@ -276,13 +281,11 @@
         event.currentTarget.classList.add('active');
         if (window.innerWidth <= 768) toggleMenu();
     }
-
     function syncAvatar(selectEl, imgId) {
         const user = cacheUsers.find(u => u.id === selectEl.value);
         const imgEl = document.getElementById(imgId);
         imgEl.src = user && user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` : `https://cdn.discordapp.com/embed/avatars/0.png`;
     }
-
     function notify(m, e=false) {
         const t = document.getElementById('toast');
         t.textContent = m;
@@ -290,7 +293,6 @@
         t.style.display = 'block';
         setTimeout(() => t.style.display = 'none', 3000);
     }
-
     async function req(url, body = null) {
         const opt = { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json' } };
         if (body) opt.body = JSON.stringify(body);
@@ -299,7 +301,6 @@
         if (!res.ok) throw new Error(data.error || '失敗');
         return data;
     }
-
     async function loadData() {
         try {
             const [users, roles, channels] = await Promise.all([
@@ -319,33 +320,28 @@
             notify('數據已更新');
         } catch (e) { notify(e.message, true); }
     }
-
     async function execMember(action) {
         try {
             const res = await req('/api/member', { userId: document.getElementById('m-target').value, action, reason: document.getElementById('m-reason').value });
             notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
-
     async function execRole(action) {
         try {
             const res = await req('/api/role', { userId: document.getElementById('r-target').value, roleId: document.getElementById('r-role').value, action });
             notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
-
     async function execMsg() {
         try {
             const res = await req('/api/msg', { channelId: document.getElementById('msg-ch').value, content: document.getElementById('msg-ctx').value });
             notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
-
     function logout() {
         document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = 'https://mofox.xyz/staff.html';
     }
-
     window.onload = loadData;
 </script>
 </body>

@@ -3,7 +3,7 @@ const USERS_DATABASE = {
         { u: "mohuhu", p: "Mofox0609" }
     ],
     STAFF: [
-        { u: "no", p: "1232rewtrhrtgrwdvydrfiefgedwserufgdsruegrfedtrfjdherthbgfdketfgdujsetfgrkewjutgl,bjfjhdoiyhrujgld0o" }
+        { u: "kusanagi_akane", p: "kusanagi_kane" }
     ],
     ADMIN: [
         { u: "2023", p: "chenyichen1106" }

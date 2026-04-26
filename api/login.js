@@ -2,13 +2,13 @@ import nodemailer from 'nodemailer';
 
 const USERS_DATABASE = {
     OWNER: [
-        { u: "mohuhu", p: "Mofox0609", email: "mohuhu@example.com" }
+        { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com" }
     ],
     STAFF: [
         { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@example.com" }
     ],
     ADMIN: [
-        { u: "2023", p: "chenyichen1106", email: "dev2023@example.com" }
+        { u: "2023", p: "chenyichen1106", email: "yic0979s@gmail.com" }
     ]
 };
 

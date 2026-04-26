@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,13 @@
     <link rel="icon" type="image/png" href="images/mofox-logo.png">
     
     <style>
-        
+        :root {
+            --accent-gold: #ffcc66;
+            --hover-gold: #ff8c42;
+            --bg-overlay: rgba(0, 0, 0, 0.4);
+            --card-bg: rgba(255, 255, 255, 0.15);
+        }
+
         body {
             color: #ffffff; 
             font-family: 'Avenir', 'Georgia', serif; 
@@ -19,14 +25,11 @@
             min-height: 100vh;
             text-align: center;
             position: relative; 
-            
-
             background-image: url('images/mofox-background.jpg'); 
             background-size: cover; 
             background-position: center center; 
             background-attachment: fixed; 
         }
-        
 
         body::before {
             content: '';
@@ -35,79 +38,81 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); 
+            background-color: var(--bg-overlay); 
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px); 
             z-index: -1; 
         }
 
-
         .login-container {
             position: absolute;
             top: 20px;
             right: 20px;
-            z-index: 100; 
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .discord-login-btn {
+        .auth-btn {
             display: inline-flex;
             align-items: center;
-            padding: 10px 15px;
-            background-color; 
-            color: white;
+            justify-content: center;
+            padding: 8px 15px;
+            background-color: #000; /* 完全黑底 */
+            color: var(--accent-gold); /* 金字 */
+            border: 1px solid var(--accent-gold); /* 金邊 */
             border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1em;
+            font-size: 0.9em;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.2s;
+            transition: all 0.3s;
+            min-width: 130px;
         }
 
-        .discord-login-btn:hover {
-            background-color: #677BC4;
+        .auth-btn:hover {
+            background-color: var(--accent-gold);
+            color: #000;
             transform: scale(1.05);
         }
 
-        .discord-login-btn img {
-            width: 20px;
-            height: 20px;
+        .auth-btn img {
+            width: 18px;
+            height: 18px;
             margin-right: 8px;
-            vertical-align: middle;
-
         }
 
         .nav-bar {
             width: 100%;
             background-color: rgba(0, 0, 0, 0.2); 
             padding: 10px 0;
-            margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: center;
-            order: -1; 
         }
         
         .nav-link {
             text-decoration: none;
-            color: #ffcc66;
+            color: var(--accent-gold);
             font-weight: bold;
             font-size: 1.1em;
             padding: 8px 15px;
             margin: 0 15px;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            transition: all 0.3s;
         }
 
         .nav-link:hover {
-            background-color: #ff8c42;
+            background-color: var(--hover-gold);
             color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
+            transform: translateY(-1px);
         }
 
         .nav-link.active {
             background-color: #cc6600;
             color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
+            border-bottom: 2px solid var(--accent-gold);
         }
 
         .page-title {
@@ -115,17 +120,11 @@
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
             font-family: 'Handlee', cursive;
             font-size: 2.5em;
-            margin-bottom: 30px;
-            margin-top: 30px;
-            display: inline-block; 
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 30px 0;
+            transition: transform 0.25s;
         }
         
-        .page-title:hover {
-            transform: scale(1.05) translateY(-2px);
-            cursor: default;
-        }
-
+        .page-title:hover { transform: scale(1.05); }
 
         .staff-container {
             display: flex;
@@ -133,75 +132,58 @@
             justify-content: center;
             gap: 30px;
             width: 90%;
-            max-width: 900px;
+            max-width: 1000px;
             margin-bottom: 40px;
         }
 
-
         .staff-member {
-            background-color: rgba(255, 255, 255, 0.15);
+            background-color: var(--card-bg);
             border-radius: 15px;
             padding: 20px;
-            width: 250px;
+            width: 240px;
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.25s;
+            border: 1px solid rgba(255, 204, 102, 0.1);
         }
         
-        .staff-member:hover {
-            transform: scale(1.03);
-            cursor: pointer;
-        }
+        .staff-member:hover { transform: scale(1.03); }
 
         .staff-member img {
             width: 120px;
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #ffcc66;
+            border: 4px solid var(--accent-gold);
             margin-bottom: 15px;
-            transition: border-color 0.3s;
-        }
-        
-        .staff-member:hover img {
-            border-color: #ff8c42;
         }
         
         .staff-member h4 {
-            color: #ff8c42;
+            color: var(--hover-gold);
             font-size: 1.6em;
             margin: 5px 0 10px;
         }
-        
 
         .quote {
-            color: #ffcc66; 
+            color: var(--accent-gold); 
             font-style: italic;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            font-size: 0.95em; 
+            margin: 5px 0;
+            font-size: 0.9em; 
         }
-        
 
         .staff-member p {
             font-size: 0.95em;
             line-height: 1.5;
             color: #ffffff; 
-            margin-bottom: 5px; 
         }
-        
 
-footer {
-            width: 90%;
-            max-width: 800px; 
-            margin-top: 40px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 0.9em;
-            color: #ffcc66;
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            color: var(--accent-gold);
             font-style: italic;
-            text-align: center; 
+            font-size: 0.8em;
+            opacity: 0.7;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
@@ -209,9 +191,13 @@ footer {
 <body>
 
     <div class="login-container">
-        <a href="/api/auth" class="discord-login-btn">
-            <img src="images/discord_login_button.png" alt="Discord Icon">
-            後台登入
+        <a href="https://mofox.xyz/api/auth/google" class="auth-btn">
+            <img src="https://www.google.com/favicon.ico" alt="Google Icon" style="filter: grayscale(1) brightness(2);">
+            Google 登入
+        </a>
+        <a href="/api/auth" class="auth-btn">
+            <img src="images/mofox-logo.png" alt="Discord Icon">
+            Discord 登入
         </a>
     </div>
 
@@ -231,65 +217,33 @@ footer {
             <div class="staff-member">
                 <img src="https://i.ibb.co/HD99KRhw/9eeb6a8437a41c27.jpg" alt="館主 墨狐">
                 <h4>館主-墨狐</h4>
-                
                 <p class="quote">一隻可愛小狐狸(⁠´⁠∩⁠｡⁠•⁠ ⁠ᵕ⁠ ⁠•⁠｡⁠∩⁠`⁠)</p>
-                <p class="quote" style="margin-top: 0;">酒館最讚的姐姐</p>
-                
+                <p class="quote">酒館最讚的姐姐</p>
                 <p>酒館的創始人，以其溫暖與神秘的氣質，為迷途的旅人提供安心的驛站。</p>
             </div>
 
             <div class="staff-member">
                 <img src="https://i.ibb.co/WNSj65DK/2023-2-1-1.png" alt="館員 2023">
                 <h4>館員-2023</h4>
-                
                 <p class="quote">酒館資深開發者。</p>
-                
                 <p>負責酒館的各種活動規劃與項目開發。是酒館運作背後，不可或缺的技術核心。</p>
             </div>
 
             <div class="staff-member">
                 <img src="https://i.ibb.co/Qj9JGW0T/imag2e.png" alt="館員 嵐">
                 <h4>館員-嵐</h4>
-                
-                <p class="quote">定居酒館的75重度沉迷者。</p>
-                
+                <p class="quote">定居酒館的重度沉迷者。</p>
                 <p>酒館中的氣氛營造者，熱衷於與人交流，總是能帶來歡樂的特調和輕鬆的氛圍。</p>
             </div>
 
             <div class="staff-member">
                 <img src="https://cdn.discordapp.com/avatars/964849855396741130/39c6a0d40e6386c65f65ea8d5fa1e058.png?size=1024" alt="館員 草薙明音">
                 <h4>館員-草薙明音</h4>
-                
-                <p class="quote"可愛的貓貓。</p>
-                
+                <p class="quote">可愛的貓貓。</p>
                 <p>早安安，世界上最可愛的貓貓在這裡~~~</p>
-             
             </div>
+
         </div>
     </main>
-
- 
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

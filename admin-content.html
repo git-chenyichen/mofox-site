@@ -2,8 +2,8 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館管理系統 v3.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>墨狐酒館管理系統 v3.2</title>
     <style>
         :root {
             --sidebar-width: 260px;
@@ -12,18 +12,18 @@
             --discord-red: #ED4245;
             --discord-yellow: #FEE75C;
             --discord-green: #57F287;
-            --bg-glass: rgba(32, 34, 37, 0.95);
+            --bg-glass: rgba(32, 34, 37, 0.98);
             --card-glass: rgba(255, 255, 255, 0.05);
         }
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             margin: 0;
-            display: flex;
             background: #0f0f0f url('images/mofox-background.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #ffffff;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         nav {
@@ -33,10 +33,35 @@
             -webkit-backdrop-filter: blur(20px);
             height: 100vh;
             position: fixed;
+            left: 0;
             display: flex;
             flex-direction: column;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 100;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            z-index: 900;
+            align-items: center;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            nav { transform: translateX(-100%); }
+            nav.open { transform: translateX(0); }
+            .mobile-header { display: flex; }
+            main { margin-left: 0 !important; padding: 80px 15px 20px 15px !important; }
         }
 
         .nav-brand {
@@ -45,21 +70,15 @@
             font-weight: 800;
             color: var(--accent-gold);
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .nav-menu { flex-grow: 1; padding: 20px 0; }
-
         .nav-link {
-            padding: 16px 24px;
+            padding: 18px 24px;
             cursor: pointer;
             color: #8e9297;
             transition: 0.2s;
-            display: flex;
-            align-items: center;
         }
 
-        .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.03); }
         .nav-link.active {
             color: #fff;
             background: rgba(88, 101, 242, 0.2);
@@ -69,57 +88,58 @@
         main {
             margin-left: var(--sidebar-width);
             flex-grow: 1;
-            padding: 50px;
-            max-width: 1000px;
+            padding: 40px;
         }
 
-        .module-section { display: none; animation: fadeIn 0.4s ease-out; }
-        .module-section.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .module-section { display: none; }
+        .module-section.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card {
             background: var(--card-glass);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
         }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .stat-item { background: rgba(0, 0, 0, 0.3); padding: 24px; border-radius: 10px; text-align: center; }
-        .stat-value { font-size: 2.5em; font-weight: 700; color: var(--accent-gold); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; text-align: center; }
+        .stat-value { font-size: 2em; font-weight: 700; color: var(--accent-gold); }
 
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 10px; font-size: 0.85em; color: #b9bbbe; }
+        label { display: block; margin-bottom: 10px; font-size: 0.9em; color: #b9bbbe; }
 
-        .input-with-avatar { display: flex; align-items: center; gap: 15px; }
+        .input-with-avatar { display: flex; align-items: center; gap: 12px; }
         .avatar-preview {
             width: 48px;
             height: 48px;
             border-radius: 50%;
             border: 2px solid var(--accent-gold);
-            background: #000;
             object-fit: cover;
         }
 
         select, input, textarea {
-            flex-grow: 1;
+            width: 100%;
             padding: 14px;
             background: #2f3136;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
+            border-radius: 8px;
             color: #fff;
-            box-sizing: border-box;
+            font-size: 16px;
         }
 
-        .btn-group { display: flex; gap: 12px; }
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         button {
-            padding: 12px 24px;
-            border-radius: 6px;
+            padding: 14px;
+            border-radius: 8px;
             border: none;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
         }
@@ -128,14 +148,28 @@
         .btn-kick { background: var(--discord-yellow); color: #000; }
         .btn-ban { background: var(--discord-red); color: white; }
 
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 950;
+        }
+        .overlay.show { display: block; }
+
         #toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 16px 32px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
             border-radius: 8px;
             display: none;
-            z-index: 1000;
+            z-index: 2000;
+            white-space: nowrap;
         }
         .toast-success { background: var(--discord-green); color: #000; }
         .toast-error { background: var(--discord-red); color: #fff; }
@@ -143,43 +177,51 @@
 </head>
 <body>
 
-<nav>
-    <div class="nav-brand">墨狐酒館</div>
+<div class="mobile-header">
+    <div onclick="toggleMenu()" style="font-size: 1.5em; cursor: pointer;">☰</div>
+    <div style="color: var(--accent-gold); font-weight: 800;">墨狐核心</div>
+    <div style="width: 24px;"></div>
+</div>
+
+<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+
+<nav id="sidebar">
+    <div class="nav-brand">墨狐核心</div>
     <div class="nav-menu">
-        <div class="nav-link active" onclick="switchModule('stats')">酒館數據</div>
-        <div class="nav-link" onclick="switchModule('members')">成員管理</div>
-        <div class="nav-link" onclick="switchModule('roles')">權限操作</div>
-        <div class="nav-link" onclick="switchModule('msg')">訊息廣播</div>
+        <div class="nav-link active" onclick="navTo('stats')">酒館數據</div>
+        <div class="nav-link" onclick="navTo('members')">成員管理</div>
+        <div class="nav-link" onclick="navTo('roles')">權限調度</div>
+        <div class="nav-link" onclick="navTo('msg')">訊息廣播</div>
     </div>
-    <div style="padding: 24px;">
-        <button class="btn-ban" style="width:100%" onclick="logout()">登出</button>
+    <div style="padding: 20px;">
+        <button class="btn-ban" style="width:100%" onclick="logout()">登出系統</button>
     </div>
 </nav>
 
 <main>
-    <div id="stats" class="module-section active">
+    <section id="stats" class="module-section active">
         <div class="card">
             <h2>即時狀態</h2>
             <div class="stats-grid">
                 <div class="stat-item"><div>總成員</div><div class="stat-value" id="s-members">---</div></div>
                 <div class="stat-item"><div>身分組</div><div class="stat-value" id="s-roles">---</div></div>
             </div>
-            <button class="btn-primary" style="margin-top:20px" onclick="loadData()">重新整理</button>
+            <button class="btn-primary" style="width:100%; margin-top:20px" onclick="loadData()">重新整理</button>
         </div>
-    </div>
+    </section>
 
-    <div id="members" class="module-section">
+    <section id="members" class="module-section">
         <div class="card">
             <h2>成員懲處</h2>
             <div class="form-group">
-                <label>選擇對象</label>
+                <label>對象</label>
                 <div class="input-with-avatar">
                     <img id="m-avatar" class="avatar-preview" src="https://cdn.discordapp.com/embed/avatars/0.png">
                     <select id="m-target" class="list-u" onchange="syncAvatar(this, 'm-avatar')"></select>
                 </div>
             </div>
             <div class="form-group">
-                <label>原因</label>
+                <label>理由</label>
                 <input type="text" id="m-reason" placeholder="原因...">
             </div>
             <div class="btn-group">
@@ -187,9 +229,9 @@
                 <button class="btn-ban" onclick="execMember('ban')">BAN</button>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div id="roles" class="module-section">
+    <section id="roles" class="module-section">
         <div class="card">
             <h2>身分組操作</h2>
             <div class="form-group">
@@ -199,22 +241,22 @@
                     <select id="r-target" class="list-u" onchange="syncAvatar(this, 'r-avatar')"></select>
                 </div>
             </div>
-            <div class="form-group"><label>身分組</label><select id="r-role" class="list-r"></select></div>
+            <div class="form-group"><label>選擇身分組</label><select id="r-role" class="list-r"></select></div>
             <div class="btn-group">
                 <button class="btn-primary" onclick="execRole('add')">給予</button>
                 <button class="btn-ban" onclick="execRole('remove')">移除</button>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div id="msg" class="module-section">
+    <section id="msg" class="module-section">
         <div class="card">
-            <h2>訊息發布</h2>
+            <h2>廣播訊息</h2>
             <div class="form-group"><label>頻道</label><select id="msg-ch" class="list-c"></select></div>
             <div class="form-group"><label>內容</label><textarea id="msg-ctx" rows="5"></textarea></div>
-            <button class="btn-primary" onclick="execMsg()">發送</button>
+            <button class="btn-primary" style="width:100%" onclick="execMsg()">發送</button>
         </div>
-    </div>
+    </section>
 </main>
 
 <div id="toast"></div>
@@ -222,11 +264,23 @@
 <script>
     let cacheUsers = [];
 
-    function switchModule(id) {
+    function toggleMenu() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    }
+
+    function navTo(id) {
         document.querySelectorAll('.module-section').forEach(m => m.classList.remove('active'));
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.currentTarget.classList.add('active');
+        if (window.innerWidth <= 768) toggleMenu();
+    }
+
+    function syncAvatar(selectEl, imgId) {
+        const user = cacheUsers.find(u => u.id === selectEl.value);
+        const imgEl = document.getElementById(imgId);
+        imgEl.src = user && user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128` : `https://cdn.discordapp.com/embed/avatars/0.png`;
     }
 
     function notify(m, e=false) {
@@ -235,16 +289,6 @@
         t.className = e ? 'toast-error' : 'toast-success';
         t.style.display = 'block';
         setTimeout(() => t.style.display = 'none', 3000);
-    }
-
-    function syncAvatar(selectEl, imgId) {
-        const user = cacheUsers.find(u => u.id === selectEl.value);
-        const imgEl = document.getElementById(imgId);
-        if (user && user.avatar) {
-            imgEl.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
-        } else {
-            imgEl.src = `https://cdn.discordapp.com/embed/avatars/0.png`;
-        }
     }
 
     async function req(url, body = null) {
@@ -263,23 +307,15 @@
                 req('/api/list?type=roles'),
                 req('/api/list?type=channels')
             ]);
-            
             cacheUsers = users;
             document.getElementById('s-members').textContent = users.length;
             document.getElementById('s-roles').textContent = roles.length;
-
             const uHtml = users.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
             const rHtml = roles.map(r => `<option value="${r.id}">${r.name}</option>`).join('');
             const cHtml = channels.map(c => `<option value="${c.id}"># ${c.name}</option>`).join('');
-
-            document.querySelectorAll('.list-u').forEach(s => {
-                s.innerHTML = uHtml;
-                const imgId = s.id === 'm-target' ? 'm-avatar' : 'r-avatar';
-                syncAvatar(s, imgId);
-            });
+            document.querySelectorAll('.list-u').forEach(s => { s.innerHTML = uHtml; syncAvatar(s, s.id === 'm-target' ? 'm-avatar' : 'r-avatar'); });
             document.querySelector('.list-r').innerHTML = rHtml;
             document.querySelector('.list-c').innerHTML = cHtml;
-            
             notify('數據已更新');
         } catch (e) { notify(e.message, true); }
     }
@@ -287,21 +323,21 @@
     async function execMember(action) {
         try {
             const res = await req('/api/member', { userId: document.getElementById('m-target').value, action, reason: document.getElementById('m-reason').value });
-            notify(res.message);
+            notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
 
     async function execRole(action) {
         try {
             const res = await req('/api/role', { userId: document.getElementById('r-target').value, roleId: document.getElementById('r-role').value, action });
-            notify(res.message);
+            notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
 
     async function execMsg() {
         try {
             const res = await req('/api/msg', { channelId: document.getElementById('msg-ch').value, content: document.getElementById('msg-ctx').value });
-            notify(res.message);
+            notify(res.message || '執行成功');
         } catch (e) { notify(e.message, true); }
     }
 

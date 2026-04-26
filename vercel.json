@@ -3,7 +3,10 @@
     {
       "source": "/admin.html",
       "destination": "/api/admin-check"
+    },
+    {
+      "source": "/admin-content.html",
+      "destination": "/api/login"
     }
   ]
 }
-

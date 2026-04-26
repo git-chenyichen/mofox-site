@@ -1,6 +1,6 @@
 const USERS_DATABASE = {
     OWNER: [
-        { u: "admin_fox", p: "fox888" }
+        { u: "mohuhu", p: "mohuhu328" }
     ],
     STAFF: [
         { u: "staff_lan", p: "lan123" },

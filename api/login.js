@@ -54,7 +54,7 @@ export default async function handler(req, res) {
                         from: `"墨狐酒館 SSO" <${process.env.EMAIL_USER}>`,
                         to: user.email,
                         subject: '您的登入驗證碼',
-                        text: `驗證碼：${vCode}`
+                        text: `驗證碼：${vCode}(本驗證碼請勿給予別人）`
                     });
                     return res.status(200).json({ success: true, nextStep: '2fa' });
                 } catch (e) {

@@ -4,7 +4,7 @@ import { join } from 'path';
 
 const USERS_DATABASE = {
     OWNER: [
-        { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com" }
+        { u: "mohuhu", p: "Mofox0609", email: "yic0979s@gmail.com" }
     ],
     STAFF: [
         { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@kusanagi.dev" }

@@ -51,7 +51,7 @@ export default async function handler(req, res) {
                 tempCodes[username] = vCode;
                 try {
                     await transporter.sendMail({
-                        from: `"墨狐酒館 SSO" <${process.env.EMAIL_USER}>`,
+                        from: `"墨狐酒館 認證系統" <${process.env.EMAIL_USER}>`,
                         to: user.email,
                         subject: '您的登入驗證碼',
                         text: `驗證碼：${vCode}(本驗證碼請勿給予別人）`

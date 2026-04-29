@@ -14,7 +14,7 @@ const USERS_DATABASE = {
     ]
 };
 
-let tempCodes = {};
+let tempCodes = {}; 
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -23,6 +23,33 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+
+const generateEmailTemplate = (username, vCode) => `
+<div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f7; padding: 50px 20px; color: #333;">
+    <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <div style="background-color: #2d3436; padding: 30px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 24px; letter-spacing: 2px;">墨狐酒館 MOFOX</h1>
+        </div>
+        <div style="padding: 40px 30px;">
+            <h2 style="font-size: 20px; margin-top: 0; color: #2d3436;">安全驗證通知</h2>
+            <p style="font-size: 16px; line-height: 1.6; color: #636e72;">
+                您好 ${username}，系統收到了一個登入請求。請使用下方的驗證碼完成雙重驗證（2FA）：
+            </p>
+            <div style="background-color: #f9f9f9; border: 1px dashed #dfe6e9; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0;">
+                <span style="font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #d63031;">${vCode}</span>
+            </div>
+            <p style="font-size: 14px; color: #b2bec3; line-height: 1.6;">
+                ❌ 此驗證碼僅用於登入身分確認。<br>
+                ❌ 請勿將此代碼洩漏給他人，工作人員不會主動向您索取。<br>
+                ❌ 如果這不是您本人的操作，請立即檢查帳號安全。
+            </p>
+        </div>
+        <div style="background-color: #f4f4f7; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
+            <p style="font-size: 12px; color: #b2bec3; margin: 0;">&copy; 2026 墨狐酒館 Onion Team. All rights reserved.</p>
+        </div>
+    </div>
+</div>
+`;
 
 export default async function handler(req, res) {
     const auth = req.headers.cookie;
@@ -46,15 +73,18 @@ export default async function handler(req, res) {
 
         if (step === 'auth') {
             const user = USERS_DATABASE[role]?.find(u => u.u === username && u.p === password);
+            
             if (user) {
                 const vCode = Math.floor(100000 + Math.random() * 900000).toString();
                 tempCodes[username] = vCode;
+
                 try {
                     await transporter.sendMail({
-                        from: `"墨狐酒館 認證系統" <${process.env.EMAIL_USER}>`,
+                        from: `"墨狐酒館 系統通知" <${process.env.EMAIL_USER}>`,
                         to: user.email,
-                        subject: '您的登入驗證碼',
-                        text: `驗證碼：${vCode}(本驗證碼請勿給予別人）`
+                        subject: `【驗證碼】${vCode} - 墨狐酒館後台管理`,
+                        text: `您的登入驗證碼為：${vCode}。請勿將此代碼分享給任何人。`,
+                        html: generateEmailTemplate(username, vCode)
                     });
                     return res.status(200).json({ success: true, nextStep: '2fa' });
                 } catch (e) {

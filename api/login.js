@@ -45,7 +45,7 @@ const generateEmailTemplate = (username, vCode) => `
             </p>
         </div>
         <div style="background-color: #f4f4f7; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
-            <p style="font-size: 12px; color: #b2bec3; margin: 0;">&copy; 2026 墨狐酒館 Onion Team. All rights reserved.</p>
+            <p style="font-size: 12px; color: #b2bec3; margin: 0;">&copy; 2026 墨狐酒館. All rights reserved.</p>
         </div>
     </div>
 </div>

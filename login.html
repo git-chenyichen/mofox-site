@@ -80,7 +80,11 @@
         .discord-btn {
             display: block;
             width: 100%;
-            transition: transform 0.2s;
+            padding: 0;
+            border: none;
+            background: none;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
         }
         .discord-btn img {
             width: 100%;
@@ -90,6 +94,9 @@
         .discord-btn:hover {
             transform: scale(1.02);
             filter: brightness(1.1);
+        }
+        .discord-btn:active {
+            transform: scale(0.98);
         }
         .back-link { display: block; margin-top: 20px; color: #ffcc66; text-decoration: none; font-size: 0.85em; }
     </style>
@@ -132,9 +139,9 @@
         <span>或使用</span>
     </div>
 
-    <a href="https://www.mofox.xyz/api/auth" class="discord-btn">
+    <button type="button" class="discord-btn" onclick="location.href='https://www.mofox.xyz/api/auth'">
         <img src="/images/discord_login_button.png" alt="Discord 登入">
-    </a>
+    </button>
 
     <a href="staff.html" class="back-link">返回團隊頁面</a>
 </div>

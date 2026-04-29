@@ -77,33 +77,28 @@
             color: #ffe6c7;
             font-size: 0.85em;
         }
-        .discord-btn-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
         .discord-btn {
-            display: block;
             width: 100%;
-            max-width: 280px;
-            padding: 0;
+            padding: 12px;
+            background-color: #5865F2;
+            color: white;
             border: none;
-            background: none;
-            cursor: pointer;
-            transition: transform 0.2s, filter 0.2s;
-        }
-        .discord-btn img {
-            width: 100%;
-            height: auto;
-            display: block;
             border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s;
         }
         .discord-btn:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
+            background-color: #4752c4;
         }
-        .discord-btn:active {
-            transform: scale(0.98);
+        .discord-btn img {
+            height: 20px;
+            width: auto;
         }
         .back-link { display: block; margin-top: 20px; color: #ffcc66; text-decoration: none; font-size: 0.85em; }
     </style>
@@ -146,11 +141,10 @@
         <span>或使用</span>
     </div>
 
-    <div class="discord-btn-container">
-        <button type="button" class="discord-btn" onclick="location.href='https://www.mofox.xyz/api/auth'">
-            <img src="/images/discord_login_button.png" alt="Discord 登入">
-        </button>
-    </div>
+    <button type="button" class="discord-btn" onclick="location.href='https://www.mofox.xyz/api/auth'">
+        <img src="/images/discord_login_button.png" alt="">
+        Discord 登入
+    </button>
 
     <a href="staff.html" class="back-link">返回團隊頁面</a>
 </div>

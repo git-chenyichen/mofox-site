@@ -39,9 +39,9 @@ const generateEmailTemplate = (username, vCode) => `
                 <span style="font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #d63031;">${vCode}</span>
             </div>
             <p style="font-size: 14px; color: #b2bec3; line-height: 1.6;">
-                ❌ 此驗證碼僅用於登入身分確認。<br>
-                ❌ 請勿將此代碼洩漏給他人，工作人員不會主動向您索取。<br>
-                ❌ 如果這不是您本人的操作，請立即檢查帳號安全。
+                此驗證碼僅用於登入身分確認。<br>
+                請勿將此代碼洩漏給他人。<br>
+                如果這不是您本人的操作，請立即檢查帳號安全。
             </p>
         </div>
         <div style="background-color: #f4f4f7; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
                     await transporter.sendMail({
                         from: `"墨狐酒館 系統通知" <${process.env.EMAIL_USER}>`,
                         to: user.email,
-                        subject: `【驗證碼】${vCode} - 墨狐酒館後台管理`,
+                        subject: `【驗證碼】${vCode} - 墨狐酒館管理系統`,
                         text: `您的登入驗證碼為：${vCode}。請勿將此代碼分享給任何人。`,
                         html: generateEmailTemplate(username, vCode)
                     });

@@ -1,5 +1,22 @@
 {
+  "redirects": [
+    {
+      "source": "/login.html",
+      "destination": "https://login.mofox.xyz",
+      "permanent": true
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "login.mofox.xyz"
+        }
+      ],
+      "destination": "/login.html"
+    },
     {
       "source": "/admin.html",
       "destination": "/api/admin-check"

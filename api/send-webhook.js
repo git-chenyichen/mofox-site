@@ -2,9 +2,10 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
     const { nickname, discord_id, category, title, content } = req.body;
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1453362268887711778/F6Jeyc1Ne4WYdA6KcNbK62tKVqFU_HN3RqZEQuLhgnX4BKHMOY7Yu_LDFQ_ZEq8PkLaw";
 
-    const time = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+    if (!nickname || !content || !title) {
+        return res.status(400).json({ message: 'Missing fields' });
+    }
 
     const discordPayload = {
         embeds: [{
@@ -13,25 +14,23 @@ export default async function handler(req, res) {
             color: 0xff8c42,
             fields: [
                 { name: "旅客暱稱", value: `\`${nickname}\``, inline: true },
-                { name: "Discord 使用者名稱", value: `\`${discord_id}\``, inline: true },
-                { name: "分類", value: `**${category}**`, inline: true },
+                { name: "Discord 使用者名稱", value: `\`${discord_id || '未提供'}\``, inline: true },
+                { name: "分類", value: `**${category || '一般'}**`, inline: true },
                 { name: "回饋內容", value: `> ${content}` }
             ],
-            footer: { 
-                text: `系統發送時間：${time}`
-            },
-            thumbnail: {
-                url: "https://www.mofox.xyz/images/mofox-logo.jpg" 
-            }
+            footer: { text: `系統發送時間：${new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })}` },
+            thumbnail: { url: "https://www.mofox.xyz/images/mofox-logo.jpg" }
         }]
     };
 
     try {
-        await fetch(WEBHOOK_URL, {
+        const response = await fetch(process.env.WEBHOOK_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(discordPayload)
         });
+
+        if (!response.ok) throw new Error();
         return res.status(200).json({ message: 'OK' });
     } catch (error) {
         return res.status(500).json({ message: 'Error' });

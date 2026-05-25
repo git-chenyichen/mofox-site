@@ -7,143 +7,24 @@
     <link rel="icon" type="image/jpeg" href="images/mofox-logo.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
     <style>
-        body {
-            color: #ffffff; 
-            font-family: 'Avenir', 'Georgia', serif; 
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            background-image: url('images/mofox-background.jpg'); 
-            background-size: cover; 
-            background-position: center center; 
-            background-attachment: fixed; 
-        }
-        
-        body::before {
-            content: '';
-            position: fixed; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px); 
-            z-index: -1; 
-        }
-
-        .nav-bar {
-            width: 100%;
-            background-color: rgba(0, 0, 0, 0.2); 
-            padding: 10px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            display: flex;
-            justify-content: center;
-        }
-                  
-        .nav-link {
-            text-decoration: none;
-            color: #ffcc66;
-            font-weight: bold;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            margin: 0 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
+        body { color: #ffffff; font-family: 'Avenir', 'Georgia', serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; text-align: center; background-image: url('images/mofox-background.jpg'); background-size: cover; background-position: center center; background-attachment: fixed; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: -1; }
+        .nav-bar { width: 100%; background-color: rgba(0, 0, 0, 0.2); padding: 10px 0; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); display: flex; justify-content: center; }
+        .nav-link { text-decoration: none; color: #ffcc66; font-weight: bold; font-size: 1.1em; padding: 8px 15px; margin: 0 15px; border-radius: 5px; transition: background-color 0.3s, color 0.3s; }
         .nav-link:hover { background-color: #ff8c42; color: #ffffff; }
         .nav-link.active { background-color: #cc6600; color: #ffffff; border-bottom: 2px solid #ffcc66; }
-
-        header {
-            width: 90%;
-            padding: 20px 0 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
-            margin-bottom: 20px;
-        }
-        
-        h1 {
-            font-size: 2.2em;
-            color: #ffe6c7; 
-            font-family: 'Handlee', cursive; 
-            margin-bottom: 5px;
-        }
-
-        main {
-            width: 95%;
-            max-width: 500px; 
-            text-align: left;
-        }
-
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.12); 
-            padding: 20px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
-            border-left: 4px solid #ffcc66; 
-        }
-
-        .row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 12px;
-        }
-
-        .input-group {
-            flex: 1;
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            color: #ffcc66;
-            margin-bottom: 6px;
-            font-size: 0.9em;
-            font-weight: bold;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            font-size: 0.95em;
-            box-sizing: border-box;
-        }
-
+        header { width: 90%; padding: 20px 0 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 20px; }
+        h1 { font-size: 2.2em; color: #ffe6c7; font-family: 'Handlee', cursive; margin-bottom: 5px; }
+        main { width: 95%; max-width: 500px; text-align: left; }
+        .form-container { background-color: rgba(255, 255, 255, 0.12); padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); border-left: 4px solid #ffcc66; }
+        .row { display: flex; gap: 15px; margin-bottom: 12px; }
+        .input-group { flex: 1; margin-bottom: 12px; }
+        label { display: block; color: #ffcc66; margin-bottom: 6px; font-size: 0.9em; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2); background: rgba(0, 0, 0, 0.4); color: white; font-size: 0.95em; box-sizing: border-box; }
         textarea { resize: none; }
-
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #ff8c42; 
-            color: white;
-            border: none;
-            border-radius: 25px; 
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 5px;
-        }
-
-        .submit-btn:hover { background-color: #ff703f; transform: translateY(-2px); }
-
-        footer {
-            width: 90%;
-            margin-top: 30px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 0.85em;
-            color: #ffcc66; 
-        }
+        .submit-btn { width: 100%; padding: 12px; background-color: #ff8c42; color: white; border: none; border-radius: 25px; font-weight: bold; font-size: 1em; cursor: pointer; transition: 0.3s; margin-top: 5px; }
+        .submit-btn:disabled { background-color: #666; cursor: not-allowed; }
+        .submit-btn:hover:not(:disabled) { background-color: #ff703f; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -153,12 +34,10 @@
         <a href="staff.html" class="nav-link">館員團隊</a>
         <a href="history.html" class="nav-link">歷程回顧</a>
         <a href="reviews.html" class="nav-link">旅客評價</a>
-       <a href="feedback.html" class="nav-link active">用戶回饋</a>
+        <a href="feedback.html" class="nav-link active">用戶回饋</a>
     </div>
 
-    <header>
-        <h1>旅客回饋信箱</h1>
-    </header>
+    <header><h1>旅客回饋信箱</h1></header>
 
     <main>
         <div class="form-container">
@@ -173,7 +52,6 @@
                         <input type="text" id="discord_id" placeholder="Username" required>
                     </div>
                 </div>
-
                 <div class="input-group">
                     <label>回饋類別</label>
                     <select id="category">
@@ -184,26 +62,41 @@
                         <option value="其他">其他</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label>標題</label>
                     <input type="text" id="title" placeholder="主旨" required>
                 </div>
-
                 <div class="input-group">
                     <label>內容</label>
                     <textarea id="content" rows="4" placeholder="在這裡寫下您的想法..." required></textarea>
                 </div>
-
                 <button type="submit" class="submit-btn" id="submitBtn">🥂 投遞回饋</button>
             </form>
         </div>
     </main>
 
     <script>
+        const COOLDOWN = 10 * 60 * 1000;
+        const btn = document.getElementById('submitBtn');
+
+        function checkCooldown() {
+            const lastSent = localStorage.getItem('lastSentTime');
+            if (lastSent) {
+                const remaining = COOLDOWN - (Date.now() - parseInt(lastSent));
+                if (remaining > 0) {
+                    btn.disabled = true;
+                    btn.innerText = `冷卻中 (${Math.ceil(remaining / 1000)}秒)`;
+                    setTimeout(checkCooldown, 1000);
+                } else {
+                    localStorage.removeItem('lastSentTime');
+                    btn.disabled = false;
+                    btn.innerText = '🥂 投遞回饋';
+                }
+            }
+        }
+
         document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerText = '傳送中...';
 
@@ -223,18 +116,23 @@
                 });
 
                 if (response.ok) {
+                    localStorage.setItem('lastSentTime', Date.now());
                     alert('回饋已成功寄出！');
                     document.getElementById('feedbackForm').reset();
+                    checkCooldown();
                 } else {
-                    alert('傳送失敗，請聯繫管理員。');
+                    alert('傳送失敗，請稍後再試。');
+                    btn.disabled = false;
+                    btn.innerText = '🥂 投遞回饋';
                 }
             } catch (err) {
                 alert('發生網路錯誤。');
-            } finally {
                 btn.disabled = false;
                 btn.innerText = '🥂 投遞回饋';
             }
         });
+
+        checkCooldown();
     </script>
 </body>
 </html>

@@ -1,18 +1,18 @@
 import nodemailer from 'nodemailer';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { checkUserHasRole } from './role.js'; 
 
-const USERS_DATABASE = {
-    OWNER: [
-        { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com" }
-    ],
-    STAFF: [
-        { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@kusanagi.dev" }
-    ],
-    ADMIN: [
-        { u: "2023", p: "chenyichen1106", email: "yic0979s@gmail.com" }
-    ]
-};
+const USERS_DATABASE = [
+    { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com", discordId: "1367782120403238923" },
+    { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@kusanagi.dev", discordId: "964849855396741130" },
+    { u: "2023", p: "chenyichen1106", email: "yic0979s@gmail.com", discordId: "1191200148357910538" }
+];
+
+const ALLOWED_ROLE_IDS = [
+    "1519393328679096401",
+    "1519394123260498183"
+];
 
 let tempCodes = {}; 
 
@@ -52,31 +52,41 @@ const generateEmailTemplate = (username, vCode) => `
 `;
 
 export default async function handler(req, res) {
-    const auth = req.headers.cookie;
-
+    const authCookie = req.headers.cookie || '';
+    
     if (req.method === 'GET') {
-        if (auth && auth.includes('mofox_auth=true')) {
-            try {
-                const filePath = join(process.cwd(), 'admin-content.html');
-                const fileContent = readFileSync(filePath, 'utf8');
-                res.setHeader('Content-Type', 'text/html');
-                return res.status(200).send(fileContent);
-            } catch (err) {
-                return res.status(500).send('讀取後台檔案失敗');
+        const isAuth = authCookie.includes('mofox_auth=true');
+        const idMatch = authCookie.match(/mofox_discord_id=([^;]+)/);
+        const userDiscordId = idMatch ? idMatch[1] : null;
+
+        if (isAuth && userDiscordId) {
+            const hasPermission = await checkUserHasRole(userDiscordId, ALLOWED_ROLE_IDS);
+
+            if (hasPermission) {
+                try {
+                    const filePath = join(process.cwd(), 'admin-content.html');
+                    const fileContent = readFileSync(filePath, 'utf8');
+                    res.setHeader('Content-Type', 'text/html');
+                    return res.status(200).send(fileContent);
+                } catch (err) {
+                    return res.status(500).send('讀取後台檔案失敗');
+                }
+            } else {
+                return res.status(403).send('權限不足或未擁有指定 Discord 身分組，無法存取此頁面');
             }
         }
         return res.redirect(302, '/login.html');
     }
 
     if (req.method === 'POST') {
-        const { step, role, username, password, code } = req.body;
+        const { step, username, password, code } = req.body;
 
         if (step === 'auth') {
-            const user = USERS_DATABASE[role]?.find(u => u.u === username && u.p === password);
+            const user = USERS_DATABASE.find(u => u.u === username && u.p === password);
             
             if (user) {
                 const vCode = Math.floor(100000 + Math.random() * 900000).toString();
-                tempCodes[username] = vCode;
+                tempCodes[username] = { vCode, discordId: user.discordId }; 
 
                 try {
                     await transporter.sendMail({
@@ -95,9 +105,15 @@ export default async function handler(req, res) {
         }
 
         if (step === 'verify') {
-            if (tempCodes[username] && tempCodes[username] === code) {
+            const savedData = tempCodes[username];
+            if (savedData && savedData.vCode === code) {
+                const userDiscordId = savedData.discordId;
                 delete tempCodes[username];
-                res.setHeader('Set-Cookie', 'mofox_auth=true; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600');
+                
+                res.setHeader('Set-Cookie', [
+                    'mofox_auth=true; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600',
+                    `mofox_discord_id=${userDiscordId}; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600`
+                ]);
                 return res.status(200).json({ success: true });
             }
             return res.status(401).json({ success: false, message: '驗證碼錯誤' });

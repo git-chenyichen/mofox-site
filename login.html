@@ -36,7 +36,12 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
-        h2 { color: #ffcc66; margin-bottom: 30px; }
+        .logo-img {
+            width: 120px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+        }
+        h2 { color: #ffcc66; margin-bottom: 25px; margin-top: 0; }
         .form-group { margin-bottom: 20px; text-align: left; }
         label { display: block; margin-bottom: 8px; color: #ffe6c7; font-size: 0.9em; }
         select, input {
@@ -67,16 +72,6 @@
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .divider span {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #2a2a2a;
-            padding: 0 15px;
-            color: #ffe6c7;
-            font-size: 0.85em;
-        }
         .discord-btn {
             width: 100%;
             padding: 12px;
@@ -93,20 +88,18 @@
             gap: 10px;
             transition: background-color 0.2s;
         }
-        .discord-btn:hover {
-            background-color: #4752c4;
-        }
-        .discord-btn img {
-            height: 20px;
-            width: auto;
-        }
+        .discord-btn:hover { background-color: #4752c4; }
+        .discord-btn img { height: 20px; width: auto; }
         .back-link { display: block; margin-top: 20px; color: #ffcc66; text-decoration: none; font-size: 0.85em; }
     </style>
 </head>
 <body>
 
 <div class="login-box">
+    <img src="images/DECISION-MAKING-TEAM-logo.png" alt="Mofox Logo" class="logo-img">
+    
     <h2>Mofox 管理員認證系統</h2>
+    
     <form id="loginForm">
         <div id="step-1">
             <div class="form-group">
@@ -137,12 +130,10 @@
         <button type="submit" class="login-submit" id="submit-btn">下一步</button>
     </form>
 
-    <div class="divider">
-        <span></span>
-    </div>
+    <div class="divider"></div>
 
     <button type="button" class="discord-btn" onclick="location.href='https://www.mofox.xyz/api/auth'">
-        <img src="/images/discord_login_button.png" alt="">
+        <img src="/images/discord_login_button.png" alt="Discord">
         Discord 登入
     </button>
 

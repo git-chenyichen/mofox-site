@@ -39,9 +39,9 @@ const generateEmailTemplate = (username, vCode) => `
                 <span style="font-family: 'Courier New', monospace; font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #d63031;">${vCode}</span>
             </div>
             <p style="font-size: 14px; color: #b2bec3; line-height: 1.6;">
-                此驗證碼僅用於登入身分確認。<br>
+                此驗證碼僅用於管理系統登入身分確認。<br>
                 請勿將此代碼洩漏給他人。<br>
-                如果這不是您本人的操作，請立即檢查帳號安全。
+                如果這不是您本人的操作，請立即通知網管進行密碼更改。
             </p>
         </div>
         <div style="background-color: #f4f4f7; padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">

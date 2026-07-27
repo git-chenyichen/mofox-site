@@ -7,6 +7,9 @@
     {
       "source": "/admin.html",
       "destination": "/api/login"
-    }
+    },
+    {
+      "source": "/admin-login.html",
+      "destination": "apy/admin-login.js
   ]
 }

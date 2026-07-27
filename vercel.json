@@ -5,10 +5,6 @@
       "destination": "/api/admin-check"
     },
     {
-      "source": "/admin.html",
-      "destination": "/api/login"
-    },
-    {
       "source": "/admin-login.html",
       "destination": "api/admin-login.js"
     }

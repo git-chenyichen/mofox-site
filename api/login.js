@@ -4,9 +4,24 @@ import { join } from 'path';
 import { checkUserHasRole } from './role.js'; 
 
 const USERS_DATABASE = [
-    { u: "mohuhu", p: "Mofox0609", email: "mohuhu328@gmail.com", discordId: "1367782120403238923" },
-    { u: "kusanagi_akane", p: "kusanagi_kane", email: "akane@kusanagi.dev", discordId: "964849855396741130" },
-    { u: "2023", p: "chenyichen1106", email: "yic0979s@gmail.com", discordId: "1191200148357910538" }
+    { 
+        u: process.env.USER1_NAME, 
+        p: process.env.USER1_PASS, 
+        email: process.env.USER1_EMAIL, 
+        discordId: "1367782120403238923" 
+    },
+    { 
+        u: process.env.USER2_NAME, 
+        p: process.env.USER2_PASS, 
+        email: process.env.USER2_EMAIL, 
+        discordId: "964849855396741130" 
+    },
+    { 
+        u: process.env.USER3_NAME, 
+        p: process.env.USER3_PASS, 
+        email: process.env.USER3_EMAIL, 
+        discordId: "1191200148357910538" 
+    }
 ];
 
 const ALLOWED_ROLE_IDS = [

@@ -1,6 +1,4 @@
 import nodemailer from 'nodemailer';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { checkUserHasRole } from './role.js'; 
 
 const USERS_DATABASE = [
@@ -78,14 +76,14 @@ export default async function handler(req, res) {
             const hasPermission = await checkUserHasRole(userDiscordId, ALLOWED_ROLE_IDS);
 
             if (hasPermission) {
-                try {
-                    const filePath = join(process.cwd(), 'admin-content.html');
-                    const fileContent = readFileSync(filePath, 'utf8');
-                    res.setHeader('Content-Type', 'text/html');
-                    return res.status(200).send(fileContent);
-                } catch (err) {
-                    return res.status(500).send('讀取後台檔案失敗');
+                const fileContent = process.env.ADMIN_PAGE_HTML;
+
+                if (!fileContent) {
+                    return res.status(500).send('未設定 ADMIN_PAGE_HTML 環境變數');
                 }
+
+                res.setHeader('Content-Type', 'text/html');
+                return res.status(200).send(fileContent);
             } else {
                 return res.status(403).send('權限不足或未擁有指定 Discord 身分組，無法存取此頁面');
             }

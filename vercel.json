@@ -10,6 +10,7 @@
     },
     {
       "source": "/admin-login.html",
-      "destination": "apy/admin-login.js
+      "destination": "api/admin-login.js
+    }
   ]
 }

@@ -76,6 +76,7 @@
             padding: 6px 4px;
             position: relative;
             transition: color 0.3s ease;
+            white-space: nowrap;
         }
 
         .nav-link::after {
@@ -267,6 +268,92 @@
 
         footer p {
             margin-top: 12px;
+        }
+
+        /* 手機版適應 (RWD) */
+        @media (max-width: 768px) {
+            .bg-blob {
+                width: 300px;
+                height: 300px;
+                filter: blur(30px);
+            }
+
+            .nav-bar {
+                gap: 16px;
+                padding: 20px 16px;
+                flex-wrap: wrap;
+            }
+
+            .nav-link {
+                font-size: 0.88em;
+                padding: 4px 2px;
+            }
+
+            header {
+                width: 92%;
+                margin: 15px 0 30px;
+            }
+
+            .top-tag {
+                font-size: 1.3em;
+            }
+
+            h1 {
+                font-size: 2.3em;
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                font-size: 0.82em;
+                line-height: 1.5;
+            }
+
+            main {
+                width: 92%;
+                gap: 24px;
+            }
+
+            .info-panel {
+                padding: 24px 20px;
+                border-radius: 16px;
+            }
+
+            h2 {
+                font-size: 1.5em;
+                margin-bottom: 16px;
+            }
+
+            .intro-text {
+                font-size: 0.9em;
+                margin-bottom: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .grid-item {
+                padding: 12px 14px;
+            }
+
+            .footer-note {
+                margin-top: 24px;
+                padding-top: 18px;
+                font-size: 0.82em;
+            }
+
+            .join-button {
+                width: 100%;
+                max-width: 280px;
+                padding: 12px 24px;
+                font-size: 1.2em;
+            }
+
+            footer {
+                padding: 24px 16px;
+                font-size: 0.75em;
+            }
         }
 
         @keyframes fadeIn {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨狐酒館 | 旅客私語</title>
+    <title>墨狐酒館 | 館員團隊</title>
     <link rel="icon" type="image/jpeg" href="images/mofox-logo.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,15 +56,58 @@
             100% { transform: translate(40px, 30px) scale(1.1); }
         }
 
-        .nav-bar {
+        /* 導覽列容器 */
+        .nav-container {
             width: 100%;
             max-width: 800px;
+            padding: 24px 20px;
             display: flex;
             justify-content: center;
-            gap: 28px;
-            padding: 32px 20px;
+            align-items: center;
+            position: relative;
+            z-index: 100;
             opacity: 0;
             animation: fadeIn 1s forwards ease-out 0.2s;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 26px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 2px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+            background-color: var(--accent);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+            background-color: var(--accent);
+        }
+
+        .nav-bar {
+            display: flex;
+            gap: 28px;
         }
 
         .nav-link {
@@ -128,87 +171,71 @@
 
         main {
             width: 90%;
-            max-width: 580px;
+            max-width: 860px;
             display: flex;
             justify-content: center;
-            align-items: center;
-            flex-grow: 1;
             margin-bottom: 60px;
             opacity: 0;
             animation: fadeInUp 1s forwards ease-out 0.6s;
         }
 
-        .review-card {
+        .staff-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .staff-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 40px;
-            width: 100%;
-            min-height: 280px;
+            padding: 32px 24px;
             backdrop-filter: blur(12px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
             display: flex;
             flex-direction: column;
+            align-items: center;
+            text-align: center;
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .review-card:hover {
+        .staff-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
 
-        .fade-animation {
-            animation: cardFade 0.8s ease-in-out;
-        }
-
-        @keyframes cardFade {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
         .avatar {
-            width: 48px;
-            height: 48px;
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
-            margin-right: 16px;
+            margin-bottom: 16px;
             border: 1px solid var(--border);
             object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
 
-        .nickname {
+        .staff-name {
             color: var(--text-main);
             font-weight: 600;
-            font-size: 1.05em;
+            font-size: 1.15em;
             letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
-        .star-container {
-            font-size: 1.1em;
-            letter-spacing: 3px;
-            margin-bottom: 18px;
-            line-height: 1;
-        }
-
-        .star-fill {
+        .quote {
+            font-family: 'Caveat', 'Noto Serif TC', serif;
+            font-size: 1.05em;
             color: var(--accent);
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
 
-        .star-empty {
-            color: rgba(212, 203, 191, 0.6);
-        }
-
-        .comment {
-            font-size: 0.95em;
-            line-height: 1.8;
+        .desc {
+            font-size: 0.9em;
+            line-height: 1.7;
             color: var(--text-muted);
-            white-space: pre-line;
-            word-wrap: break-word;
             letter-spacing: 0.5px;
         }
 
@@ -238,6 +265,72 @@
                 transform: translateY(0);
             }
         }
+
+        /* 響應式手機介面優化 */
+        @media (max-width: 680px) {
+            .nav-container {
+                justify-content: flex-end;
+                padding: 16px 20px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-bar {
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                width: 200px;
+                background: var(--card-bg);
+                border: 1px solid var(--border);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-radius: 16px;
+                padding: 12px 0;
+                flex-direction: column;
+                gap: 4px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .nav-bar.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-link {
+                padding: 12px 20px;
+                text-align: center;
+                display: block;
+                font-size: 0.9em;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            header {
+                margin: 10px 0 24px;
+            }
+
+            h1 {
+                font-size: 2.4em;
+            }
+
+            .staff-container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .staff-card {
+                padding: 24px 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -245,20 +338,55 @@
     <div class="bg-blob bg-blob-1"></div>
     <div class="bg-blob bg-blob-2"></div>
 
-    <nav class="nav-bar">
-        <a href="index.html" class="nav-link">酒館主頁</a>
-        <a href="staff.html" class="nav-link">館員團隊</a>
-        <a href="history.html" class="nav-link">歷程回顧</a>
-        <a href="reviews.html" class="nav-link active">旅客評價</a>
-    </nav>
+    <div class="nav-container">
+        <button class="hamburger" id="hamburger-btn" aria-label="選單">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav class="nav-bar" id="nav-menu">
+            <a href="index.html" class="nav-link">酒館主頁</a>
+            <a href="staff.html" class="nav-link active">館員團隊</a>
+            <a href="history.html" class="nav-link">歷程回顧</a>
+            <a href="reviews.html" class="nav-link">旅客評價</a>
+        </nav>
+    </div>
 
     <header>
-        <div class="top-tag">Whispers of Guests</div>
-        <h1>旅客的私語</h1>
+        <div class="top-tag">Keepers of MoFox</div>
+        <h1>館員團隊</h1>
     </header>
 
     <main>
-        <div id="card-content" class="review-card"></div>
+        <div class="staff-container">
+            <div class="staff-card">
+                <img src="db/userimages/aea2d128b26891bde1d9dd6543b140c9.webp" alt="館主 墨狐" class="avatar">
+                <div class="staff-name">館主 - 墨狐</div>
+                <div class="quote">一隻可愛小狐狸(⁠´⁠∩⁠｡⁠•⁠ ⁠ᵕ⁠ ⁠•⁠｡⁠∩⁠`⁠)<br>酒館最讚的姐姐</div>
+                <div class="desc">酒館的創始人，以其溫暖與神秘的氣質，為迷途的旅人提供安心的驛站。</div>
+            </div>
+
+            <div class="staff-card">
+                <img src="db/userimages/23b07317528941d276955bf64eecb7b9.webp" alt="館員 2023" class="avatar">
+                <div class="staff-name">館員 - 2023</div>
+                <div class="quote">酒館資深開發者。</div>
+                <div class="desc">負責酒館的各種活動規劃與項目開發。是酒館運作背後，不可或缺的技術核心。</div>
+            </div>
+
+            <div class="staff-card">
+                <img src="https://i.ibb.co/Qj9JGW0T/imag2e.png" alt="館員 嵐" class="avatar">
+                <div class="staff-name">館員 - 嵐</div>
+                <div class="quote">定居酒館的75重度沉迷者。</div>
+                <div class="desc">酒館中的氣氛營造者，熱衷於與人交流，總是能帶來歡樂的特調和輕鬆的氛圍。</div>
+            </div>
+
+            <div class="staff-card">
+                <img src="db/userimages/adbe059e50004e4f09d48bbd58c93137.webp" alt="館員 草薙明音" class="avatar">
+                <div class="staff-name">館員 - 草薙明音</div>
+                <div class="quote">可愛的貓貓。</div>
+                <div class="desc">早安安，世界上最可愛的貓貓在這裡~~~</div>
+            </div>
+        </div>
     </main>
 
     <footer>
@@ -266,72 +394,21 @@
     </footer>
 
     <script>
-        const reviews = [
-            {
-                name: "館主 - 墨狐",
-                avatar: "db/userimages/aea2d128b26891bde1d9dd6543b140c9.webp",
-                stars: 5,
-                text: "這是一間隱藏在塵世喧囂中的小酒館。\n有時人聲鼎沸、有時靜謐溫馨；\n有時歌聲悠揚、有時也會跑出奇特的聲音(？)。\n這裡的人們溫暖包容、多元接納，\n除了人類之外，亦存在著各種族 (w)。\n從小心翼翼地探頭，到像在家一般自在。\n歡迎光臨 —— 墨狐酒館"
-            },
-            { 
-                name: "館員 - 2023", 
-                avatar: "db/userimages/23b07317528941d276955bf64eecb7b9.webp", 
-                stars: 5, 
-                text: "這裡的氛圍真的好讚，\n放鬆聊天的首選。" 
-            },
-            { 
-                name: "Ting", 
-                avatar: "db/userimages/e287f972fdcf19867bfcd6fd1818577c.webp", 
-                stars: 5, 
-                text: "這是一個很溫暖每個人類都很友好的地方！\n也是一個治療心靈的好地方。" 
-            },
-            { 
-                name: "小楓", 
-                avatar: "db/userimages/51b4d03b7361cd5cb4d964fe1a50cbb1.webp", 
-                stars: 5, 
-                text: "在墨狐酒館你可以體驗到很多很多，裡面的酒客也都很和善、好相處呐。\n來到這邊就會捨不得離開拉（笑" 
-            },
-            { 
-                name: "時汐",
-                avatar: "db/userimages/49bad89e426e615297898f99da21d682.webp", 
-                stars: 4, 
-                text: "視他人的凝目如盞盞鬼火，大膽去走你的夜路。" 
+        const btn = document.getElementById('hamburger-btn');
+        const menu = document.getElementById('nav-menu');
+
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            btn.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                btn.classList.remove('active');
+                menu.classList.remove('active');
             }
-        ];
-
-        let currentIndex = 0;
-
-        function getStars(count) {
-            let starsHTML = '<span class="star-fill">';
-            for (let i = 0; i < count; i++) starsHTML += '★';
-            starsHTML += '</span><span class="star-empty">';
-            for (let i = 0; i < (5 - count); i++) starsHTML += '★';
-            starsHTML += '</span>';
-            return starsHTML;
-        }
-
-        function updateDisplay() {
-            const data = reviews[currentIndex];
-            const container = document.getElementById('card-content');
-            
-            container.classList.remove('fade-animation');
-            void container.offsetWidth; 
-            container.classList.add('fade-animation');
-
-            container.innerHTML = `
-                <div class="user-info">
-                    <img src="${data.avatar}" class="avatar">
-                    <span class="nickname">${data.name}</span>
-                </div>
-                <div class="star-container">${getStars(data.stars)}</div>
-                <div class="comment">${data.text}</div>
-            `;
-            
-            currentIndex = (currentIndex + 1) % reviews.length;
-        }
-
-        updateDisplay();
-        setInterval(updateDisplay, 5000);
+        });
     </script>
 </body>
 </html>

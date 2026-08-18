@@ -5,359 +5,299 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>墨狐酒館 | 歷程回顧</title>
     <link rel="icon" type="image/jpeg" href="images/mofox-logo.jpg">
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        
-        body {
-            color: #ffffff;
-            font-family: 'Avenir', 'Georgia', serif;
+        :root {
+            --bg: #f7f6f2;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border: rgba(212, 203, 191, 0.5);
+            --accent: #d97724;
+            --accent-glow: rgba(217, 119, 36, 0.15);
+            --text-main: #2c2c2c;
+            --text-muted: #736d65;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
 
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Noto Serif TC', serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center; 
-            min-height: 100vh;
-            
-            background-image: url('images/mofox-background.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
         }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
+
+        .bg-blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(230,220,205,0.6) 0%, rgba(247,246,242,0) 70%);
+            border-radius: 50%;
             z-index: -1;
+            filter: blur(40px);
+            animation: float 12s infinite alternate ease-in-out;
+        }
+
+        .bg-blob-1 { top: -100px; left: -100px; }
+        .bg-blob-2 { bottom: -100px; right: -100px; animation-delay: -6s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
         }
 
         .nav-bar {
-            width: 100%; 
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 10px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
             display: flex;
             justify-content: center;
-            order: -1;
+            gap: 28px;
+            padding: 32px 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-out 0.2s;
         }
-        
+
         .nav-link {
             text-decoration: none;
-            color: #ffcc66;
-            font-weight: bold;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            margin: 0 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            letter-spacing: 1px;
+            padding: 6px 4px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
         .nav-link:hover {
-            background-color: #ff8c42;
-            color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
+            color: var(--text-main);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
         }
 
         .nav-link.active {
-            background-color: #cc6600;
-            color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
+            color: var(--accent);
         }
 
-        .top-intro {
-            width: 90%;
-            max-width: 800px; 
-            padding: 15px 0 0;
-            color: #ffcc66;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: -15px;
-            text-align: center; 
-        }
-        
-        .top-intro h0 {
-            font-size: 1.6em;
-            color: #ff8c42;
-            margin-bottom: 5px;
-            display: block;
-        }
-        
         header {
             width: 90%;
-            max-width: 800px;
-            padding: 30px 0 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            margin-bottom: 25px;
+            max-width: 720px;
             text-align: center;
+            margin: 20px 0 40px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards ease-out 0.4s;
         }
-        
+
+        .top-tag {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5em;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
         h1 {
-            font-size: 2.8em;
-            color: #ffe6c7;
-            font-family: 'Handlee', cursive;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-            margin-bottom: 5px;
-            
-            display: inline-block;
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Caveat', 'Noto Serif TC', serif;
+            font-size: 3.2em;
+            font-weight: 500;
+            color: #1a1a1a;
+            letter-spacing: 3px;
         }
 
-        h1:hover {
-            transform: scale(1.05) translateY(-2px);
-            cursor: pointer;
-        }
-
-        .subtitle {
-            font-size: 1.1em;
-            color: #ffcc66;
-            font-style: italic;
-        }
-        
         main {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
             width: 90%;
-            max-width: 800px;
-            gap: 30px;
+            max-width: 620px;
+            display: flex;
             flex-direction: column;
+            gap: 24px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards ease-out 0.6s;
         }
 
-        .info-panel {
-            width: 100%;
-            padding: 25px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            border-left: 5px solid #ffcc66;
-            text-align: left; 
-            margin-bottom: 20px;
-            color: #ffffff;
+        .timeline-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 36px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            position: relative;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
-        h2 {
-            font-size: 1.6em;
-            color: #ffcc66;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-            padding-bottom: 8px;
-            margin-top: 0;
-            margin-bottom: 15px;
+        .timeline-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
         }
-        
-        p {
-             color: #ffffff;
-             line-height: 1.6;
-        }
-        
 
         .timeline {
             position: relative;
-            padding: 15px 0;
-            margin-left: 20px;
-            list-style: none;
+            padding-left: 28px;
         }
 
-        .timeline:before {
+        .timeline::before {
             content: '';
             position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: #ffcc66;
-            left: 0;
-            margin-left: -1px;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 1px;
+            background: var(--border);
         }
 
         .timeline-item {
             position: relative;
-            padding-bottom: 30px;
-            margin-left: 30px;
-            color: #ffffff;
+            margin-bottom: 32px;
         }
 
         .timeline-item:last-child {
-            padding-bottom: 0;
+            margin-bottom: 0;
         }
 
-        .timeline-item::before {
-            content: '✨';
+        .timeline-dot {
             position: absolute;
-            left: -35px;
-            top: 0;
-            background: #cc6600;
-            color: white;
+            left: -28px;
+            top: 6px;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            text-align: center;
-            line-height: 20px;
-            font-size: 0.9em;
-            border: 3px solid #ffcc66;
-            z-index: 1;
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            transition: background-color 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: var(--accent);
         }
 
         .timeline-date {
-            font-weight: bold;
-            color: #ff8c42;
-            font-size: 1.1em;
-            margin-bottom: 5px;
-        }
-
-        .timeline-description {
-            color: #ffffff;
-            font-style: italic;
-        }
-
-
-        .action-area {
-            width: 100%;
-            max-width: 800px; 
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .join-button {
-            display: inline-block;
-            padding: 15px 35px;
-            background-color: #ff8c42;
-            color: white;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.2em;
+            font-family: 'Caveat', serif;
+            font-size: 1.25em;
+            color: var(--accent);
             letter-spacing: 1px;
-            transition: background-color 0.3s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.4);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            margin-bottom: 4px;
         }
 
-        .join-button:hover {
-            background-color: #ff703f;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        .timeline-title {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
         }
 
-        
-        footer {
-            width: 90%;
-            margin-top: 40px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        .timeline-desc {
             font-size: 0.9em;
-            color: #ffcc66; 
-            font-style: italic;
+            line-height: 1.7;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-out 0.8s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="nav-bar">
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+
+    <nav class="nav-bar">
         <a href="index.html" class="nav-link">酒館主頁</a>
         <a href="staff.html" class="nav-link">館員團隊</a>
         <a href="history.html" class="nav-link active">歷程回顧</a>
         <a href="reviews.html" class="nav-link">旅客評價</a>
-    </div>
-
-    <div class="top-intro">
-        <h0>⏳ 穿梭時光，重溫初心 ⏳</h0>
-        <span>每一次駐足，都留下了一段故事。</span>
-    </div>
+    </nav>
 
     <header>
-        <h1>墨狐酒館 - 歷程回顧</h1>
-        <div class="subtitle">「我們從微小的火花，走成了溫暖的火炬」</div>
+        <div class="top-tag">Footprints & Memories</div>
+        <h1>歷程回顧</h1>
     </header>
 
     <main>
-        <section class="info-panel">
-            <h2>📜 創立緣起：一個深夜的承諾</h2>
-            <p><strong>墨狐酒館</strong>的概念於安靜的深夜時刻萌芽，源自對真誠交流、情緒理解與界線尊重的需求。</p>
-            <p>我們認為每個人都需要一個能放下心防、自由表達情感的空間，於是......2025年 初夏，一間溫暖且神秘的深夜酒館誕生了。</p>
-            <p>我們希望這裡不僅是網路上的聚會地，更是一個心靈的避風港，讓所有感到迷惘或孤單的旅人，都能在這裡找到一杯溫暖的「曖昧」酒，獲得片刻的寧靜與共鳴。</p>
-            <p>希望墨狐酒館能夠成為一個溫暖而不喧鬧的空間，讓人能暫時放下所有的角色，在不急著定義的狀態裡，慢慢交流、安心存在。 </p>
-        </section>
+        <div class="timeline-container">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2025.06.09</div>
+                    <div class="timeline-title">墨狐酒館 正式開業</div>
+                    <div class="timeline-desc">在迷霧之中點亮第一盞燈，為無處安放的靈魂提供了一處溫暖庇護所。</div>
+                </div>
 
-        <section class="info-panel">
-            <h2>🕰️ 酒館發展時間軸</h2>
-            <ul class="timeline">
-                
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.06.09 - 開幕之夜</div>
-                    <p class="timeline-description">「墨狐酒館」正式在 Discord 平台開啟大門，迎來第一批深夜造訪的旅人。因為這些酒客的存在，酒館擁有了溫馨柔和的微醺氛圍。</p>
-                </li>
-                
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.08.15 - 打工商店系統上線</div>
-                    <p class="timeline-description">推出打工商店系統、加入互動元素，豐富了酒館的社交體驗，訪客活躍度顯著提升。</p>
-                </li>
-                
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.10.20 - 酒客突破350位</div>
-                    <p class="timeline-description">酒館成員數突破 350 人！感謝所有支持與信任酒館的夥伴~</p>
-                </li>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2025.09.15</div>
+                    <div class="timeline-title">專區與系統建立</div>
+                    <div class="timeline-desc">逐步豐富酒館設施，陸續設立情感角落、深夜探索區與虛擬打工商店。</div>
+                </div>
 
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.12.01 - 官方網站建立</div>
-                    <p class="timeline-description"><strong>館員2023<strong>建立專屬網站，讓酒館的形象更加立體，並提供更詳細的介紹，為未來的長期發展奠定基礎。</p>
-                </li>
-                
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.11.29 - 2025微醺雪夜聖誕節交換禮物</div>
-                    <p class="timeline-description">本年度聖誕節交換禮物共有15人參加，預計將交換禮物列為年度活動。</p>
-                </li>
-                
-                <li class="timeline-item">
-                    <div class="timeline-date">2025.12.09 - 半週年</div>
-                    <p class="timeline-description">墨狐酒館開設半年了~。</p>
-                </li>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2026.02.17</div>
+                    <div class="timeline-title">新春慶典與社群盛會</div>
+                    <div class="timeline-desc">舉辦馬年新春社群活動，吸引許多旅人聚首共飲，寫下熱鬧溫馨的篇章。</div>
+                </div>
 
-                <li class="timeline-item">
-                    <div class="timeline-date">2026.01.09 - 群組被炸了</div>
-                    <p class="timeline-description">恩，就被炸了。</p>
-                </li>
-
-                <li class="timeline-item">
-                    <div class="timeline-date">2026.02.16 - 2026 靈狐報喜 · 賽博春節開運計畫</div>
-                    <p class="timeline-description">墨狐酒館的燈火已在雲端為大家點亮。 農曆新年期間，我們不打算讓你安靜度過！。</p>
-                </li>
-
-                <li class="timeline-item">
-                    <div class="timeline-date">2026.02.22 - 新增官方機器人</div>
-                    <p class="timeline-description">因 MHCAT 將於 3/10 正式停止服務（結束營運），為確保酒館的系統能夠順利運作，我們將改由 官方機器人 Mofox 接手相關功能。</p>
-                </li></p>
-                </li>
-
-                <li class="timeline-item">
-                    <div class="timeline-date">2026.02.24 - 新活動 - 《尼戳大放送》</div>
-                    <p class="timeline-description">🎁 每月 1 日抽出兩位位幸運酒客，贈送 Discord Nitro Basic（1 個月）！。</p>
-                </li></p>
-                </li>
-
-                <li class="timeline-item">
-                    <div class="timeline-date">2026.05.16 - 新增各部門，並且招募新職員</div>
-                    <p class="timeline-description">新增 酒館資訊部門、酒館諮詢部門、活動企劃部門、宣傳公關部門，提升管理品質。</p>
-                </li></p>
-                </li>
-
-                <li class="timeline-item">
-                    <div class="timeline-date">未來展望：持續前行</div>
-                    <p class="timeline-description">我們將持續優化酒館體驗、舉辦更多主題活動，並期待為更多生活忙碌的靈魂提供一個溫暖的休憩處。</p>
-                </li>
-
-            </ul>
-        </section>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">2026.06.09</div>
+                    <div class="timeline-title">一週年紀念</div>
+                    <div class="timeline-desc">感謝每一位曾停下腳步的旅人，酒館依然會在每一個深夜為你守候。</div>
+                </div>
+            </div>
+        </div>
     </main>
 
-                        
-</body>
+    <footer>
+        墨狐酒館 MoFox · Since 2025.06.09
+    </footer>
 
+</body>
 </html>

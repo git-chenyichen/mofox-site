@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="facebook-domain-verification" content="k2magj9bg5f6293zu46edn1etz4hob" />
-    <title>墨狐酒館．MoFox Tavern</title>
+    <title>墨狐酒館 MoFox Tavern</title>
     <link rel="icon" type="image/jpeg" href="images/mofox-logo.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -154,12 +154,29 @@
         }
 
         h1 {
-            font-family: 'Caveat', 'Noto Serif TC', serif;
-            font-size: 3.2em;
-            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .title-main {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 3.6em;
+            font-weight: 600;
             color: #1a1a1a;
-            letter-spacing: 3px;
-            margin-bottom: 12px;
+            letter-spacing: 4px;
+            line-height: 1.1;
+        }
+
+        .title-sub {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2em;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            line-height: 1.1;
         }
 
         .subtitle {
@@ -370,8 +387,12 @@
                 margin: 10px 0 24px;
             }
 
-            h1 {
-                font-size: 2.4em;
+            .title-main {
+                font-size: 2.8em;
+            }
+
+            .title-sub {
+                font-size: 1.8em;
             }
 
             .info-panel {
@@ -404,7 +425,10 @@
     </div>
 
     <header>
-        <h1>墨狐酒館．MoFox Tavern</h1>
+        <h1>
+            <span class="title-main">墨狐酒館</span>
+            <span class="title-sub">MoFox Tavern</span>
+        </h1>
         <div class="subtitle">「一杯曖昧，讓靈魂在迷霧中自由共醉」 · Since 2025.06.09</div>
     </header>
 
@@ -443,7 +467,7 @@
     <footer>
         <a href="privacy.html">隱私權政策</a> | 
         <a href="terms.html">服務條款</a>
-        <p>© 2026 墨狐酒館．MoFox Tavern. All Rights Reserved.</p>
+        <p>© 2026 墨狐酒館 MoFox Tavern. All Rights Reserved.</p>
     </footer>
 
     <script>

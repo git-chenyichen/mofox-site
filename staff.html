@@ -1,292 +1,281 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>墨狐酒館 | 館員團隊</title>
     <link rel="icon" type="image/jpeg" href="images/mofox-logo.jpg">
- <style>
-        
-        body {
-            color: #ffffff; 
-            font-family: 'Avenir', 'Georgia', serif; 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Noto+Serif+TC:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f7f6f2;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --border: rgba(212, 203, 191, 0.5);
+            --accent: #d97724;
+            --accent-glow: rgba(217, 119, 36, 0.15);
+            --text-main: #2c2c2c;
+            --text-muted: #736d65;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Noto Serif TC', serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            position: relative; 
-            
-
-            background-image: url('images/mofox-background.jpg'); 
-            background-size: cover; 
-            background-position: center center; 
-            background-attachment: fixed; 
-        }
-        
-
-        body::before {
-            content: '';
-            position: fixed; 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); 
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px); 
-            z-index: -1; 
+            overflow-x: hidden;
+            position: relative;
         }
 
-
-        .login-container {
+        .bg-blob {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 100; 
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(230,220,205,0.6) 0%, rgba(247,246,242,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+            animation: float 12s infinite alternate ease-in-out;
         }
 
-        .discord-login-btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 15px;
-            background-color; 
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-            transition: background-color 0.3s, transform 0.2s;
-        }
+        .bg-blob-1 { top: -100px; left: -100px; }
+        .bg-blob-2 { bottom: -100px; right: -100px; animation-delay: -6s; }
 
-        .discord-login-btn:hover {
-            background-color: #677BC4;
-            transform: scale(1.05);
-        }
-
-        .discord-login-btn img {
-            width: 20px;
-            height: 20px;
-            margin-right: 8px;
-            vertical-align: middle;
-
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
         }
 
         .nav-bar {
             width: 100%;
-            background-color: rgba(0, 0, 0, 0.2); 
-            padding: 10px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
             display: flex;
             justify-content: center;
-            order: -1; 
+            gap: 28px;
+            padding: 32px 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-out 0.2s;
         }
-        
+
         .nav-link {
             text-decoration: none;
-            color: #ffcc66;
-            font-weight: bold;
-            font-size: 1.1em;
-            padding: 8px 15px;
-            margin: 0 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            letter-spacing: 1px;
+            padding: 6px 4px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
         .nav-link:hover {
-            background-color: #ff8c42;
-            color: #ffffff;
-            transform: scale(1.05) translateY(-1px);
+            color: var(--text-main);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
         }
 
         .nav-link.active {
-            background-color: #cc6600;
-            color: #ffffff;
-            border-bottom: 2px solid #ffcc66;
+            color: var(--accent);
         }
 
-        .page-title {
-            color: #ffe6c7;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
-            font-family: 'Handlee', cursive;
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            margin-top: 30px;
-            display: inline-block; 
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .page-title:hover {
-            transform: scale(1.05) translateY(-2px);
-            cursor: default;
+        header {
+            width: 90%;
+            max-width: 720px;
+            text-align: center;
+            margin: 20px 0 40px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards ease-out 0.4s;
         }
 
+        .top-tag {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5em;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-family: 'Caveat', 'Noto Serif TC', serif;
+            font-size: 3.2em;
+            font-weight: 500;
+            color: #1a1a1a;
+            letter-spacing: 3px;
+        }
+
+        main {
+            width: 90%;
+            max-width: 860px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards ease-out 0.6s;
+        }
 
         .staff-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            width: 100%;
+        }
+
+        .staff-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            width: 90%;
-            max-width: 900px;
-            margin-bottom: 40px;
-        }
-
-
-        .staff-member {
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 20px;
-            width: 250px;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .staff-member:hover {
-            transform: scale(1.03);
-            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .staff-member img {
-            width: 120px;
-            height: 120px;
+        .staff-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+
+        .avatar {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
             object-fit: cover;
-            border: 4px solid #ffcc66;
-            margin-bottom: 15px;
-            transition: border-color 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
-        
-        .staff-member:hover img {
-            border-color: #ff8c42;
+
+        .staff-name {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 1.15em;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
-        
-        .staff-member h4 {
-            color: #ff8c42;
-            font-size: 1.6em;
-            margin: 5px 0 10px;
-        }
-        
 
         .quote {
-            color: #ffcc66; 
-            font-style: italic;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            font-size: 0.95em; 
+            font-family: 'Caveat', 'Noto Serif TC', serif;
+            font-size: 1.05em;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
-        
 
-        .staff-member p {
-            font-size: 0.95em;
-            line-height: 1.5;
-            color: #ffffff; 
-            margin-bottom: 5px; 
-        }
-        
-
-footer {
-            width: 90%;
-            max-width: 800px; 
-            margin-top: 40px;
-            padding: 15px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        .desc {
             font-size: 0.9em;
-            color: #ffcc66;
-            font-style: italic;
-            text-align: center; 
+            line-height: 1.7;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-out 0.8s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="login-container">
-        <a href="login.html" class="discord-login-btn" style="margin-bottom: 10px; background-color: #ff8c42;">
-            管理員登入
-        </a>
-    </div>
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
 
-    <div class="nav-bar">
+    <nav class="nav-bar">
         <a href="index.html" class="nav-link">酒館主頁</a>
         <a href="staff.html" class="nav-link active">館員團隊</a>
         <a href="history.html" class="nav-link">歷程回顧</a>
         <a href="reviews.html" class="nav-link">旅客評價</a>
-    </div>
+    </nav>
 
-    <h2 class="page-title">墨狐酒館 - 團隊介紹</h2>
-    
+    <header>
+        <div class="top-tag">Keepers of MoFox</div>
+        <h1>館員團隊</h1>
+    </header>
+
     <main>
         <div class="staff-container">
-            
-            <div class="staff-member">
-                <img src="db/userimages/aea2d128b26891bde1d9dd6543b140c9.webp" alt="館主 墨狐">
-                <h4>館主-墨狐</h4>
-                
-                <p class="quote">一隻可愛小狐狸(⁠´⁠∩⁠｡⁠•⁠ ⁠ᵕ⁠ ⁠•⁠｡⁠∩⁠`⁠)</p>
-                <p class="quote" style="margin-top: 0;">酒館最讚的姐姐</p>
-                
-                <p>酒館的創始人，以其溫暖與神秘的氣質，為迷途的旅人提供安心的驛站。</p>
+            <div class="staff-card">
+                <img src="db/userimages/aea2d128b26891bde1d9dd6543b140c9.webp" alt="館主 墨狐" class="avatar">
+                <div class="staff-name">館主 - 墨狐</div>
+                <div class="quote">一隻可愛小狐狸(⁠´⁠∩⁠｡⁠•⁠ ⁠ᵕ⁠ ⁠•⁠｡⁠∩⁠`⁠)<br>酒館最讚的姐姐</div>
+                <div class="desc">酒館的創始人，以其溫暖與神秘的氣質，為迷途的旅人提供安心的驛站。</div>
             </div>
 
-            <div class="staff-member">
-                <img src="db/userimages/23b07317528941d276955bf64eecb7b9.webp" alt="館員 2023">
-                <h4>館員-2023</h4>
-                
-                <p class="quote">酒館資深開發者。</p>
-                
-                <p>負責酒館的各種活動規劃與項目開發。是酒館運作背後，不可或缺的技術核心。</p>
+            <div class="staff-card">
+                <img src="db/userimages/23b07317528941d276955bf64eecb7b9.webp" alt="館員 2023" class="avatar">
+                <div class="staff-name">館員 - 2023</div>
+                <div class="quote">酒館資深開發者。</div>
+                <div class="desc">負責酒館的各種活動規劃與項目開發。是酒館運作背後，不可或缺的技術核心。</div>
             </div>
 
-            <div class="staff-member">
-                <img src="https://i.ibb.co/Qj9JGW0T/imag2e.png" alt="館員 嵐">
-                <h4>館員-嵐</h4>
-                
-                <p class="quote">定居酒館的75重度沉迷者。</p>
-                
-                <p>酒館中的氣氛營造者，熱衷於與人交流，總是能帶來歡樂的特調和輕鬆的氛圍。</p>
+            <div class="staff-card">
+                <img src="https://i.ibb.co/Qj9JGW0T/imag2e.png" alt="館員 嵐" class="avatar">
+                <div class="staff-name">館員 - 嵐</div>
+                <div class="quote">定居酒館的75重度沉迷者。</div>
+                <div class="desc">酒館中的氣氛營造者，熱衷於與人交流，總是能帶來歡樂的特調和輕鬆的氛圍。</div>
             </div>
 
-            <div class="staff-member">
-                <img src="db/userimages/adbe059e50004e4f09d48bbd58c93137.webp" alt="館員 草薙明音">
-                <h4>館員-草薙明音</h4>
-                
-                <p class="quote"可愛的貓貓。</p>
-                
-                <p>早安安，世界上最可愛的貓貓在這裡~~~</p>
-             
+            <div class="staff-card">
+                <img src="db/userimages/adbe059e50004e4f09d48bbd58c93137.webp" alt="館員 草薙明音" class="avatar">
+                <div class="staff-name">館員 - 草薙明音</div>
+                <div class="quote">可愛的貓貓。</div>
+                <div class="desc">早安安，世界上最可愛的貓貓在這裡~</div>
             </div>
         </div>
     </main>
 
- 
+    <footer>
+        墨狐酒館 MoFox · Since 2025.06.09
+    </footer>
+
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

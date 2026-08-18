@@ -66,6 +66,33 @@
             padding: 32px 20px;
             opacity: 0;
             animation: fadeIn 1s forwards ease-out 0.2s;
+            position: relative;
+            z-index: 100;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            outline: none;
+            padding: 8px;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 101;
+        }
+
+        .hamburger .bar {
+            width: 22px;
+            height: 2px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 28px;
         }
 
         .nav-link {
@@ -270,7 +297,7 @@
             margin-top: 12px;
         }
 
-        /* 手機版適應 (RWD) */
+        /* 手機版 RWD 與漢堡選單樣式 */
         @media (max-width: 768px) {
             .bg-blob {
                 width: 300px;
@@ -279,14 +306,55 @@
             }
 
             .nav-bar {
+                justify-content: flex-end;
+                padding: 20px 24px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            /* 開啟狀態下的漢堡圖示變換 */
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+            }
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-10px);
+                width: 90%;
+                max-width: 320px;
+                background: rgba(255, 255, 255, 0.92);
+                backdrop-filter: blur(16px);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                flex-direction: column;
+                align-items: center;
                 gap: 16px;
-                padding: 20px 16px;
-                flex-wrap: wrap;
+                padding: 20px 0;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            .nav-menu.active {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateX(-50%) translateY(0);
             }
 
             .nav-link {
-                font-size: 0.88em;
-                padding: 4px 2px;
+                font-size: 1em;
+                padding: 8px 16px;
             }
 
             header {
@@ -379,10 +447,17 @@
     <div class="bg-blob bg-blob-2"></div>
 
     <nav class="nav-bar">
-        <a href="index.html" class="nav-link active">酒館主頁</a>
-        <a href="staff.html" class="nav-link">館員團隊</a>
-        <a href="history.html" class="nav-link">歷程回顧</a>
-        <a href="reviews.html" class="nav-link">旅客評價</a>
+        <button class="hamburger" id="hamburger" aria-label="選單">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <div class="nav-menu" id="nav-menu">
+            <a href="index.html" class="nav-link active">酒館主頁</a>
+            <a href="staff.html" class="nav-link">館員團隊</a>
+            <a href="history.html" class="nav-link">歷程回顧</a>
+            <a href="reviews.html" class="nav-link">旅客評價</a>
+        </div>
     </nav>
 
     <header>
@@ -429,5 +504,21 @@
         <p>© 2026 墨狐酒館 MoFox. All Rights Reserved.</p>
     </footer>
 
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>

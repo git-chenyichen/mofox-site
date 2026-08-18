@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg: #f7f6f2;
-            --card-bg: rgba(255, 255, 255, 0.75);
+            --card-bg: rgba(255, 255, 255, 0.85);
             --border: rgba(212, 203, 191, 0.5);
             --accent: #d97724;
             --accent-glow: rgba(217, 119, 36, 0.15);
@@ -57,44 +57,56 @@
             100% { transform: translate(40px, 30px) scale(1.1); }
         }
 
-        .nav-bar {
+        /* 導覽列容器 */
+        .nav-container {
             width: 100%;
             max-width: 800px;
+            padding: 24px 20px;
             display: flex;
             justify-content: center;
-            gap: 28px;
-            padding: 32px 20px;
-            opacity: 0;
-            animation: fadeIn 1s forwards ease-out 0.2s;
+            align-items: center;
             position: relative;
             z-index: 100;
+            opacity: 0;
+            animation: fadeIn 1s forwards ease-out 0.2s;
         }
 
         .hamburger {
             display: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            outline: none;
-            padding: 8px;
-            width: 40px;
-            height: 40px;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            justify-content: space-between;
+            width: 26px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
             z-index: 101;
         }
 
-        .hamburger .bar {
-            width: 24px;
+        .hamburger span {
+            width: 100%;
             height: 2px;
             background-color: var(--text-main);
             border-radius: 2px;
             transition: all 0.3s ease;
         }
 
-        .nav-menu {
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+            background-color: var(--accent);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+            background-color: var(--accent);
+        }
+
+        .nav-bar {
             display: flex;
             gap: 28px;
         }
@@ -107,7 +119,6 @@
             padding: 6px 4px;
             position: relative;
             transition: color 0.3s ease;
-            white-space: nowrap;
         }
 
         .nav-link::after {
@@ -138,7 +149,7 @@
             width: 90%;
             max-width: 720px;
             text-align: center;
-            margin: 30px 0 50px;
+            margin: 20px 0 40px;
             opacity: 0;
             animation: fadeInUp 1s forwards ease-out 0.4s;
         }
@@ -301,133 +312,6 @@
             margin-top: 12px;
         }
 
-        @media (max-width: 768px) {
-            .bg-blob {
-                width: 300px;
-                height: 300px;
-                filter: blur(30px);
-            }
-
-            .nav-bar {
-                justify-content: flex-end;
-                padding: 20px 24px;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .hamburger.active .bar:nth-child(1) {
-                transform: translateY(7px) rotate(45deg);
-            }
-            .hamburger.active .bar:nth-child(2) {
-                opacity: 0;
-            }
-            .hamburger.active .bar:nth-child(3) {
-                transform: translateY(-7px) rotate(-45deg);
-            }
-
-            .nav-menu {
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-10px);
-                width: 90%;
-                max-width: 320px;
-                background: rgba(255, 255, 255, 0.92);
-                backdrop-filter: blur(16px);
-                border: 1px solid var(--border);
-                border-radius: 16px;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                padding: 24px 0;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-                opacity: 0;
-                pointer-events: none;
-                transition: all 0.3s ease;
-            }
-
-            .nav-menu.active {
-                opacity: 1;
-                pointer-events: auto;
-                transform: translateX(-50%) translateY(0);
-            }
-
-            .nav-link {
-                font-size: 1em;
-                padding: 8px 16px;
-                width: 100%;
-                text-align: center;
-            }
-
-            header {
-                width: 92%;
-                margin: 15px 0 30px;
-            }
-
-            .top-tag {
-                font-size: 1.3em;
-            }
-
-            h1 {
-                font-size: 2.3em;
-                letter-spacing: 2px;
-            }
-
-            .subtitle {
-                font-size: 0.82em;
-                line-height: 1.5;
-            }
-
-            main {
-                width: 92%;
-                gap: 24px;
-            }
-
-            .info-panel {
-                padding: 24px 20px;
-                border-radius: 16px;
-            }
-
-            h2 {
-                font-size: 1.5em;
-                margin-bottom: 16px;
-            }
-
-            .intro-text {
-                font-size: 0.9em;
-                margin-bottom: 20px;
-            }
-
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .grid-item {
-                padding: 12px 14px;
-            }
-
-            .footer-note {
-                margin-top: 24px;
-                padding-top: 18px;
-                font-size: 0.82em;
-            }
-
-            .join-button {
-                width: 100%;
-                max-width: 280px;
-                padding: 12px 24px;
-                font-size: 1.2em;
-            }
-
-            footer {
-                padding: 24px 16px;
-                font-size: 0.75em;
-            }
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -443,6 +327,71 @@
                 transform: translateY(0);
             }
         }
+
+        /* 響應式手機介面優化（與其他頁面完全一致） */
+        @media (max-width: 680px) {
+            .nav-container {
+                justify-content: flex-end;
+                padding: 16px 20px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-bar {
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                width: 200px;
+                background: var(--card-bg);
+                border: 1px solid var(--border);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-radius: 16px;
+                padding: 12px 0;
+                flex-direction: column;
+                gap: 4px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .nav-bar.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-link {
+                padding: 12px 20px;
+                text-align: center;
+                display: block;
+                font-size: 0.9em;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            header {
+                margin: 10px 0 24px;
+            }
+
+            h1 {
+                font-size: 2.4em;
+            }
+
+            .info-panel {
+                padding: 28px 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -450,19 +399,19 @@
     <div class="bg-blob bg-blob-1"></div>
     <div class="bg-blob bg-blob-2"></div>
 
-    <nav class="nav-bar">
-        <button class="hamburger" id="hamburger" aria-label="選單">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
+    <div class="nav-container">
+        <button class="hamburger" id="hamburger-btn" aria-label="選單">
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
-        <div class="nav-menu" id="nav-menu">
+        <nav class="nav-bar" id="nav-menu">
             <a href="index.html" class="nav-link active">酒館主頁</a>
             <a href="staff.html" class="nav-link">館員團隊</a>
             <a href="history.html" class="nav-link">歷程回顧</a>
             <a href="reviews.html" class="nav-link">旅客評價</a>
-        </div>
-    </nav>
+        </nav>
+    </div>
 
     <header>
         <div class="top-tag">深夜的秘密集會地</div>
@@ -509,18 +458,19 @@
     </footer>
 
     <script>
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('nav-menu');
+        const btn = document.getElementById('hamburger-btn');
+        const menu = document.getElementById('nav-menu');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            btn.classList.toggle('active');
+            menu.classList.toggle('active');
         });
 
         document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
+            if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                btn.classList.remove('active');
+                menu.classList.remove('active');
             }
         });
     </script>

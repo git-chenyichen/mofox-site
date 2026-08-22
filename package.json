@@ -1,13 +1,13 @@
 {
-  "name": "mofox-discord-auth",
+  "name": "discord-stats-api",
   "version": "1.0.0",
-  "description": "Discord OAuth2 Serverless Function",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "axios": "^1.6.8",
-    "nodemailer": "^6.9.0"
+    "cors": "^2.8.5",
+    "discord.js": "^14.14.1",
+    "express": "^4.18.2"
   }
 }

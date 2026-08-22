@@ -2,12 +2,24 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const GUILD_ID = process.env.GUILD_ID;
 
 app.get('/api/server-stats', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+
+  if (!BOT_TOKEN || !GUILD_ID) {
+    return res.status(500).json({ error: 'Missing environment variables' });
+  }
+
   try {
     const headers = {
       Authorization: `Bot ${BOT_TOKEN}`
